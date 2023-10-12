@@ -12,22 +12,26 @@
     "dev:react": {
       "name": "dev:react",
       "command": "pnpm nx dev react",
-      "runAtStart": true
+      "runAtStart": true,
+      "preview": {
+        "port": 5174
+      }
     },
     "dev:vanilla": {
       "name": "dev:vanilla",
       "command": "pnpm nx dev vanilla",
-      "runAtStart": true
+      "runAtStart": true,
+      "preview": {
+        "port": 5173
+      }
     },
     "build": {
       "name": "build",
-      "command": "pnpm build",
-      "runAtStart": false
+      "command": "pnpm build"
     },
     "preview": {
       "name": "preview",
-      "command": "pnpm preview",
-      "runAtStart": false
+      "command": "pnpm preview"
     }
   }
 }
