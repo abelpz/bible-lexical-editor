@@ -9,9 +9,14 @@
 
   // These tasks can be run from CodeSandbox. Running one will open a log in the app.
   "tasks": {
-    "dev": {
-      "name": "dev",
-      "command": "pnpm dev",
+    "dev:react": {
+      "name": "dev:react",
+      "command": "pnpm nx dev react",
+      "runAtStart": true
+    },
+    "dev:vanilla": {
+      "name": "dev:vanilla",
+      "command": "pnpm nx dev vanilla",
       "runAtStart": true
     },
     "build": {
