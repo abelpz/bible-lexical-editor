@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/facebook/lexical",
+    "url": "https://github.com/abelpz/bible-lexical-editor",
     "directory": "packages/shared"
   }
 }
