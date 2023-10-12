@@ -1,15 +1,13 @@
 {
-  "name": "vanilla-bible-editor-lexical-proskomma",
-  "private": true,
+  "name": "bible-lexical-editor",
   "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
-  },
+  "license": "MIT",
+  "scripts": {},
+  "private": true,
+  "dependencies": {},
   "devDependencies": {
-    "typescript": "^5.0.2",
-    "vite": "^4.4.5"
+    "@nx/js": "16.10.0",
+    "nx": "16.10.0",
+    "nx-cloud": "latest"
   }
 }
