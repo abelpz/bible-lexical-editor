@@ -7,10 +7,17 @@
     "editor",
     "rich-text"
   ],
+  "scripts": {
+    "build": "tsc"
+  },
   "license": "MIT",
   "version": "0.12.2",
   "dependencies": {
-    "lexical": "0.12.2"
+    "lexical": "0.12.2",
+    "@lexical/utils": "^0.12.2"
+  },
+  "devDependencies": {
+    "typescript": "^5.2.2"
   },
   "repository": {
     "type": "git",

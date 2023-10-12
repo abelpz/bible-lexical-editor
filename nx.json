@@ -2,19 +2,22 @@
   "extends": "nx/presets/npm.json",
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "affected": {
-    "defaultBase": "master"
+    "defaultBase": "main"
   },
   "tasksRunnerOptions": {
     "default": {
       "runner": "nx-cloud",
       "options": {
-        "cacheableOperations": ["build", "lint", "test", "e2e"],
+        "cacheableOperations": ["build", "lint", "test", "e2e", "dev"],
         "accessToken": "MDNhZDBkYWEtOWE0ZC00ZDc3LWJiOTctNTZlM2MzYWQ5MjQzfHJlYWQtd3JpdGU="
       }
     }
   },
   "targetDefaults": {
     "build": {
+      "dependsOn": ["^build"]
+    },
+    "dev": {
       "dependsOn": ["^build"]
     }
   }

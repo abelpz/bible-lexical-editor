@@ -1,5 +1,6 @@
 import { addClassNamesToElement } from "@lexical/utils";
 import { $applyNodeReplacement } from "lexical";
+import { NodeKey } from "lexical/LexicalNode";
 import { UsfmElementNode } from "./UsfmElementNode";
 
 export class DivisionMarkNode extends UsfmElementNode {
@@ -11,7 +12,7 @@ export class DivisionMarkNode extends UsfmElementNode {
     return new DivisionMarkNode(node.__attributes, node.__data, node.__key);
   }
 
-  constructor(attributes, data, key) {
+  constructor(attributes, data, key?: NodeKey) {
     super(attributes, data, key);
   }
 
