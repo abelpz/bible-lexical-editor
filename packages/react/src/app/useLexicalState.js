@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { usfmText } from "shared";
-import { usfm2perf } from "../libraries/converters/usfmToPerf";
-import { transformPerfToLexicalState } from "../libraries/converters/perfToLexical";
+import { usfm2perf } from "shared/converters/usfmToPerf";
+import { transformPerfToLexicalState } from "shared/converters/perfToLexical";
 import EpiteleteHtml from "epitelete-html";
 
 //Lots of hardcoded data here.

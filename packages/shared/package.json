@@ -23,5 +23,9 @@
     "type": "git",
     "url": "https://github.com/abelpz/bible-lexical-editor",
     "directory": "packages/shared"
-  }
+  },
+  "main":"dist/index.js",
+  "files": [
+    "dist"
+  ]
 }
