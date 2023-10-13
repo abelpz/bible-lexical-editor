@@ -1,4 +1,37 @@
-import Epitelete from "epitelete-html";
+import Epitelete from "epitelete";
+import { transformPerfToLexicalState } from "../converters/perfToLexical";
+import usfmText from "../data/tit.usfm";
+import { usfm2perf } from "../converters/usfmToPerf";
+
+const getTestLexicalState = () => {
+  //Lots of hardcoded data here.
+  const perf = usfm2perf(usfmText, {
+    serverName: "door43",
+    organizationId: "unfoldingWord",
+    languageCode: "en",
+    versionId: "ult",
+  });
+
+  const bibleHandler = new Epitelete({
+    docSetId: perf.metadata.translation.id,
+    options: { historySize: 100 },
+  });
+
+  const readOptions = { readPipeline: "stripAlignmentPipeline" };
+
+  return bibleHandler
+    .sideloadPerf("RUT", perf, { ...readOptions })
+    .then((perf) => {
+      const _lexicalState = transformPerfToLexicalState(
+        perf,
+        perf.main_sequence_id,
+      );
+      console.log("Perf to Lexical", { perf, lexicalState: _lexicalState });
+      return JSON.stringify(_lexicalState);
+    });
+};
+
+export const lexicalState = getTestLexicalState();
 
 /**
  * A class with useful methods for managing

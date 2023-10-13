@@ -1,4 +1,4 @@
-export const usfmText = String.raw`\id RUT EN_ULT en_English_ltr Tue Mar 03 2020 16:27:33 GMT+0200 (SAST) tc
+export default String.raw`\id RUT EN_ULT en_English_ltr Tue Mar 03 2020 16:27:33 GMT+0200 (SAST) tc
 \usfm 3.0
 \ide UTF-8
 \h Ruth

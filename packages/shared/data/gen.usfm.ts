@@ -1,4 +1,4 @@
-export const usfmText = String.raw`\id GEN - Translation 4 Translators 1 
+export default String.raw`\id GEN - Translation 4 Translators 1 
 \ide 65001 - Unicode (UTF-8)
 \h GENESIS 
 \toc1 Genesis 
