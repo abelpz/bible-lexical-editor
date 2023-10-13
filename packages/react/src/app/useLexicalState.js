@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { usfmText } from "shared";
+import { usfmText } from "shared/data/tit.usfm";
 import { usfm2perf } from "shared/converters/usfmToPerf";
 import { transformPerfToLexicalState } from "shared/converters/perfToLexical";
 import EpiteleteHtml from "epitelete-html";

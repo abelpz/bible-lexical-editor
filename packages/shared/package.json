@@ -17,15 +17,15 @@
     "@lexical/utils": "^0.12.2"
   },
   "devDependencies": {
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "proskomma-core": "^0.10.4"
+  },
+  "peerDependencies": {
+    "proskomma-core": "^0.10.4"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/abelpz/bible-lexical-editor",
     "directory": "packages/shared"
-  },
-  "main":"dist/index.js",
-  "files": [
-    "dist"
-  ]
+  }
 }

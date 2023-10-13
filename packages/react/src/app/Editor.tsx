@@ -3,7 +3,7 @@ import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
-import ScriptureNodes from "shared/";
+import ScriptureNodes from "shared/nodes";
 import { OnChangePlugin } from "../lexical/plugins/OnChangePlugin";
 import { useLexicalState } from "./useLexicalState";
 
