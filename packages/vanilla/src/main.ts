@@ -12,9 +12,9 @@ import("shared/contentManager").then(async ({ lexicalState }) => {
   };
 
   const editor = createEditor(config);
-  const parsedEditorState = editor.parseEditorState(await lexicalState);
-  editor.setEditorState(parsedEditorState, { tag: "history-merge" });
-  const contentEditableElement = document.getElementById("editor");
-  editor.setRootElement(contentEditableElement);
+  editor.setEditorState(editor.parseEditorState(await lexicalState), {
+    tag: "history-merge",
+  });
+  editor.setRootElement(document.getElementById("editor"));
   registerRichText(editor);
 });
