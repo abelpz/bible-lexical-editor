@@ -17,6 +17,9 @@ importers:
       nx-cloud:
         specifier: latest
         version: 16.5.2
+      typescript:
+        specifier: ^5.2.2
+        version: 5.2.2
 
   packages/react:
     dependencies:
