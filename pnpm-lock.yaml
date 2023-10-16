@@ -11,6 +11,18 @@ importers:
       '@nx/js':
         specifier: 16.10.0
         version: 16.10.0(@types/node@20.8.4)(nx@16.10.0)(typescript@5.2.2)
+      eslint:
+        specifier: ^8.48.0
+        version: 8.51.0
+      eslint-plugin-react:
+        specifier: ^7.33.2
+        version: 7.33.2(eslint@8.51.0)
+      eslint-plugin-react-hooks:
+        specifier: ^4.6.0
+        version: 4.6.0(eslint@8.51.0)
+      eslint-plugin-react-refresh:
+        specifier: ^0.4.3
+        version: 0.4.3(eslint@8.51.0)
       nx:
         specifier: 16.10.0
         version: 16.10.0
@@ -66,18 +78,6 @@ importers:
       '@vitejs/plugin-react-swc':
         specifier: ^3.3.2
         version: 3.4.0(vite@4.4.11)
-      eslint:
-        specifier: ^8.48.0
-        version: 8.51.0
-      eslint-plugin-react:
-        specifier: ^7.33.2
-        version: 7.33.2(eslint@8.51.0)
-      eslint-plugin-react-hooks:
-        specifier: ^4.6.0
-        version: 4.6.0(eslint@8.51.0)
-      eslint-plugin-react-refresh:
-        specifier: ^0.4.3
-        version: 0.4.3(eslint@8.51.0)
       typescript:
         specifier: ^5.2.2
         version: 5.2.2

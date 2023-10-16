@@ -3,7 +3,7 @@ import { transformPerfToLexicalState } from "../converters/perfToLexical";
 import usfmText from "../data/tit.usfm";
 import { usfm2perf } from "../converters/usfmToPerf";
 
-const getTestLexicalState = () => {
+export const getLexicalState = (usfmText) => {
   //Lots of hardcoded data here.
   const perf = usfm2perf(usfmText, {
     serverName: "door43",
@@ -31,7 +31,7 @@ const getTestLexicalState = () => {
     });
 };
 
-export const lexicalState = getTestLexicalState();
+// export const lexicalState = getTestLexicalState();
 
 /**
  * A class with useful methods for managing

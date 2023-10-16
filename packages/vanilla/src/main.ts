@@ -5,18 +5,26 @@ import { registerEmoticons } from "shared/plugins/emoticons";
 import { registerOnChange } from "shared/plugins/onChange";
 import ScriptureNodes from "shared/nodes";
 import { EmoticonNode } from "shared/nodes/EmoticonNode";
+import { getLexicalState } from "shared/contentManager";
+import { fetchUsfm } from "shared/contentManager/mockup/fetchUsfm";
 
-import("shared/contentManager").then(async ({ lexicalState }) => {
+(async () => {
   const config = {
     namespace: "MyEditor",
     theme: {},
     nodes: [...ScriptureNodes, EmoticonNode],
     onError: console.error,
   };
-
+  const lexicalState = await fetchUsfm({
+    serverName: "dbl",
+    organizationId: "bfbs",
+    languageCode: "fra",
+    versionId: "lsg",
+    bookCode: "tit",
+  }).then((usfm) => getLexicalState(usfm));
   //Initialize editor
   const editor = createEditor(config);
-  editor.setEditorState(editor.parseEditorState(await lexicalState), {
+  editor.setEditorState(editor.parseEditorState(lexicalState), {
     tag: "history-merge",
   });
   editor.setRootElement(document.getElementById("editor"));
@@ -30,4 +38,4 @@ import("shared/contentManager").then(async ({ lexicalState }) => {
       console.log({ dirtyElements, editorState });
     },
   });
-});
+})();

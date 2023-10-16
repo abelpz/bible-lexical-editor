@@ -8,7 +8,8 @@
     "rich-text"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.json"
+    "build": "tsc -p tsconfig.json",
+    "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
   },
   "license": "MIT",
   "version": "0.12.2",
