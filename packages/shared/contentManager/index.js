@@ -1,6 +1,6 @@
 import Epitelete from "epitelete";
 import { transformPerfToLexicalState } from "../converters/perfToLexical";
-import usfmText from "../data/tit.usfm";
+import usfmText from "../data/psa1.usfm";
 import { usfm2perf } from "../converters/usfmToPerf";
 
 const getTestLexicalState = () => {

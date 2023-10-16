@@ -49,6 +49,12 @@ export class DivisionMarkNode extends UsfmElementNode {
       version: 1,
     };
   }
+
+  updateDOM(prevNode, dom) {
+    // Returning false tells Lexical that this node does not need its
+    // DOM element replacing with a new copy from createDOM.
+    return false;
+  }
 }
 
 export function $createDivisionMarkNode(attributes, data) {

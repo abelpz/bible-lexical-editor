@@ -52,7 +52,7 @@ export class UsfmParagraphNode extends UsfmElementNode {
   }
 
   updateDOM(...updateDOMProps) {
-    console.log({ updateDOMProps });
+    // console.log({ updateDOMProps });
     return false;
   }
 }
