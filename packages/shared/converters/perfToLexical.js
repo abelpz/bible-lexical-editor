@@ -67,7 +67,7 @@ export const createPerfMap = (perf) => ({
       console.log("NOT SUPPORTED", { perfElementProps, children });
       return children?.length
         ? {
-            data: perfElementProps,
+            // data: perfElementProps,
             children: [
               {
                 detail: 0,
@@ -77,7 +77,7 @@ export const createPerfMap = (perf) => ({
                 text: `NOT SUPPORTED ---->`,
                 type: "text",
                 version: 1,
-                data: perfElementProps,
+                // data: perfElementProps,
               },
               ...children,
 
@@ -89,7 +89,7 @@ export const createPerfMap = (perf) => ({
                 text: `<------`,
                 type: "text",
                 version: 1,
-                data: perfElementProps,
+                // data: perfElementProps,
               },
             ],
             detail: 0,
@@ -100,7 +100,7 @@ export const createPerfMap = (perf) => ({
             version: 1,
           }
         : {
-            data: perfElementProps,
+            // data: perfElementProps,
             children: [
               {
                 detail: 0,
@@ -145,7 +145,7 @@ export const createPerfMap = (perf) => ({
       children: ((lexicalState) => lexicalState.root.children)(
         transformPerfToLexicalState(perf, perfElementProps.target),
       ),
-      data: perfElementProps,
+      // data: perfElementProps,
       tag: ((subtypeMap) => subtypeMap[perfElementProps.subtype])({
         title: "h1",
         introduction: "section",
@@ -162,7 +162,7 @@ export const createPerfMap = (perf) => ({
   paragraph: {
     "*": ({ props: perfElementProps, children }) => ({
       children: children,
-      data: perfElementProps,
+      // data: perfElementProps,
       tag: getTagFromSubtype({
         subtype: perfElementProps.subtype,
         replacementMap: {
@@ -181,7 +181,7 @@ export const createPerfMap = (perf) => ({
     }),
     x: ({ children, props: perfElementProps }) => ({
       children,
-      data: perfElementProps,
+      // data: perfElementProps,
       attributes: getAttributesFromPerfElementProps(perfElementProps),
       direction: "ltr",
       format: "",
@@ -193,7 +193,7 @@ export const createPerfMap = (perf) => ({
   wrapper: {
     "*": ({ children, props: perfElementProps }) => ({
       children,
-      data: perfElementProps,
+      // data: perfElementProps,
       attributes: getAttributesFromPerfElementProps(perfElementProps),
       direction: "ltr",
       format: "",
@@ -204,7 +204,7 @@ export const createPerfMap = (perf) => ({
   },
   mark: {
     ts: ({ props: perfElementProps }) => ({
-      data: perfElementProps,
+      // data: perfElementProps,
       type: "usfmparagraph",
       version: 1,
     }),
@@ -212,7 +212,7 @@ export const createPerfMap = (perf) => ({
       verses: divisionMark,
       chapter: divisionMark,
     }))(({ props: perfElementProps }) => ({
-      data: perfElementProps,
+      // data: perfElementProps,
       attributes: {
         "data-atts-number": perfElementProps.atts.number,
         "data-type": perfElementProps.type,
