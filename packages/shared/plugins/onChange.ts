@@ -1,7 +1,7 @@
 import {
   EditorState,
   LexicalEditor,
-  $getSelection,
+  // $getSelection,
   $getNodeByKey,
 } from "lexical";
 
