@@ -27,9 +27,7 @@ export function SectionMarkPlugin() {
   const [editor] = useLexicalComposerContext();
   useEffect(() => {
     if (!editor.hasNodes([SectionMarkNode])) {
-      throw new Error(
-        "SectionMarkPlugin: SectionMarkNode not registered on editor",
-      );
+      throw new Error("SectionMarkPlugin: SectionMarkNode not registered on editor");
     }
     return mergeRegister(
       editor.registerCommand(

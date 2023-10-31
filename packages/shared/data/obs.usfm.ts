@@ -55,4 +55,4 @@ export default String.raw`\id OBS
 \v 15 God made man and woman in his own image. He blessed them and told them, \qt “Have many children and grandchildren and fill the earth!”\qt* And God saw that everything he had made was very good, and he was very pleased with all of it. This all happened on the sixth day of creation. 
 \p
 \v 16 When the seventh day came, God had finished all the work that he had been doing. He blessed the seventh day and made it holy because on this day he stopped creating things. This is how God created the universe and everything in it. 
-`
+`;

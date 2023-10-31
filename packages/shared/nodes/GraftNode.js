@@ -12,12 +12,7 @@ export class GraftNode extends UsfmElementNode {
   }
 
   static clone(node) {
-    return new GraftNode(
-      node.__attributes,
-      node.__data,
-      node.__tag,
-      node.__key,
-    );
+    return new GraftNode(node.__attributes, node.__data, node.__tag, node.__key);
   }
 
   isInline() {

@@ -13,21 +13,12 @@ import {
 } from "../nodes/SectionMarkNode";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { mergeRegister } from "@lexical/utils";
-import {
-  $createTextNode,
-  $isElementNode,
-  $isLineBreakNode,
-  $isTextNode,
-  TextNode,
-} from "lexical";
+import { $createTextNode, $isElementNode, $isLineBreakNode, $isTextNode, TextNode } from "lexical";
 import { useEffect } from "react";
 import invariant from "lexical";
 import * as React from "react";
 
-export function createSectionMarkMatcherWithRegExp(
-  regExp,
-  markTransformer = (text) => text,
-) {
+export function createSectionMarkMatcherWithRegExp(regExp, markTransformer = (text) => text) {
   return (text) => {
     const match = regExp.exec(text);
     if (match === null) return null;
@@ -75,8 +66,7 @@ function isPreviousNodeValid(node) {
   return (
     previousNode === null ||
     $isLineBreakNode(previousNode) ||
-    ($isTextNode(previousNode) &&
-      endsWithSeparator(previousNode.getTextContent()))
+    ($isTextNode(previousNode) && endsWithSeparator(previousNode.getTextContent()))
   );
 }
 function isNextNodeValid(node) {
@@ -92,16 +82,12 @@ function isNextNodeValid(node) {
 }
 function isContentAroundIsValid(matchStart, matchEnd, text, node) {
   const contentBeforeIsValid =
-    matchStart > 0
-      ? isSeparator(text[matchStart - 1])
-      : isPreviousNodeValid(node);
+    matchStart > 0 ? isSeparator(text[matchStart - 1]) : isPreviousNodeValid(node);
   if (!contentBeforeIsValid) {
     return false;
   }
   const contentAfterIsValid =
-    matchEnd < text.length
-      ? isSeparator(text[matchEnd])
-      : isNextNodeValid(node);
+    matchEnd < text.length ? isSeparator(text[matchEnd]) : isNextNodeValid(node);
   return contentAfterIsValid;
 }
 function handleSectionMarkCreation(node, matchers, onChange) {
@@ -127,15 +113,12 @@ function handleSectionMarkCreation(node, matchers, onChange) {
           invalidMatchEnd + matchLength,
         );
       } else {
-        [, sectionmarkTextNode, remainingTextNode] =
-          remainingTextNode.splitText(
-            invalidMatchEnd + matchStart,
-            invalidMatchEnd + matchStart + matchLength,
-          );
+        [, sectionmarkTextNode, remainingTextNode] = remainingTextNode.splitText(
+          invalidMatchEnd + matchStart,
+          invalidMatchEnd + matchStart + matchLength,
+        );
       }
-      const sectionmarkNode = $createAutoSectionMarkNode(
-        createDataFromMatch(match),
-      );
+      const sectionmarkNode = $createAutoSectionMarkNode(createDataFromMatch(match));
       const textNode = $createTextNode(match.text.slice(3));
       textNode.setFormat(sectionmarkTextNode.getFormat());
       textNode.setDetail(sectionmarkTextNode.getDetail());
@@ -170,10 +153,7 @@ function handleSectionMarkEdit(sectionmarkNode, matchers, onChange) {
     return;
   }
   // Check neighbors
-  if (
-    !isPreviousNodeValid(sectionmarkNode) ||
-    !isNextNodeValid(sectionmarkNode)
-  ) {
+  if (!isPreviousNodeValid(sectionmarkNode) || !isNextNodeValid(sectionmarkNode)) {
     replaceWithChildren(sectionmarkNode);
     onChange(null, sectionmarkNode.getData());
     return;
@@ -233,8 +213,7 @@ function useAutoSectionMark(editor, matchers, onChange) {
         } else if (!$isSectionMarkNode(parent)) {
           if (
             textNode.isSimpleText() &&
-            (startsWithSeparator(textNode.getTextContent()) ||
-              !$isAutoSectionMarkNode(previous))
+            (startsWithSeparator(textNode.getTextContent()) || !$isAutoSectionMarkNode(previous))
           ) {
             handleSectionMarkCreation(textNode, matchers, onChangeWrapped);
           }

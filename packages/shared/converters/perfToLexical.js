@@ -17,13 +17,7 @@ export default transformPerfToLexicalState;
 /**
  * Converts a PERF element to a different format
  */
-export const buildLexicalNodeFromPerfNode = ({
-  props,
-  children,
-  path,
-  kind,
-  perfDocument,
-}) =>
+export const buildLexicalNodeFromPerfNode = ({ props, children, path, kind, perfDocument }) =>
   mapPerf({
     props,
     kind,
@@ -250,10 +244,5 @@ const getTagFromSubtype = ({ subtype, replacementMap }) =>
   replacementMap[subtype] ??
   ((matchedSubtype) =>
     matchedSubtype
-      ? subtype.replace(
-          new RegExp(matchedSubtype),
-          replacementMap[matchedSubtype],
-        )
-      : undefined)(
-    Object.keys(replacementMap).find((key) => subtype.match(key)),
-  );
+      ? subtype.replace(new RegExp(matchedSubtype), replacementMap[matchedSubtype])
+      : undefined)(Object.keys(replacementMap).find((key) => subtype.match(key)));

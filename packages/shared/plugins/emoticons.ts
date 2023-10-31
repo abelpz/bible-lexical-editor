@@ -9,10 +9,7 @@ function emoticonTransform(node) {
 }
 
 export function registerEmoticons(editor) {
-  const removeTransform = editor.registerNodeTransform(
-    TextNode,
-    emoticonTransform,
-  );
+  const removeTransform = editor.registerNodeTransform(TextNode, emoticonTransform);
   return () => {
     removeTransform();
   };

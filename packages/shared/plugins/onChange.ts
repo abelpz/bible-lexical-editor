@@ -25,9 +25,7 @@ export const registerOnChange = ({
     return editor.registerUpdateListener(
       ({ editorState, dirtyElements, dirtyLeaves, prevEditorState, tags }) => {
         if (
-          (ignoreSelectionChange &&
-            dirtyElements.size === 0 &&
-            dirtyLeaves.size === 0) ||
+          (ignoreSelectionChange && dirtyElements.size === 0 && dirtyLeaves.size === 0) ||
           (ignoreHistoryMergeTagChange && tags.has("history-merge")) ||
           prevEditorState.isEmpty()
         ) {
@@ -61,8 +59,7 @@ export const registerOnChange = ({
             const parentNode = node?.getParent?.();
             console.log({ node });
             const { path } = parentNode?.getData?.() ?? {};
-            if (path)
-              console.log("node with path changed", { path, node, parentNode });
+            if (path) console.log("node with path changed", { path, node, parentNode });
             if (!path) console.log("node deleted?", { path, node, parentNode });
           }
         });
@@ -74,8 +71,7 @@ export const registerOnChange = ({
             const parentNode = node?.getParent?.();
             // console.log({ node });
             const { path } = parentNode?.getData?.() ?? {};
-            if (path)
-              console.log("node with path changed", { path, node, parentNode });
+            if (path) console.log("node with path changed", { path, node, parentNode });
             if (!path) console.log("node deleted?", { path, node, parentNode });
           }
         });

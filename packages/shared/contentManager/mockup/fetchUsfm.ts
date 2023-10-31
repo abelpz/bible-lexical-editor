@@ -8,7 +8,6 @@ export function fetchUsfm({
   versionId = "unknown",
   bookCode = "unknown",
 }): Promise<string> {
-  return serverMap[serverName][organizationId][languageCode][versionId][
-    bookCode
-  ].file as Promise<string>;
+  return serverMap[serverName][organizationId][languageCode][versionId][bookCode]
+    .file as Promise<string>;
 }

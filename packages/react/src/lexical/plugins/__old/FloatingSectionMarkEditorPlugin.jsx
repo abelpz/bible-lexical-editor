@@ -19,10 +19,7 @@ import {
 import { useCallback, useEffect, useRef, useState } from "react";
 import * as React from "react";
 import { createPortal } from "react-dom";
-import {
-  getSelectedNode,
-  setFloatingElemPositionForSectionMarkEditor,
-} from "../utils";
+import { getSelectedNode, setFloatingElemPositionForSectionMarkEditor } from "../utils";
 
 //TODO: implement sanitization
 function sanitizeInput(input) {
@@ -79,27 +76,15 @@ function FloatingSectionMarkEditor({
       rootElement.contains(nativeSelection.anchorNode) &&
       editor.isEditable()
     ) {
-      const domRect =
-        nativeSelection.focusNode?.parentElement?.getBoundingClientRect();
+      const domRect = nativeSelection.focusNode?.parentElement?.getBoundingClientRect();
       if (domRect) {
         domRect.y += 40;
-        setFloatingElemPositionForSectionMarkEditor(
-          domRect,
-          editorElem,
-          anchorElem,
-        );
+        setFloatingElemPositionForSectionMarkEditor(domRect, editorElem, anchorElem);
       }
       setLastSelection(selection);
-    } else if (
-      !activeElement ||
-      activeElement.className !== "sectionmark-input"
-    ) {
+    } else if (!activeElement || activeElement.className !== "sectionmark-input") {
       if (rootElement !== null) {
-        setFloatingElemPositionForSectionMarkEditor(
-          null,
-          editorElem,
-          anchorElem,
-        );
+        setFloatingElemPositionForSectionMarkEditor(null, editorElem, anchorElem);
       }
       setLastSelection(null);
       console.log(1);
@@ -284,10 +269,7 @@ function useFloatingSectionMarkEditorToolbar(
       if ($isRangeSelection(selection)) {
         const node = getSelectedNode(selection);
         const sectionmarkParent = $findMatchingParent(node, $isSectionMarkNode);
-        const autoSectionMarkParent = $findMatchingParent(
-          node,
-          $isAutoSectionMarkNode,
-        );
+        const autoSectionMarkParent = $findMatchingParent(node, $isAutoSectionMarkNode);
         // We don't want this menu to open for auto sectionmarks.
         if (sectionmarkParent !== null && autoSectionMarkParent === null) {
           setIsSectionMark(true);
@@ -317,14 +299,8 @@ function useFloatingSectionMarkEditorToolbar(
           const selection = $getSelection();
           if ($isRangeSelection(selection)) {
             const node = getSelectedNode(selection);
-            const sectionmarkNode = $findMatchingParent(
-              node,
-              $isSectionMarkNode,
-            );
-            if (
-              $isSectionMarkNode(sectionmarkNode) &&
-              (payload.metaKey || payload.ctrlKey)
-            ) {
+            const sectionmarkNode = $findMatchingParent(node, $isSectionMarkNode);
+            if ($isSectionMarkNode(sectionmarkNode) && (payload.metaKey || payload.ctrlKey)) {
               return true;
             }
           }

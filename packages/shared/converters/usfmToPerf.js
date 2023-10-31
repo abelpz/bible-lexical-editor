@@ -39,19 +39,13 @@ export const usfm2perf = (
       }
     };
     const pk = new CustomProskomma();
-    pk.importDocument(
-      { serverName, organizationId, languageCode, versionId },
-      "usfm",
-      usfm,
-    );
-    const perfResultDocument = pk.gqlQuerySync(
-      "{documents {id docSetId perf} }",
-    ).data.documents[0];
+    pk.importDocument({ serverName, organizationId, languageCode, versionId }, "usfm", usfm);
+    const perfResultDocument = pk.gqlQuerySync("{documents {id docSetId perf} }").data.documents[0];
     perf = JSON.parse(perfResultDocument.perf);
   } catch (e) {
     console.error(e);
     perf = null;
   }
-  console.log({perf});
+  console.log({ perf });
   return perf;
 };

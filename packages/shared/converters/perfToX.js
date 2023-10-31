@@ -14,25 +14,18 @@ const PerfStrutureTypes = {
 export const convertPerf = ({ perfDocument, nodeBuilder }) => {
   return {
     ...perfDocument,
-    sequences: Object.keys(perfDocument.sequences).reduce(
-      (convertedSequences, sequenceId) => {
-        convertedSequences[sequenceId] = convertSequence({
-          sequence: perfDocument.sequences[sequenceId],
-          sequenceId,
-          nodeBuilder,
-        });
-        return convertedSequences;
-      },
-      {},
-    ),
+    sequences: Object.keys(perfDocument.sequences).reduce((convertedSequences, sequenceId) => {
+      convertedSequences[sequenceId] = convertSequence({
+        sequence: perfDocument.sequences[sequenceId],
+        sequenceId,
+        nodeBuilder,
+      });
+      return convertedSequences;
+    }, {}),
   };
 };
 
-export const convertSequence = ({
-  sequence,
-  sequenceId,
-  nodeBuilder: buildNode,
-}) => {
+export const convertSequence = ({ sequence, sequenceId, nodeBuilder: buildNode }) => {
   const { blocks, ...props } = sequence;
   const path = `$.sequences.${sequenceId}`;
   return buildNode({
@@ -42,9 +35,7 @@ export const convertSequence = ({
     children: blocks?.reduce(
       (convertedBlocks, block, index) =>
         ((convertedBlock) =>
-          convertedBlock
-            ? pushToArray(convertedBlocks, convertedBlock)
-            : convertedBlocks)(
+          convertedBlock ? pushToArray(convertedBlocks, convertedBlock) : convertedBlocks)(
           convertBlock({
             block,
             nodeBuilder: buildNode,
@@ -88,11 +79,7 @@ export const getContents = ({ content, nodeBuilder: buildNode, path }) =>
     );
   }, []) ?? [];
 
-export const convertContentElement = ({
-  element,
-  nodeBuilder: buildNode,
-  path,
-}) => {
+export const convertContentElement = ({ element, nodeBuilder: buildNode, path }) => {
   const { type, subtype, content, meta_content, ...props } = element;
   const subtypes = handleSubtypeNS(subtype);
 
