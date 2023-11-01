@@ -12,7 +12,7 @@ graph TD
     P --> E
     E --> |Epitelete can export USFM but not import it|B
     F[Editor-PERF adapter] -- Transforms PERF --> G[Editor]
-    G -- Transforms Editor Format --> F 
+    G -- Transforms Editor Format --> F
 
     E[(epiteleteStore)]
     E -- Epitelete runs operations on PERF --> F
@@ -75,3 +75,14 @@ Nx comes with local caching already built-in (check your `nx.json`). On CI you m
 - [Join the community](https://nx.dev/community)
 - [Subscribe to the Nx Youtube Channel](https://www.youtube.com/@nxdevtools)
 - [Follow us on Twitter](https://twitter.com/nxdevtools)
+
+## Formatting
+
+Formatting happens automatically when you commit. If you use VS Code with this repo's recommended extensions, files will be formatted when you save.
+
+To check TypeScript for readability, maintainability, and functionality errors, and to check a few other files for proper formatting, run the following from the repo root (or just use VS Code with this repo's recommended extensions)
+
+```bash
+pnpm nx format:check
+pnpm nx format:write
+```

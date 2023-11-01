@@ -92,10 +92,7 @@ export class SectionMarkNode extends ElementNode {
   }
 
   insertNewAfter(selection, restoreSelection = true) {
-    const element = this.getParentOrThrow().insertNewAfter(
-      selection,
-      restoreSelection,
-    );
+    const element = this.getParentOrThrow().insertNewAfter(selection, restoreSelection);
     if ($isElementNode(element)) {
       const sectionmarkNode = $createSectionMarkNode(this.__data);
       element.append(sectionmarkNode);
@@ -132,10 +129,7 @@ function convertAnchorElement(domNode) {
   let node = null;
   if (isHTMLAnchorElement(domNode)) {
     const data = domNode.dataset;
-    if (
-      data.type === "mark" &&
-      (data.subtype === "chapter" || data.subtype === "verses")
-    ) {
+    if (data.type === "mark" && (data.subtype === "chapter" || data.subtype === "verses")) {
       node = $createSectionMarkNode({
         atts: { number: domNode.getAttribute("data-atts_number") },
         type: domNode.getAttribute("data-type"),
@@ -189,10 +183,7 @@ export class AutoSectionMarkNode extends SectionMarkNode {
     };
   }
   insertNewAfter(selection, restoreSelection = true) {
-    const element = this.getParentOrThrow().insertNewAfter(
-      selection,
-      restoreSelection,
-    );
+    const element = this.getParentOrThrow().insertNewAfter(selection, restoreSelection);
     if ($isElementNode(element)) {
       const sectionmarkNode = $createAutoSectionMarkNode(this.__data);
       element.append(sectionmarkNode);
@@ -222,9 +213,7 @@ export function $createAutoSectionMarkNode(data) {
 export function $isAutoSectionMarkNode(node) {
   return node instanceof AutoSectionMarkNode;
 }
-export const TOGGLE_SECTIONMARK_COMMAND = createCommand(
-  "TOGGLE_SECTIONMARK_COMMAND",
-);
+export const TOGGLE_SECTIONMARK_COMMAND = createCommand("TOGGLE_SECTIONMARK_COMMAND");
 /**
  * Generates or updates a SectionMarkNode. It can also delete a SectionMarkNode if the DATA is null,
  * but saves any children and brings them up to the parent node.
@@ -317,10 +306,6 @@ function $getSectionMarkAncestor(node) {
 }
 function $getAncestor(node, predicate) {
   let parent = node;
-  while (
-    parent !== null &&
-    (parent = parent.getParent()) !== null &&
-    !predicate(parent)
-  );
+  while (parent !== null && (parent = parent.getParent()) !== null && !predicate(parent));
   return parent;
 }

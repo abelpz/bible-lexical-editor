@@ -54,10 +54,7 @@ export default function PerfClickableSectionMarkPlugin() {
       nearestEditor.update(() => {
         const clickedNode = $getNearestNodeFromDOMNode(target);
         if (clickedNode !== null) {
-          const maybeSectionMarkNode = $findMatchingParent(
-            clickedNode,
-            $isElementNode,
-          );
+          const maybeSectionMarkNode = $findMatchingParent(clickedNode, $isElementNode);
           if ($isSectionMarkNode(maybeSectionMarkNode)) {
             data = maybeSectionMarkNode.getData();
           } else {

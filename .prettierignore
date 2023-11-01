@@ -1,5 +1,10 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
+# generated files
+pnpm-lock.yaml
+
+# items below are copied from `.gitignore`
+
 # compiled output
 build
 coverage

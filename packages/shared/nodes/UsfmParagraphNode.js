@@ -8,12 +8,7 @@ export class UsfmParagraphNode extends UsfmElementNode {
   }
 
   static clone(node) {
-    return new UsfmParagraphNode(
-      node.__attributes,
-      node.__data,
-      node.__tag,
-      node.__key,
-    );
+    return new UsfmParagraphNode(node.__attributes, node.__data, node.__tag, node.__key);
   }
 
   constructor(attributes, data, tag, key) {

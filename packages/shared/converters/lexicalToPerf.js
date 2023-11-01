@@ -28,15 +28,7 @@ const customNodeBuilder = ({
       lexicalMap,
     }))(createLexicalMap(perf));
 
-const mapLexical = ({
-  node,
-  children,
-  data,
-  kind,
-  path,
-  defaults,
-  lexicalMap,
-}) => {
+const mapLexical = ({ node, children, data, kind, path, defaults, lexicalMap }) => {
   const _defaults = defaults ?? { node, children, data, kind, path };
 
   if (!lexicalMap) return _defaults;

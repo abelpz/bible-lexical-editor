@@ -1,9 +1,6 @@
 import { pushToArray } from "./utils";
 
-export const convertLexicalStateNode = ({
-  node: nodeData,
-  nodeBuilder: buildNode,
-}) => {
+export const convertLexicalStateNode = ({ node: nodeData, nodeBuilder: buildNode }) => {
   const { children, ...node } = nodeData;
   return buildNode
     ? buildNode({
@@ -11,9 +8,7 @@ export const convertLexicalStateNode = ({
         children: children?.reduce(
           (convertedNodes, node) =>
             ((convertedNode) =>
-              convertedNode
-                ? pushToArray(convertedNodes, convertedNode)
-                : convertedNodes)(
+              convertedNode ? pushToArray(convertedNodes, convertedNode) : convertedNodes)(
               convertLexicalStateNode({ node, nodeBuilder: buildNode }),
             ),
           [],

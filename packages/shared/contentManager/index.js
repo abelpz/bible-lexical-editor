@@ -19,16 +19,11 @@ export const getLexicalState = (usfmText) => {
 
   const readOptions = { readPipeline: "stripAlignmentPipeline" };
 
-  return bibleHandler
-    .sideloadPerf("RUT", perf, { ...readOptions })
-    .then((perf) => {
-      const _lexicalState = transformPerfToLexicalState(
-        perf,
-        perf.main_sequence_id,
-      );
-      console.log("Perf to Lexical", { perf, lexicalState: _lexicalState });
-      return JSON.stringify(_lexicalState);
-    });
+  return bibleHandler.sideloadPerf("RUT", perf, { ...readOptions }).then((perf) => {
+    const _lexicalState = transformPerfToLexicalState(perf, perf.main_sequence_id);
+    console.log("Perf to Lexical", { perf, lexicalState: _lexicalState });
+    return JSON.stringify(_lexicalState);
+  });
 };
 
 // export const lexicalState = getTestLexicalState();
