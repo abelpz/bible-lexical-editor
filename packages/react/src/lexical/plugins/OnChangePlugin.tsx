@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 
 //Lots of experimenting here.
-export const OnChangePlugin = ({ onChange }) => {
+export const OnChangePlugin = ({ onChange }: { onChange: (props: unknown) => void }) => {
   const [editor] = useLexicalComposerContext();
   useEffect(() => {
     return editor.registerUpdateListener((listener) => {
@@ -27,7 +27,7 @@ export const OnChangePlugin = ({ onChange }) => {
         }
       }
     });
-  }, [editor]);
+  }, [editor, onChange]);
 
   return null;
 };

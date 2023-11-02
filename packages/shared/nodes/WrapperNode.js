@@ -27,7 +27,7 @@ export class WrapperNode extends ElementNode {
     return node;
   }
 
-  updateDOM(prevNode, dom) {
+  updateDOM() {
     // Returning false tells Lexical that this node does not need its
     // DOM element replacing with a new copy from createDOM.
     return false;

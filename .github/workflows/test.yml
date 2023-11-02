@@ -48,6 +48,9 @@ jobs:
       - name: Check formatting
         run: pnpm nx format:check
 
+      - name: Check linting
+        run: pnpm nx run-many -t lint
+
       # Enable tmate debugging of manually-triggered workflows if the input option was provided
       - name: Setup tmate session
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.debug_enabled }}

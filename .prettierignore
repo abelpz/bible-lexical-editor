@@ -1,4 +1,5 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
+# Please keep this file in sync with `.eslintignore`
 
 # generated files
 pnpm-lock.yaml

@@ -1,14 +1,19 @@
-export function createContext() {
-  let contextValue = undefined;
+type Context<T = unknown> = {
+  Provider: (value: T, callback: () => void) => void;
+  Consumer: () => T;
+};
 
-  function Provider(value, callback) {
-    let currentValue = contextValue;
+export function createContext<T = unknown>(): Context<T> {
+  let contextValue: T;
+
+  function Provider(value: T, callback: () => void): void {
+    const currentValue = contextValue;
     contextValue = value;
     callback();
     contextValue = currentValue;
   }
 
-  function Consumer() {
+  function Consumer(): T {
     return contextValue;
   }
 
@@ -18,6 +23,6 @@ export function createContext() {
   };
 }
 
-export function useContext(ctxRef) {
+export function useContext<T = unknown>(ctxRef: Context<T>): T {
   return ctxRef.Consumer();
 }

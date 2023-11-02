@@ -2,7 +2,7 @@ import "./style.css";
 import { createEditor } from "lexical";
 import { registerRichText } from "@lexical/rich-text";
 import { registerEmoticons } from "shared/plugins/emoticons";
-import { registerOnChange } from "shared/plugins/onChange";
+// import { registerOnChange } from "shared/plugins/onChange";
 import { registerOnTransform } from "shared/plugins/onTransform";
 
 // import { registerOnMutation } from "shared/plugins/onMutation";
