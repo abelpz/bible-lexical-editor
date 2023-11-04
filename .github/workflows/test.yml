@@ -43,10 +43,13 @@ jobs:
           cache: pnpm
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Check formatting
         run: pnpm nx format:check
+
+      - name: Check tests
+        run: pnpm nx run-many -t test
 
       - name: Check linting
         run: pnpm nx run-many -t lint

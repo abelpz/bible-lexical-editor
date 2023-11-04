@@ -76,6 +76,35 @@ Nx comes with local caching already built-in (check your `nx.json`). On CI you m
 - [Subscribe to the Nx Youtube Channel](https://www.youtube.com/@nxdevtools)
 - [Follow us on Twitter](https://twitter.com/nxdevtools)
 
+## Testing
+
+The unit tests run automatically on each GitHub PR (see [test.yml](https://github.com/abelpz/bible-lexical-editor/blob/main/.github/workflows/test.yml)).
+
+To run all TS unit tests:
+
+```bash
+pnpm nx run-many -t test
+```
+
+To run all TS unit tests for a single package (in this example the **shared** package):
+
+```bash
+pnpm nx test shared
+```
+
+To run all TS unit tests watching for file changes:
+
+- On Windows:
+  ```bash
+  pnpm nx watch --all -- pnpm nx test %NX_PROJECT_NAME%
+  ```
+- On Linux or macOS:
+  ```bash
+  pnpm nx watch --all -- pnpm nx test \$NX_PROJECT_NAME
+  ```
+
+You can also use the [recommended VS Code extensions](https://github.com/abelpz/bible-lexical-editor/blob/main/.vscode/extensions.json) to run tests there. This is particularly useful for running individual tests and debugging.
+
 ## Formatting and Linting
 
 Formatting happens automatically when you commit. If you use VS Code with this repo's recommended extensions, files will be formatted when you save.
