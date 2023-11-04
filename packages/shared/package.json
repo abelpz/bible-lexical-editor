@@ -8,8 +8,7 @@
     "rich-text"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+    "build": "tsc -p tsconfig.json"
   },
   "license": "MIT",
   "version": "0.12.2",
@@ -19,8 +18,7 @@
     "lexical": "0.12.2"
   },
   "devDependencies": {
-    "proskomma-core": "^0.10.4",
-    "typescript": "^5.2.2"
+    "proskomma-core": "^0.10.4"
   },
   "peerDependencies": {
     "proskomma-core": "^0.10.4"

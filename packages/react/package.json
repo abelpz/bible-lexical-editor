@@ -4,10 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "dev": "vite"
   },
   "dependencies": {
     "@lexical/headless": "^0.12.2",
@@ -22,12 +19,7 @@
   },
   "devDependencies": {
     "@types/react": "^18.2.21",
-    "@types/react-dom": "^18.2.7",
-    "@typescript-eslint/eslint-plugin": "^6.6.0",
-    "@typescript-eslint/parser": "^6.6.0",
-    "@vitejs/plugin-react-swc": "^3.3.2",
-    "typescript": "^5.2.2",
-    "vite": "^4.4.9"
+    "@types/react-dom": "^18.2.7"
   },
   "nx": {
     "implicitDependencies": [

@@ -1,5 +1,10 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
-# Changes here should be reflected in `.eslintignore` and `.prettierignore`
+# Please keep this file in sync with `.prettierignore`
+
+# generated files
+pnpm-lock.yaml
+
+# items below are copied from `.gitignore`
 
 # compiled output
 build
@@ -28,9 +33,9 @@ node_modules
 !.vscode/extensions.json
 
 # misc
+__old
 /.sass-cache
 /connect.lock
-/coverage
 /libpeerconnection.log
 npm-debug.log
 yarn-error.log

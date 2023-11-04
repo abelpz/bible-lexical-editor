@@ -197,7 +197,7 @@ export const createPerfMap = (perf) => ({
     }),
   },
   mark: {
-    ts: ({ props: perfElementProps }) => ({
+    ts: () => ({
       // data: perfElementProps,
       type: "usfmparagraph",
       version: 1,
