@@ -1,22 +1,38 @@
 import { addClassNamesToElement } from "@lexical/utils";
-import { $applyNodeReplacement } from "lexical";
-import { NodeKey } from "lexical/LexicalNode";
+import {
+  $applyNodeReplacement,
+  EditorConfig,
+  LexicalNode,
+  NodeKey,
+  SerializedElementNode,
+  Spread,
+} from "lexical";
 import { UsfmElementNode } from "./UsfmElementNode";
+
+export type SerializedDivisionMarkNode = Spread<
+  {
+    attributes: unknown;
+    data: unknown;
+  },
+  SerializedElementNode
+>;
 
 export class DivisionMarkNode extends UsfmElementNode {
   static getType() {
     return "divisionmark";
   }
 
-  static clone(node) {
+  static clone(node: DivisionMarkNode): DivisionMarkNode {
     return new DivisionMarkNode(node.__attributes, node.__data, node.__key);
   }
 
-  constructor(attributes, data, key?: NodeKey) {
-    super(attributes, data, key);
+  constructor(attributes: unknown, data: unknown, key?: NodeKey) {
+    // TODO: define this value. This was added because previously `super` was passed `key` as `tag`.
+    const tag = "";
+    super(attributes, data, tag, key);
   }
 
-  static importJSON(serializedNode) {
+  static importJSON(serializedNode: SerializedDivisionMarkNode) {
     const { data, attributes, format, indent, direction } = serializedNode;
     const node = $createDivisionMarkNode(attributes, data);
     node.setData(data);
@@ -27,7 +43,7 @@ export class DivisionMarkNode extends UsfmElementNode {
     return node;
   }
 
-  createDOM(config) {
+  createDOM(config: EditorConfig) {
     const element = document.createElement("span");
     const attributes = this.getAttributes();
 
@@ -57,10 +73,12 @@ export class DivisionMarkNode extends UsfmElementNode {
   }
 }
 
-export function $createDivisionMarkNode(attributes, data) {
+export function $createDivisionMarkNode(attributes: unknown, data: unknown): DivisionMarkNode {
   return $applyNodeReplacement(new DivisionMarkNode(attributes, data));
 }
 
-export function $isDivisionMarkNode(node) {
+export function $isDivisionMarkNode(
+  node: LexicalNode | null | undefined,
+): node is DivisionMarkNode {
   return node instanceof DivisionMarkNode;
 }
