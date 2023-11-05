@@ -109,6 +109,52 @@ importers:
         specifier: ~0.34.6
         version: 0.34.6(@vitest/ui@0.34.6)(jsdom@22.1.0)
 
+  packages/platform:
+    dependencies:
+      '@lexical/code':
+        specifier: ^0.12.2
+        version: 0.12.2(lexical@0.12.2)
+      '@lexical/link':
+        specifier: ^0.12.2
+        version: 0.12.2(lexical@0.12.2)
+      '@lexical/list':
+        specifier: ^0.12.2
+        version: 0.12.2(lexical@0.12.2)
+      '@lexical/react':
+        specifier: ^0.12.2
+        version: 0.12.2(lexical@0.12.2)(react-dom@18.2.0)(react@18.2.0)(yjs@13.6.8)
+      '@lexical/rich-text':
+        specifier: ^0.12.2
+        version: 0.12.2(@lexical/clipboard@0.12.2)(@lexical/selection@0.12.2)(@lexical/utils@0.12.2)(lexical@0.12.2)
+      '@lexical/selection':
+        specifier: ^0.12.2
+        version: 0.12.2(lexical@0.12.2)
+      '@lexical/utils':
+        specifier: ^0.12.2
+        version: 0.12.2(lexical@0.12.2)
+      '@xmldom/xmldom':
+        specifier: ^0.8.10
+        version: 0.8.10
+      lexical:
+        specifier: ^0.12.2
+        version: 0.12.2
+      react:
+        specifier: ^18.2.0
+        version: 18.2.0
+      react-dom:
+        specifier: ^18.2.0
+        version: 18.2.0(react@18.2.0)
+      shared:
+        specifier: '*'
+        version: link:../shared
+    devDependencies:
+      '@types/react':
+        specifier: ^18.2.35
+        version: 18.2.35
+      '@types/react-dom':
+        specifier: ^18.2.14
+        version: 18.2.14
+
   packages/perf-react:
     dependencies:
       '@lexical/headless':
@@ -3351,11 +3397,25 @@ packages:
   /@types/react-dom@18.2.13:
     resolution: {integrity: sha512-eJIUv7rPP+EC45uNYp/ThhSpE16k22VJUknt5OLoH9tbXoi8bMhwLf5xRuWMywamNbWzhrSmU7IBJfPup1+3fw==}
     dependencies:
-      '@types/react': 18.2.28
+      '@types/react': 18.2.35
+    dev: true
+
+  /@types/react-dom@18.2.14:
+    resolution: {integrity: sha512-V835xgdSVmyQmI1KLV2BEIUgqEuinxp9O4G6g3FqO/SqLac049E53aysv0oEFD2kHfejeKU+ZqL2bcFWj9gLAQ==}
+    dependencies:
+      '@types/react': 18.2.35
     dev: true
 
   /@types/react@18.2.28:
     resolution: {integrity: sha512-ad4aa/RaaJS3hyGz0BGegdnSRXQBkd1CCYDCdNjBPg90UUpLgo+WlJqb9fMYUxtehmzF3PJaTWqRZjko6BRzBg==}
+    dependencies:
+      '@types/prop-types': 15.7.8
+      '@types/scheduler': 0.16.4
+      csstype: 3.1.2
+    dev: true
+
+  /@types/react@18.2.35:
+    resolution: {integrity: sha512-LG3xpFZ++rTndV+/XFyX5vUP7NI9yxyk+MQvBDq+CVs8I9DLSc3Ymwb1Vmw5YDoeNeHN4PDZa3HylMKJYT9PNQ==}
     dependencies:
       '@types/prop-types': 15.7.8
       '@types/scheduler': 0.16.4
@@ -3691,6 +3751,11 @@ packages:
       '@webassemblyjs/ast': 1.11.6
       '@xtuc/long': 4.2.2
     dev: true
+
+  /@xmldom/xmldom@0.8.10:
+    resolution: {integrity: sha512-2WALfTl4xo2SkGCYRt6rDTFfk9R1czmBvUQy12gK2KuRKIpWEhcbbzy8EZXtz/jkRqHX8bFEc6FC1HjX4TUWYw==}
+    engines: {node: '>=10.0.0'}
+    dev: false
 
   /@xtuc/ieee754@1.2.0:
     resolution: {integrity: sha512-DX8nKgqcGwsc0eJSqYt5lwP4DH5FlHnmuWWBRy7X0NcaGR0ZtuyeESgMwTYVEtxmsNGY+qit4QYT/MIYTOTPeA==}
