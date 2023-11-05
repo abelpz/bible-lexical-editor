@@ -109,7 +109,7 @@ importers:
         specifier: ~0.34.6
         version: 0.34.6(@vitest/ui@0.34.6)(jsdom@22.1.0)
 
-  packages/react:
+  packages/perf-react:
     dependencies:
       '@lexical/headless':
         specifier: ^0.12.2
@@ -149,6 +149,21 @@ importers:
         specifier: ^18.2.7
         version: 18.2.13
 
+  packages/perf-vanilla:
+    dependencies:
+      '@lexical/rich-text':
+        specifier: ^0.12.2
+        version: 0.12.2(@lexical/clipboard@0.12.2)(@lexical/selection@0.12.2)(@lexical/utils@0.12.2)(lexical@0.12.2)
+      '@lexical/utils':
+        specifier: ^0.12.2
+        version: 0.12.2(lexical@0.12.2)
+      lexical:
+        specifier: ^0.12.2
+        version: 0.12.2
+      shared:
+        specifier: '*'
+        version: link:../shared
+
   packages/shared:
     dependencies:
       '@lexical/utils':
@@ -164,21 +179,6 @@ importers:
       proskomma-core:
         specifier: ^0.10.4
         version: 0.10.4(@babel/core@7.23.2)
-
-  packages/vanilla:
-    dependencies:
-      '@lexical/rich-text':
-        specifier: ^0.12.2
-        version: 0.12.2(@lexical/clipboard@0.12.2)(@lexical/selection@0.12.2)(@lexical/utils@0.12.2)(lexical@0.12.2)
-      '@lexical/utils':
-        specifier: ^0.12.2
-        version: 0.12.2(lexical@0.12.2)
-      lexical:
-        specifier: ^0.12.2
-        version: 0.12.2
-      shared:
-        specifier: '*'
-        version: link:../shared
 
 packages:
 
