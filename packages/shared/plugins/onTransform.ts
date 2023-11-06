@@ -1,10 +1,16 @@
 import ScriptureNodes from "../nodes";
-import { TextNode } from "lexical";
+import { LexicalEditor, LexicalNode, TextNode } from "lexical";
 
-export const registerOnTransform = ({ editor, onTransform }) => {
+export const registerOnTransform = ({
+  editor,
+  onTransform,
+}: {
+  editor: LexicalEditor;
+  onTransform: boolean;
+}) => {
   if (onTransform) {
     console.log("TRANSFORMED");
-    const callback = (node) => {
+    const callback = (node: LexicalNode) => {
       console.log({ node });
     };
 

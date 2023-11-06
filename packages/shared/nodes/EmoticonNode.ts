@@ -1,5 +1,4 @@
-import { TextNode } from "lexical";
-import { NodeKey } from "lexical/LexicalNode";
+import { EditorConfig, LexicalNode, NodeKey, TextNode } from "lexical";
 
 export class EmoticonNode extends TextNode {
   __className: string;
@@ -8,25 +7,25 @@ export class EmoticonNode extends TextNode {
     return "emoticon";
   }
 
-  static clone(node) {
+  static clone(node: EmoticonNode): EmoticonNode {
     return new EmoticonNode(node.__className, node.__text, node.__key);
   }
-  constructor(className, text, key?: NodeKey) {
+  constructor(className: string, text: string, key?: NodeKey) {
     super(text, key);
     this.__className = className;
   }
 
-  createDOM(config) {
+  createDOM(config: EditorConfig) {
     const dom = super.createDOM(config);
     dom.className = this.__className;
     return dom;
   }
 }
 
-export function $isEmoticonNode(node) {
+export function $isEmoticonNode(node: LexicalNode | null | undefined): node is EmoticonNode {
   return node instanceof EmoticonNode;
 }
 
-export function $createEmoticonNode(className, emoticonText) {
+export function $createEmoticonNode(className: string, emoticonText: string): EmoticonNode {
   return new EmoticonNode(className, emoticonText).setMode("token");
 }

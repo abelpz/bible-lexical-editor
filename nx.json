@@ -15,6 +15,7 @@
   },
   "targetDefaults": {
     "build": {
+      "inputs": ["production", "^production"],
       "dependsOn": ["^build"]
     },
     "dev": {

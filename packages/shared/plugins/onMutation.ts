@@ -1,6 +1,13 @@
+import { LexicalEditor } from "lexical";
 import { InlineNode } from "../nodes/InlineNode";
 
-export const registerOnMutation = ({ editor, onMutation }) => {
+export const registerOnMutation = ({
+  editor,
+  onMutation,
+}: {
+  editor: LexicalEditor;
+  onMutation: boolean;
+}) => {
   if (onMutation) {
     console.log("MUTATED");
     return editor.registerMutationListener(InlineNode, (mutatedNodes) => {

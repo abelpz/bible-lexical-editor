@@ -16,15 +16,17 @@
   "javascript.format.enable": false,
   "typescript.format.enable": false,
 
-  "search.exclude": {
-    ".git": true,
-    "node_modules": true
-  },
-
   "json.schemas": [
     {
       "fileMatch": ["*tsconfig*.json"],
       "url": "http://json.schemastore.org/tsconfig"
     }
-  ]
+  ],
+
+  "search.exclude": {
+    ".git": true,
+    "node_modules": true
+  },
+
+  "typescript.tsdk": "node_modules/typescript/lib"
 }
