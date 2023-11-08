@@ -21,6 +21,9 @@
     "dev": {
       "dependsOn": ["^build"]
     },
+    "devpub": {
+      "dependsOn": ["build", "^build"]
+    },
     "test": {
       "inputs": ["default", "^default", "{workspaceRoot}/jest.preset.js"]
     },

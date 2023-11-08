@@ -9,7 +9,7 @@
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
-        "outputPath": "dist/packages/platform"
+        "outputPath": "packages/platform/dist"
       },
       "configurations": {
         "development": {
@@ -51,6 +51,11 @@
           "buildTarget": "platform:build:production"
         }
       }
+    },
+    "devpub": {
+      "executor": "nx:run-commands",
+      "defaultConfiguration": "production",
+      "options": { "command": "yalc publish", "cwd": "packages/platform" }
     },
     "test": {
       "executor": "@nx/jest:jest",
