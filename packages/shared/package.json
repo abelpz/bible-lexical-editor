@@ -14,6 +14,7 @@
   "version": "0.12.2",
   "dependencies": {
     "@lexical/utils": "^0.12.2",
+    "@xmldom/xmldom": "^0.8.10",
     "epitelete": "^0.2.20",
     "lexical": "0.12.2"
   },

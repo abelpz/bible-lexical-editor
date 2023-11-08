@@ -9,7 +9,7 @@ import {
   Spread,
   TextNode,
 } from "lexical";
-import { BookCode } from "../../../converters/usj.model";
+import { BookCode } from "../../../converters/usj/usj.model";
 
 export const BOOK_STYLE = "id";
 export const BOOK_VERSION = 1;

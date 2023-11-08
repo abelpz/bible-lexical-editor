@@ -8,12 +8,13 @@ import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
+import { Usj } from "shared/converters/usj/usj.model";
+import scriptureUsjNodes from "shared/nodes/scripture/usj";
+import { NoteNode } from "./nodes/NoteNode";
 import editorTheme from "./themes/editor-theme";
 import ToolbarPlugin from "./plugins/ToolbarPlugin";
 // import TreeViewPlugin from './plugins/TreeViewPlugin';
 import UpdateStatePlugin from "./plugins/UpdateStatePlugin";
-import scriptureUsjNodes from "./nodes/scripture/usj";
-import { Usj } from "./converters/usj.model";
 import { LoggerBasic } from "./plugins/logger-basic.model";
 
 type EditorProps<TLogger extends LoggerBasic> = {
@@ -31,11 +32,11 @@ const editorConfig: InitialConfigType = {
     throw error;
   },
   // Any custom nodes go here
-  nodes: [...scriptureUsjNodes],
+  nodes: [NoteNode, ...scriptureUsjNodes],
 };
 
 function Placeholder(): JSX.Element {
-  return <div className="editor-placeholder">Enter some rich text...</div>;
+  return <div className="editor-placeholder">Enter some Scripture...</div>;
 }
 
 export default function Editor<TLogger extends LoggerBasic>({

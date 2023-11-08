@@ -190,9 +190,6 @@ importers:
       '@lexical/utils':
         specifier: ^0.12.2
         version: 0.12.2(lexical@0.12.2)
-      '@xmldom/xmldom':
-        specifier: ^0.8.10
-        version: 0.8.10
       lexical:
         specifier: ^0.12.2
         version: 0.12.2
@@ -218,6 +215,9 @@ importers:
       '@lexical/utils':
         specifier: ^0.12.2
         version: 0.12.2(lexical@0.12.2)
+      '@xmldom/xmldom':
+        specifier: ^0.8.10
+        version: 0.8.10
       epitelete:
         specifier: ^0.2.20
         version: 0.2.20

@@ -19,7 +19,6 @@
     "@lexical/rich-text": "^0.12.2",
     "@lexical/selection": "^0.12.2",
     "@lexical/utils": "^0.12.2",
-    "@xmldom/xmldom": "^0.8.10",
     "lexical": "^0.12.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

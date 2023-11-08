@@ -9,43 +9,44 @@ import {
 } from "lexical";
 import { useEffect } from "react";
 import {
+  MarkerContent,
+  MarkerObject,
+  USJ_TYPE,
+  USJ_VERSION,
+  Usj,
+} from "shared/converters/usj/usj.model";
+import { deserializeUsjType } from "shared/converters/usj/usj.util";
+import {
   BOOK_STYLE,
   BOOK_VERSION,
   BookNode,
   SerializedBookNode,
-} from "../nodes/scripture/usj/BookNode";
+} from "shared/nodes/scripture/usj/BookNode";
 import {
   CHAPTER_STYLE,
   CHAPTER_VERSION,
   ImmutableChapterNode,
   SerializedChapterNode,
-} from "../nodes/scripture/usj/ImmutableChapterNode";
-import { CHAR_VERSION, CharNode, SerializedCharNode } from "../nodes/scripture/usj/CharNode";
+} from "shared/nodes/scripture/usj/ImmutableChapterNode";
+import { CHAR_VERSION, CharNode, SerializedCharNode } from "shared/nodes/scripture/usj/CharNode";
 import {
   IMPLIED_PARA_VERSION,
   ImpliedParaNode,
   SerializedImpliedParaNode,
-} from "../nodes/scripture/usj/ImpliedParaNode";
+} from "shared/nodes/scripture/usj/ImpliedParaNode";
 import {
   PARA_STYLE_DEFAULT,
   PARA_VERSION,
   ParaNode,
   SerializedParaNode,
-} from "../nodes/scripture/usj/ParaNode";
-import {
-  NOTE_VERSION,
-  NoteNode,
-  NoteUsxStyle,
-  SerializedNoteNode,
-} from "../nodes/scripture/usj/NoteNode";
+} from "shared/nodes/scripture/usj/ParaNode";
+import { NOTE_VERSION, NoteNode, NoteUsxStyle, SerializedNoteNode } from "../nodes/NoteNode";
 import {
   SerializedVerseNode,
   VERSE_STYLE,
   VERSE_VERSION,
   VerseNode,
-} from "../nodes/scripture/usj/VerseNode";
-import { MarkerContent, MarkerObject, USJ_TYPE, USJ_VERSION, Usj } from "../converters/usj.model";
-import { deserializeUsjType } from "../converters/usj.util";
+} from "shared/nodes/scripture/usj/VerseNode";
 import { LoggerBasic } from "./logger-basic.model";
 
 // empty para node for an 'empty' editor

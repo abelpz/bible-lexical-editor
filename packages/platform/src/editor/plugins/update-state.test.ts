@@ -5,7 +5,7 @@ import {
   usjEmpty,
   usjGen1v1,
   usjGen1v1ImpliedPara,
-} from "../converters/converter-test.data";
+} from "shared/converters/usj/converter-test.data";
 import { loadEditorState } from "./UpdateStatePlugin";
 
 describe("Update Lexical State", () => {

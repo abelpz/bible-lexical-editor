@@ -4,15 +4,13 @@ import { ImmutableChapterNode } from "./ImmutableChapterNode";
 import { CharNode } from "./CharNode";
 import { ImpliedParaNode } from "./ImpliedParaNode";
 import { ParaNode } from "./ParaNode";
-import { NoteNode } from "./NoteNode";
 import { VerseNode } from "./VerseNode";
 
-const scriptureNodes = [
+const scriptureUsjNodes = [
   BookNode,
   ImmutableChapterNode,
   VerseNode,
   CharNode,
-  NoteNode,
   ImpliedParaNode,
   ParaNode,
   {
@@ -22,4 +20,4 @@ const scriptureNodes = [
     },
   },
 ];
-export default scriptureNodes;
+export default scriptureUsjNodes;
