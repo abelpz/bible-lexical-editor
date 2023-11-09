@@ -1,5 +1,24 @@
 # A PoC for assembling Lexical, PERF, Epitelete and Proskomma
 
+```mermaid
+---
+title: ScriptureData—Editor flow
+---
+graph TD
+  A[(DB)] --> B([USFM])
+  B --> A
+  B --> C[Proskomma]
+  C --> |Proskomma is only being used to convert USFM to PERF|P([PERF])
+  P --> E
+  E --> |Epitelete can export USFM but not import it|B
+  F[Editor-PERF adapter] -- Transforms PERF --> G[Editor]
+  G -- Transforms Editor Format --> F
+
+  E[(epiteleteStore)]
+  E -- Epitelete runs operations on PERF --> F
+  F -- Epitelete runs operations on PERF --> E
+```
+
 ## TODO
 
 Low hanging:
@@ -23,9 +42,3 @@ Epics:
 - [CodeSandbox — Discord](https://discord.gg/Ggarp3pX5H)
 - [Vite — GitHub](https://github.com/vitejs/vite)
 - [Vite — Docs](https://vitejs.dev/guide/)
-
-## JavaScript Tool Manager
-
-You can use [Volta](https://volta.sh/) with this repo to use the right version of tools such as node and pnpm.
-
-If you don't use Volta just look at the `volta` property in [package.json](https://github.com/abelpz/bible-lexical-editor/blob/main/package.json) to see the right tool versions to install in your preferred way.
