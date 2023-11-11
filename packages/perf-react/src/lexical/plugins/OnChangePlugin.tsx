@@ -1,28 +1,31 @@
 import { useEffect } from "react";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+import { EditorState, LexicalEditor } from "lexical";
+
+export type OnChange = (editorState: EditorState, editor: LexicalEditor, tags: Set<string>) => void;
 
 //Lots of experimenting here.
-export const OnChangePlugin = ({ onChange }: { onChange: (props: unknown) => void }) => {
+export const OnChangePlugin = ({ onChange }: { onChange: OnChange }) => {
   const [editor] = useLexicalComposerContext();
   useEffect(() => {
-    return editor.registerUpdateListener((listener) => {
-      if (listener.dirtyElements.size > 0) {
+    return editor.registerUpdateListener(({ editorState, dirtyElements, dirtyLeaves, tags }) => {
+      if (dirtyElements.size > 0) {
         console.log("DIRTY ELEMENTS", {
-          dirtyElements: listener.dirtyElements,
+          dirtyElements,
         });
-        onChange({ editor, listener });
-        for (const [nodeKey] of listener.dirtyElements) {
-          const node = listener.editorState._nodeMap.get(nodeKey);
+        onChange(editorState, editor, tags);
+        for (const [nodeKey] of dirtyElements) {
+          const node = editorState._nodeMap.get(nodeKey);
           const path = node?.__data?.path;
           if (path) console.log("node with path changed", { path, node });
         }
       }
-      if (listener.dirtyLeaves.size > 0) {
+      if (dirtyLeaves.size > 0) {
         console.log("DIRTY LEAVES", {
-          dirtyLeaves: listener.dirtyLeaves,
+          dirtyLeaves,
         });
-        for (const nodeKey of listener.dirtyLeaves) {
-          const node = listener.editorState._nodeMap.get(nodeKey);
+        for (const nodeKey of dirtyLeaves) {
+          const node = editorState._nodeMap.get(nodeKey);
           console.log({ node });
         }
       }

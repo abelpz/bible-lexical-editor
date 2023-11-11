@@ -3,7 +3,7 @@
     "default": {
       "runner": "nx-cloud",
       "options": {
-        "cacheableOperations": ["build", "serve", "preview", "test", "lint", "dev"],
+        "cacheableOperations": ["build", "serve", "preview", "typecheck", "test", "lint", "dev"],
         "accessToken": "MDNhZDBkYWEtOWE0ZC00ZDc3LWJiOTctNTZlM2MzYWQ5MjQzfHJlYWQtd3JpdGU="
       }
     }
@@ -24,16 +24,41 @@
     "devpub": {
       "dependsOn": ["build", "^build"]
     },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc -p tsconfig.json --noEmit",
+        "cwd": "{projectRoot}",
+        "forwardAllArgs": false
+      }
+    },
     "test": {
-      "inputs": ["default", "^default", "{workspaceRoot}/jest.preset.js"]
+      "executor": "@nx/jest:jest",
+      "inputs": ["default", "^default", "{workspaceRoot}/jest.preset.js"],
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "{projectRoot}/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
     },
     "lint": {
+      "executor": "@nx/linter:eslint",
       "inputs": [
         "default",
         "{workspaceRoot}/.eslintrc.json",
         "{workspaceRoot}/.eslintignore",
         "{workspaceRoot}/eslint.config.js"
-      ]
+      ],
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["{projectRoot}/**/*.{ts,tsx,js,jsx}"]
+      }
     }
   },
   "namedInputs": {

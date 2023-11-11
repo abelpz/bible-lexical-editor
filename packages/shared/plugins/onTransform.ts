@@ -1,4 +1,4 @@
-import ScriptureNodes from "../nodes";
+import scriptureNodes from "shared/nodes";
 import { LexicalEditor, LexicalNode, TextNode } from "lexical";
 
 export const registerOnTransform = ({
@@ -6,7 +6,7 @@ export const registerOnTransform = ({
   onTransform,
 }: {
   editor: LexicalEditor;
-  onTransform: boolean;
+  onTransform?: () => void;
 }) => {
   if (onTransform) {
     console.log("TRANSFORMED");
@@ -14,7 +14,7 @@ export const registerOnTransform = ({
       console.log({ node });
     };
 
-    const unregisterTransformArray = [TextNode, ...ScriptureNodes].map((Node) =>
+    const unregisterTransformArray = [TextNode, ...scriptureNodes].map((Node) =>
       editor.registerNodeTransform(Node, callback),
     );
 

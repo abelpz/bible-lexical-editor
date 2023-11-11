@@ -1,6 +1,11 @@
-import * as React from "react";
 import { UsfmForm } from "./UsfmForm";
 
 export function Main() {
-  return <UsfmForm onLoad={onLoad} />;
+  return (
+    <UsfmForm
+      onLoad={() => {
+        throw new Error("Function not implemented.");
+      }}
+    />
+  );
 }

@@ -6,7 +6,7 @@ export const registerOnMutation = ({
   onMutation,
 }: {
   editor: LexicalEditor;
-  onMutation: boolean;
+  onMutation?: () => void;
 }) => {
   if (onMutation) {
     console.log("MUTATED");

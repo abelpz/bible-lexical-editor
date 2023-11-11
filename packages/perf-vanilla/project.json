@@ -1,7 +1,7 @@
 {
   "name": "perf-vanilla",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/perf-vanilla/src",
+  "sourceRoot": "{projectRoot}/src",
   "projectType": "package",
   "targets": {
     "build": {
@@ -9,7 +9,7 @@
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
-        "outputPath": "dist/packages/perf-vanilla"
+        "outputPath": "dist/{projectRoot}"
       },
       "configurations": {
         "development": {
@@ -52,27 +52,9 @@
         }
       }
     },
-    "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
-      "options": {
-        "jestConfig": "packages/perf-vanilla/jest.config.ts",
-        "passWithNoTests": true
-      },
-      "configurations": {
-        "ci": {
-          "ci": true,
-          "codeCoverage": true
-        }
-      }
-    },
-    "lint": {
-      "executor": "@nx/linter:eslint",
-      "outputs": ["{options.outputFile}"],
-      "options": {
-        "lintFilePatterns": ["packages/perf-vanilla/**/*.{ts,tsx,js,jsx}"]
-      }
-    }
+    "typecheck": {},
+    "test": {},
+    "lint": {}
   },
   "tags": []
 }

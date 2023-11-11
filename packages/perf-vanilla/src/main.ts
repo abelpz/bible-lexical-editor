@@ -4,10 +4,8 @@ import { registerRichText } from "@lexical/rich-text";
 import { registerEmoticons } from "shared/plugins/emoticons";
 // import { registerOnChange } from "shared/plugins/onChange";
 import { registerOnTransform } from "shared/plugins/onTransform";
-
 // import { registerOnMutation } from "shared/plugins/onMutation";
-
-import ScriptureNodes from "shared/nodes";
+import scriptureNodes from "shared/nodes";
 import { EmoticonNode } from "shared/nodes/EmoticonNode";
 import { getLexicalState } from "shared/contentManager";
 import { fetchUsfm } from "shared/contentManager/mockup/fetchUsfm";
@@ -16,7 +14,7 @@ import { fetchUsfm } from "shared/contentManager/mockup/fetchUsfm";
   const config = {
     namespace: "MyEditor",
     theme: {},
-    nodes: [...ScriptureNodes, EmoticonNode],
+    nodes: [...scriptureNodes, EmoticonNode],
     onError: console.error,
   };
   const lexicalState = await fetchUsfm({
