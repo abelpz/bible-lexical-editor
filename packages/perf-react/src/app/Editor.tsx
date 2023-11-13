@@ -3,8 +3,8 @@ import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
-import ScriptureNodes from "shared/nodes";
-import { OnChangePlugin } from "../lexical/plugins/OnChangePlugin";
+import scriptureNodes from "shared/nodes";
+import { OnChangePlugin, OnChange } from "../lexical/plugins/OnChangePlugin";
 import { useLexicalState } from "./useLexicalState";
 
 const theme = {
@@ -28,11 +28,11 @@ export default function Editor() {
     theme,
     editorState: lexicalState,
     onError,
-    nodes: [...ScriptureNodes],
+    nodes: [...scriptureNodes],
   };
 
-  const onChange = ({ editor, listener }) => {
-    console.log({ editor, listener });
+  const onChange: OnChange = (editorState, editor, tags) => {
+    console.log({ editorState, editor, tags });
   };
 
   return !lexicalState ? null : (

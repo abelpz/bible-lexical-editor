@@ -1,7 +1,7 @@
 {
   "name": "platform",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/platform/src",
+  "sourceRoot": "{projectRoot}/src",
   "projectType": "package",
   "targets": {
     "build": {
@@ -9,7 +9,7 @@
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
-        "outputPath": "packages/platform/dist"
+        "outputPath": "{projectRoot}/dist"
       },
       "configurations": {
         "development": {
@@ -55,29 +55,11 @@
     "devpub": {
       "executor": "nx:run-commands",
       "defaultConfiguration": "production",
-      "options": { "command": "yalc publish", "cwd": "packages/platform" }
+      "options": { "command": "yalc publish", "cwd": "{projectRoot}" }
     },
-    "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
-      "options": {
-        "jestConfig": "packages/platform/jest.config.ts",
-        "passWithNoTests": true
-      },
-      "configurations": {
-        "ci": {
-          "ci": true,
-          "codeCoverage": true
-        }
-      }
-    },
-    "lint": {
-      "executor": "@nx/linter:eslint",
-      "outputs": ["{options.outputFile}"],
-      "options": {
-        "lintFilePatterns": ["packages/platform/**/*.{ts,tsx,js,jsx}"]
-      }
-    }
+    "typecheck": {},
+    "test": {},
+    "lint": {}
   },
   "tags": []
 }

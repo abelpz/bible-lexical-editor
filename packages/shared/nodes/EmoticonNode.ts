@@ -15,7 +15,7 @@ export class EmoticonNode extends TextNode {
     this.__className = className;
   }
 
-  createDOM(config: EditorConfig) {
+  createDOM(config: EditorConfig): HTMLElement {
     const dom = super.createDOM(config);
     dom.className = this.__className;
     return dom;

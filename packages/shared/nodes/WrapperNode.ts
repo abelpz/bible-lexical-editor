@@ -1,25 +1,27 @@
-import { $applyNodeReplacement, ElementNode } from "lexical";
+import { $applyNodeReplacement, ElementNode, SerializedElementNode } from "lexical";
+
+export type SerializedWrapperNode = SerializedElementNode;
 
 export class WrapperNode extends ElementNode {
-  static getType() {
+  static getType(): string {
     return "wrapper";
   }
 
-  static clone(node) {
+  static clone(node: WrapperNode): WrapperNode {
     return new WrapperNode(node.__key);
   }
 
-  isInline() {
+  isInline(): boolean {
     return true;
   }
 
-  createDOM() {
+  createDOM(): HTMLSpanElement {
     // Define the DOM element here
     const dom = document.createElement("span");
     return dom;
   }
 
-  static importJSON(serializedNode) {
+  static importJSON(serializedNode: SerializedWrapperNode): WrapperNode {
     const node = $createWrapperNode();
     node.setFormat(serializedNode.format);
     node.setIndent(serializedNode.indent);
@@ -27,13 +29,13 @@ export class WrapperNode extends ElementNode {
     return node;
   }
 
-  updateDOM() {
+  updateDOM(): boolean {
     // Returning false tells Lexical that this node does not need its
     // DOM element replacing with a new copy from createDOM.
     return false;
   }
 
-  exportJSON() {
+  exportJSON(): SerializedWrapperNode {
     return {
       ...super.exportJSON(),
       type: "wrapper",
@@ -42,6 +44,6 @@ export class WrapperNode extends ElementNode {
   }
 }
 
-function $createWrapperNode() {
+function $createWrapperNode(): WrapperNode {
   return $applyNodeReplacement(new WrapperNode());
 }

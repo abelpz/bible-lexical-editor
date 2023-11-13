@@ -134,7 +134,7 @@ To run all TS unit tests watching for file changes:
 
 You can also use the [recommended VS Code extensions](https://github.com/abelpz/bible-lexical-editor/blob/main/.vscode/extensions.json) to run tests there. This is particularly useful for running individual tests and debugging.
 
-## Formatting and Linting
+## Formatting, Linting and Typechecking
 
 Formatting happens automatically when you commit. If you use VS Code with this repo's recommended extensions, files will be formatted when you save.
 
@@ -144,4 +144,5 @@ To check TypeScript for readability, maintainability, and functionality errors, 
 nx format:check # to check formatting
 nx format:write # to fix formatting
 nx run-many -t lint # to check linting
+nx run-many -t typecheck # to check types
 ```
