@@ -1,4 +1,4 @@
-import scriptureNodes from "shared/nodes";
+import scriptureNodes from "../nodes";
 import { LexicalEditor, LexicalNode, TextNode } from "lexical";
 
 export const registerOnTransform = ({
