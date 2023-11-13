@@ -1,24 +1,11 @@
 import { addClassNamesToElement } from "@lexical/utils";
-import {
-  $applyNodeReplacement,
-  EditorConfig,
-  LexicalNode,
-  NodeKey,
-  SerializedElementNode,
-  Spread,
-} from "lexical";
-import { UsfmElementNode } from "./UsfmElementNode";
+import { $applyNodeReplacement, EditorConfig, LexicalNode, NodeKey } from "lexical";
+import { Attributes, SerializedUsfmElementNode, UsfmElementNode } from "./UsfmElementNode";
 
-export type SerializedDivisionMarkNode = Spread<
-  {
-    attributes: unknown;
-    data: unknown;
-  },
-  SerializedElementNode
->;
+export type SerializedDivisionMarkNode = SerializedUsfmElementNode;
 
 export class DivisionMarkNode extends UsfmElementNode {
-  static getType() {
+  static getType(): string {
     return "divisionmark";
   }
 
@@ -26,7 +13,7 @@ export class DivisionMarkNode extends UsfmElementNode {
     return new DivisionMarkNode(node.__attributes, node.__data, node.__key);
   }
 
-  constructor(attributes: unknown, data: unknown, key?: NodeKey) {
+  constructor(attributes: Attributes, data: unknown, key?: NodeKey) {
     // TODO: define this value. This was added because previously `super` was passed `key` as `tag`.
     const tag = "";
     super(attributes, data, tag, key);
@@ -43,7 +30,7 @@ export class DivisionMarkNode extends UsfmElementNode {
     return node;
   }
 
-  createDOM(config: EditorConfig) {
+  createDOM(config: EditorConfig): HTMLSpanElement {
     const element = document.createElement("span");
     const attributes = this.getAttributes();
 
@@ -54,11 +41,11 @@ export class DivisionMarkNode extends UsfmElementNode {
     return element;
   }
 
-  isInline() {
+  isInline(): boolean {
     return true;
   }
 
-  exportJSON() {
+  exportJSON(): SerializedDivisionMarkNode {
     return {
       ...super.exportJSON(),
       type: "divisionmark",
@@ -66,14 +53,14 @@ export class DivisionMarkNode extends UsfmElementNode {
     };
   }
 
-  updateDOM() {
+  updateDOM(): boolean {
     // Returning false tells Lexical that this node does not need its
     // DOM element replacing with a new copy from createDOM.
     return false;
   }
 }
 
-export function $createDivisionMarkNode(attributes: unknown, data: unknown): DivisionMarkNode {
+export function $createDivisionMarkNode(attributes: Attributes, data: unknown): DivisionMarkNode {
   return $applyNodeReplacement(new DivisionMarkNode(attributes, data));
 }
 

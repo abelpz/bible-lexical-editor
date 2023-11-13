@@ -1,41 +1,52 @@
-import { ElementNode } from "lexical";
+import { ElementNode, NodeKey, SerializedElementNode, Spread } from "lexical";
+
+export type Attributes = { [key: string]: string };
+
+export type SerializedUsfmElementNode = Spread<
+  {
+    attributes: Attributes;
+    data: unknown;
+    tag: string;
+  },
+  SerializedElementNode
+>;
 
 export class UsfmElementNode extends ElementNode {
-  constructor(attributes, data, tag, key) {
+  constructor(attributes: Attributes, data: unknown, tag: string | undefined, key?: NodeKey) {
     super(key);
     this.__data = data;
     this.__attributes = attributes;
     this.__tag = tag;
   }
 
-  getData() {
+  getData(): unknown {
     return this.getLatest().__data;
   }
 
-  setData(data) {
+  setData(data: unknown) {
     const writable = this.getWritable();
     writable.__data = data;
   }
 
-  getAttributes() {
+  getAttributes(): Attributes {
     return this.getLatest().__attributes;
   }
 
-  setAttributes(attributes) {
+  setAttributes(attributes: Attributes) {
     const writable = this.getWritable();
     writable.__attributes = attributes;
   }
 
-  getTag() {
+  getTag(): string {
     return this.getLatest().__tag;
   }
 
-  setTag(tag) {
+  setTag(tag: string) {
     const writable = this.getWritable();
     writable.__tag = tag;
   }
 
-  exportJSON() {
+  exportJSON(): SerializedUsfmElementNode {
     return {
       ...super.exportJSON(),
       data: this.getData(),
