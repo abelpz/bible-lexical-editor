@@ -45,7 +45,7 @@ export default function Editor<TLogger extends LoggerBasic>({
   return (
     <LexicalComposer initialConfig={editorConfig}>
       <div className="editor-container">
-        <ToolbarPlugin />
+        <ToolbarPlugin setIsLinkEditMode={() => null} />
         <div className="editor-inner">
           <RichTextPlugin
             contentEditable={<ContentEditable className="editor-input" />}
