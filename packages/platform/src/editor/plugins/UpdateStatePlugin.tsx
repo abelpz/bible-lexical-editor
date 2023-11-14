@@ -365,10 +365,10 @@ export default function UpdateStatePlugin<TLogger extends LoggerBasic>({
     // logger.log(stringifiedEditorState);
     const editorState = editor.parseEditorState(serializedEditorState);
     // TODO: review use of `queueMicrotask`. It stops an error but why is it necessary?
-    // queueMicrotask(() => {
-    editor.setEditorState(editorState);
-    editor.dispatchCommand(CLEAR_HISTORY_COMMAND, undefined);
-    // });
+    queueMicrotask(() => {
+      editor.setEditorState(editorState);
+      editor.dispatchCommand(CLEAR_HISTORY_COMMAND, undefined);
+    });
   }, [editor, usj, logger]);
 
   return null;

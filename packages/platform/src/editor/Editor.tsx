@@ -13,7 +13,6 @@ import scriptureUsjNodes from "shared/nodes/scripture/usj";
 import { NoteNode } from "./nodes/NoteNode";
 import editorTheme from "./themes/editor-theme";
 import ToolbarPlugin from "./plugins/ToolbarPlugin";
-// import TreeViewPlugin from './plugins/TreeViewPlugin';
 import UpdateStatePlugin from "./plugins/UpdateStatePlugin";
 import { LoggerBasic } from "./plugins/logger-basic.model";
 

@@ -5,8 +5,6 @@ import "./App.css";
 
 const usj = usxStringToJson(WEB_PSA_USX);
 
-function App() {
+export default function App() {
   return <Editor usj={usj} logger={console} />;
 }
-
-export default App;
