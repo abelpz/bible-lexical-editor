@@ -77,10 +77,10 @@ function createBook<TLogger extends LoggerBasic>(
     usxStyle: BOOK_STYLE,
     code: marker.code,
     text: getTextContent(marker.content),
-    detail: 0,
-    format: 0,
-    mode: "normal",
-    style: "",
+    children: [],
+    direction: null,
+    format: "",
+    indent: 0,
     version: BOOK_VERSION,
   };
 }
@@ -288,23 +288,15 @@ function recurseNodes<TLogger extends LoggerBasic>(
 }
 
 /**
- * Insert implied paras as needed.
- *   - Around any book element.
- *   - Any other set of nodes that contain a text element at the root.
+ * Insert implied paras around any other set of nodes that contain a text element at the root.
  * @param elementNodes - serialized element nodes.
  * @returns nodes with any needed implied paras inserted.
  */
-function insertImpliedParasRecurse(
+function insertImpliedParas(
   elementNodes: (SerializedElementNode | SerializedTextNode)[],
 ): SerializedElementNode[] {
   let nodes = elementNodes;
-  const bookNodeIndex = nodes.findIndex((node) => node.type === BookNode.getType());
-  if (bookNodeIndex >= 0) {
-    const nodesBefore = insertImpliedParasRecurse(nodes.slice(0, bookNodeIndex));
-    const bookNode = createImpliedPara([nodes[bookNodeIndex]]);
-    const nodesAfter = insertImpliedParasRecurse(nodes.slice(bookNodeIndex + 1));
-    nodes = [...nodesBefore, bookNode, ...nodesAfter];
-  } else if (nodes.some((node) => "text" in node)) {
+  if (nodes.some((node) => "text" in node && "mode" in node)) {
     // If there are any text nodes as a child of this root, enclose in an implied para node.
     nodes = [createImpliedPara(nodes)];
   }
@@ -327,7 +319,7 @@ export function loadEditorState<TLogger extends LoggerBasic>(
       );
 
     if (usj.content.length > 0)
-      children = insertImpliedParasRecurse(recurseNodes<TLogger>(usj.content, logger));
+      children = insertImpliedParas(recurseNodes<TLogger>(usj.content, logger));
     else children = [emptyParaNode];
   } else {
     children = [emptyParaNode];

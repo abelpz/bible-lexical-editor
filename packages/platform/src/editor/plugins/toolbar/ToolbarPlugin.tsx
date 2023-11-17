@@ -57,10 +57,7 @@ export default function ToolbarPlugin(): JSX.Element {
       const elementDOM = activeEditor.getElementByKey(elementKey);
 
       if (elementDOM !== null) {
-        let type = element.getType();
-        if (typeof element.getUsxStyle === "function")
-          type = serializeUsjType(type, element.getUsxStyle());
-
+        const type = serializeUsjType(element.getType(), element.getUsxStyle());
         setBlockType(type);
       }
     }

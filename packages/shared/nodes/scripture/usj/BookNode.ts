@@ -4,9 +4,10 @@ import {
   type LexicalNode,
   type NodeKey,
   $applyNodeReplacement,
-  EditorConfig,
-  SerializedTextNode,
   Spread,
+  ElementNode,
+  $createTextNode,
+  SerializedElementNode,
   TextNode,
 } from "lexical";
 import { BookCode } from "../../../converters/usj/usj.model";
@@ -20,18 +21,20 @@ export type SerializedBookNode = Spread<
   {
     usxStyle: BookUsxStyle;
     code: BookCode;
+    text: string;
   },
-  SerializedTextNode
+  SerializedElementNode
 >;
 
-export class BookNode extends TextNode {
+export class BookNode extends ElementNode {
   __usxStyle: BookUsxStyle;
   __code: BookCode;
 
   constructor(code: BookCode, text: string, key?: NodeKey) {
-    super(text, key);
+    super(key);
     this.__usxStyle = BOOK_STYLE;
     this.__code = code;
+    this.append($createTextNode(text));
   }
 
   static getType(): string {
@@ -43,12 +46,12 @@ export class BookNode extends TextNode {
   }
 
   static importJSON(serializedNode: SerializedBookNode): BookNode {
-    const node = $createBookNode(serializedNode.code, serializedNode.text);
-    node.setDetail(serializedNode.detail);
-    node.setFormat(serializedNode.format);
-    node.setMode(serializedNode.mode);
-    node.setStyle(serializedNode.style);
-    node.setUsxStyle(serializedNode.usxStyle);
+    const { code, text, usxStyle, format, indent, direction } = serializedNode;
+    const node = $createBookNode(code, text);
+    node.setFormat(format);
+    node.setIndent(indent);
+    node.setDirection(direction);
+    node.setUsxStyle(usxStyle);
     return node;
   }
 
@@ -72,8 +75,8 @@ export class BookNode extends TextNode {
     return self.__code;
   }
 
-  createDOM(config: EditorConfig): HTMLElement {
-    const dom = super.createDOM(config);
+  createDOM(): HTMLElement {
+    const dom = document.createElement("p");
     dom.setAttribute("data-usx-style", this.__usxStyle);
     dom.classList.add(this.getType(), `usfm_${this.__usxStyle}`);
     dom.setAttribute("data-code", this.__code);
@@ -92,6 +95,7 @@ export class BookNode extends TextNode {
       type: this.getType(),
       usxStyle: this.getUsxStyle(),
       code: this.getCode(),
+      text: (this.getFirstChild() as TextNode)?.getText(),
       version: BOOK_VERSION,
     };
   }
