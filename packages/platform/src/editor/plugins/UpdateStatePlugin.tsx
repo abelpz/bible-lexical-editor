@@ -292,11 +292,17 @@ function recurseNodes<TLogger extends LoggerBasic>(
  * @param elementNodes - serialized element nodes.
  * @returns nodes with any needed implied paras inserted.
  */
-function insertImpliedParas(
+function insertImpliedParasRecurse(
   elementNodes: (SerializedElementNode | SerializedTextNode)[],
 ): SerializedElementNode[] {
   let nodes = elementNodes;
-  if (nodes.some((node) => "text" in node && "mode" in node)) {
+  const bookNodeIndex = nodes.findIndex((node) => node.type === BookNode.getType());
+  if (bookNodeIndex >= 0) {
+    const nodesBefore = insertImpliedParasRecurse(nodes.slice(0, bookNodeIndex));
+    const bookNode = nodes[bookNodeIndex];
+    const nodesAfter = insertImpliedParasRecurse(nodes.slice(bookNodeIndex + 1));
+    nodes = [...nodesBefore, bookNode, ...nodesAfter];
+  } else if (nodes.some((node) => "text" in node && "mode" in node)) {
     // If there are any text nodes as a child of this root, enclose in an implied para node.
     nodes = [createImpliedPara(nodes)];
   }
@@ -319,7 +325,7 @@ export function loadEditorState<TLogger extends LoggerBasic>(
       );
 
     if (usj.content.length > 0)
-      children = insertImpliedParas(recurseNodes<TLogger>(usj.content, logger));
+      children = insertImpliedParasRecurse(recurseNodes<TLogger>(usj.content, logger));
     else children = [emptyParaNode];
   } else {
     children = [emptyParaNode];
