@@ -38,9 +38,10 @@ function usxDomToJsonRecurse<T extends Usj | MarkerObject = Usj>(
   if (
     inputUsxElement.firstChild &&
     inputUsxElement.firstChild.nodeType === 3 &&
-    inputUsxElement.firstChild.nodeValue?.trim() !== ""
+    inputUsxElement.firstChild.nodeValue &&
+    inputUsxElement.firstChild.nodeValue.trim() !== ""
   ) {
-    text = inputUsxElement.firstChild.nodeValue?.trim();
+    text = inputUsxElement.firstChild.nodeValue;
   }
 
   const children = Array.from(inputUsxElement.childNodes);
@@ -74,10 +75,10 @@ function usxDomToJsonRecurse<T extends Usj | MarkerObject = Usj>(
     if (
       child.nextSibling &&
       child.nextSibling.nodeType === 3 &&
-      child.nextSibling.nodeValue?.trim() !== ""
+      child.nextSibling.nodeValue &&
+      (child.nextSibling.nodeValue.trim() !== "" || child.nextSibling.nodeValue === " ")
     ) {
-      const nodeValue = child.nextSibling.nodeValue?.trim();
-      if (nodeValue) outObj.content.push(nodeValue);
+      outObj.content.push(child.nextSibling.nodeValue);
     }
   }
 
