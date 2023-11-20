@@ -12,7 +12,7 @@ import { Usj } from "shared/converters/usj/usj.model";
 import scriptureUsjNodes from "shared/nodes/scripture/usj";
 import { NoteNode } from "./nodes/NoteNode";
 import editorTheme from "./themes/editor-theme";
-import ToolbarPlugin from "./plugins/ToolbarPlugin";
+import ToolbarPlugin from "./plugins/toolbar/ToolbarPlugin";
 import UpdateStatePlugin from "./plugins/UpdateStatePlugin";
 import { LoggerBasic } from "./plugins/logger-basic.model";
 
@@ -45,7 +45,7 @@ export default function Editor<TLogger extends LoggerBasic>({
   return (
     <LexicalComposer initialConfig={editorConfig}>
       <div className="editor-container">
-        <ToolbarPlugin setIsLinkEditMode={() => null} />
+        <ToolbarPlugin />
         <div className="editor-inner">
           <RichTextPlugin
             contentEditable={<ContentEditable className="editor-input" />}

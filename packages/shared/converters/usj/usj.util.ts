@@ -14,8 +14,9 @@ export type UsjType = {
 
 /**
  * Create a USJ type string from an element and a style.
- * @param element - the general element identifier of this type.
- * @param style - the specific style identifier for this type.
+ *
+ * @param element - The general element identifier of this type.
+ * @param style - The specific style identifier for this type.
  * @returns string serialized USJ type.
  */
 export function serializeUsjType(element: string, style: string): SerializedUsjType {
@@ -27,7 +28,8 @@ export function serializeUsjType(element: string, style: string): SerializedUsjT
 
 /**
  * Split a USJ type string into its parts.
- * @param usjType - represents a USJ type.
+ *
+ * @param usjType - Represents a USJ type.
  * @returns the USX element and style parts.
  */
 export function deserializeUsjType(usjType: SerializedUsjType | string): UsjType {
@@ -39,4 +41,25 @@ export function deserializeUsjType(usjType: SerializedUsjType | string): UsjType
   const element = usjType.substring(0, colonIndex);
   const style = usjType.substring(colonIndex + 1);
   return { element, style };
+}
+
+/**
+ * Convert a USJ type to a CSS class name.
+ *
+ * @param usjType - Represents a USJ type.
+ * @returns the type converted to a CSS class name.
+ */
+export function typeToClassName(usjType: SerializedUsjType | string): string {
+  return usjType.replaceAll(USJ_TYPE_SEPARATOR, "-");
+}
+
+/**
+ * Extract the USX style from the USJ type.
+ *
+ * @param usjType - Represents a USJ type.
+ * @returns the USX style.
+ */
+export function typeToStyle(usjType: string) {
+  const { style } = deserializeUsjType(usjType);
+  return style;
 }
