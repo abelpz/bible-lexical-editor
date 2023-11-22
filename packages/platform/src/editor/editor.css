@@ -10,6 +10,11 @@
   content: attr(data-number);
 }
 
+.note {
+  vertical-align: super;
+  font-size: 80%;
+}
+
 .note > a {
   cursor: pointer;
   color: #00f;

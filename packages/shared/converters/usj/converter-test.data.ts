@@ -37,6 +37,11 @@ export const usjEmpty: Usj = {
   content: [],
 };
 
+/** para index where the note exists */
+export const NOTE_PARA_INDEX = 3;
+/** index in para children of the note */
+export const NOTE_INDEX = 1;
+
 /**
  * Modified from:
  * @see https://github.com/mvh-solutions/nice-usfm-json/blob/main/samples/character/proposed.json
@@ -307,7 +312,7 @@ export const editorStateGen1v1 = {
           {
             type: "note",
             usxStyle: "f",
-            caller: "+",
+            caller: "a",
             previewText: "3:2  The Hebrew word rendered “God” is “אֱלֹהִ֑ים” (Elohim).",
             version: 1,
           },

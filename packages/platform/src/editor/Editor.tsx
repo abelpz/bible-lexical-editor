@@ -17,7 +17,11 @@ import UpdateStatePlugin from "./plugins/UpdateStatePlugin";
 import { LoggerBasic } from "./plugins/logger-basic.model";
 
 type EditorProps<TLogger extends LoggerBasic> = {
+  /** Scripture data in USJ form */
   usj?: Usj;
+  /** Possible note callers to use when caller is '+' */
+  noteCallers?: string[];
+  /** logger instance */
   logger?: TLogger;
 };
 
@@ -40,6 +44,7 @@ function Placeholder(): JSX.Element {
 
 export default function Editor<TLogger extends LoggerBasic>({
   usj,
+  noteCallers,
   logger,
 }: EditorProps<TLogger>): JSX.Element {
   return (
@@ -53,7 +58,7 @@ export default function Editor<TLogger extends LoggerBasic>({
             ErrorBoundary={LexicalErrorBoundary}
           />
           <HistoryPlugin />
-          <UpdateStatePlugin usj={usj} logger={logger} />
+          <UpdateStatePlugin usj={usj} noteCallers={noteCallers} logger={logger} />
         </div>
       </div>
     </LexicalComposer>

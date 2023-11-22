@@ -49,8 +49,71 @@ import {
 } from "shared/nodes/scripture/usj/VerseNode";
 import { LoggerBasic } from "./logger-basic.model";
 
-// empty para node for an 'empty' editor
-const emptyParaNode: SerializedParaNode = createPara(PARA_STYLE_DEFAULT, undefined);
+/** empty para node for an 'empty' editor */
+const emptyParaNode: SerializedParaNode = createPara(PARA_STYLE_DEFAULT);
+
+let callerCount = 0;
+/** Possible note callers to use when caller is '+'. Up to 2 characters are used, e.g. a-zz */
+let _noteCallers = [
+  "a",
+  "b",
+  "c",
+  "d",
+  "e",
+  "f",
+  "g",
+  "h",
+  "i",
+  "j",
+  "k",
+  "l",
+  "m",
+  "n",
+  "o",
+  "p",
+  "q",
+  "r",
+  "s",
+  "t",
+  "u",
+  "v",
+  "w",
+  "x",
+  "y",
+  "z",
+];
+/** logger instance */
+let _logger: LoggerBasic;
+
+export function resetCallerCount(resetValue = 0) {
+  callerCount = resetValue;
+}
+
+/**
+ * Get the note caller to use. E.g. for '+' replace with a-z, aa-zz.
+ * @param markerCaller - the specified note caller.
+ * @returns the specified caller, if '+' replace with up to 2 characters from the possible note
+ *   callers list, '*' if undefined.
+ */
+function getNoteCaller(markerCaller: string | undefined): string {
+  let caller = markerCaller;
+  if (markerCaller === "+") {
+    if (callerCount >= _noteCallers.length ** 2 + _noteCallers.length) {
+      resetCallerCount();
+      _logger?.warn("Note caller count was reset. Consider adding more possible note callers.");
+    }
+
+    const callerIndex = callerCount % _noteCallers.length;
+    let callerLeadChar = "";
+    if (callerCount >= _noteCallers.length) {
+      const callerLeadCharIndex = Math.trunc(callerCount / _noteCallers.length) - 1;
+      callerLeadChar = _noteCallers[callerLeadCharIndex];
+    }
+    caller = callerLeadChar + _noteCallers[callerIndex];
+    callerCount += 1;
+  }
+  return caller ?? "*";
+}
 
 function getTextContent(markers: MarkerContent[] | undefined): string {
   if (!markers || markers.length !== 1 || typeof markers[0] !== "string") return "";
@@ -58,17 +121,13 @@ function getTextContent(markers: MarkerContent[] | undefined): string {
   return markers[0];
 }
 
-function createBook<TLogger extends LoggerBasic>(
-  style: string,
-  marker: MarkerObject,
-  logger: TLogger | undefined,
-): SerializedBookNode | undefined {
+function createBook(style: string, marker: MarkerObject): SerializedBookNode | undefined {
   if (!marker.code) {
-    logger?.error(`Unexpected book code '${marker.code}'!`);
+    _logger?.error(`Unexpected book code '${marker.code}'!`);
     return undefined;
   }
   if (style !== BOOK_STYLE) {
-    logger?.error(`Unexpected book style '${style}'!`);
+    _logger?.error(`Unexpected book style '${style}'!`);
     return undefined;
   }
 
@@ -85,13 +144,9 @@ function createBook<TLogger extends LoggerBasic>(
   };
 }
 
-function createChapter<TLogger extends LoggerBasic>(
-  style: string,
-  marker: MarkerObject,
-  logger: TLogger | undefined,
-): SerializedChapterNode | undefined {
+function createChapter(style: string, marker: MarkerObject): SerializedChapterNode | undefined {
   if (style !== CHAPTER_STYLE) {
-    logger?.error(`Unexpected chapter style '${style}'!`);
+    _logger?.error(`Unexpected chapter style '${style}'!`);
     return undefined;
   }
   const node = { ...marker };
@@ -106,13 +161,9 @@ function createChapter<TLogger extends LoggerBasic>(
   };
 }
 
-function createVerse<TLogger extends LoggerBasic>(
-  style: string,
-  marker: MarkerObject,
-  logger: TLogger | undefined,
-): SerializedVerseNode | undefined {
+function createVerse(style: string, marker: MarkerObject): SerializedVerseNode | undefined {
   if (style !== VERSE_STYLE) {
-    logger?.error(`Unexpected verse style '${style}'!`);
+    _logger?.error(`Unexpected verse style '${style}'!`);
     return undefined;
   }
   const node = { ...marker };
@@ -132,13 +183,9 @@ function createVerse<TLogger extends LoggerBasic>(
   };
 }
 
-function createChar<TLogger extends LoggerBasic>(
-  style: string,
-  marker: MarkerObject,
-  logger: TLogger | undefined,
-): SerializedCharNode | undefined {
+function createChar(style: string, marker: MarkerObject): SerializedCharNode | undefined {
   if (!CharNode.isValidStyle(style)) {
-    logger?.error(`Unexpected char style '${style}'!`);
+    _logger?.error(`Unexpected char style '${style}'!`);
     return undefined;
   }
 
@@ -167,12 +214,9 @@ function createImpliedPara(
   };
 }
 
-function createPara<TLogger extends LoggerBasic>(
-  style: string,
-  logger: TLogger | undefined,
-): SerializedParaNode {
+function createPara(style: string): SerializedParaNode {
   if (!ParaNode.isValidStyle(style)) {
-    logger?.warn(`Unexpected para style '${style}'!`);
+    _logger?.warn(`Unexpected para style '${style}'!`);
     // Always return with data as other elements need this structure.
   }
 
@@ -187,14 +231,13 @@ function createPara<TLogger extends LoggerBasic>(
   };
 }
 
-function createNote<TLogger extends LoggerBasic>(
+function createNote(
   style: string,
   marker: MarkerObject,
   elementNodes: (SerializedElementNode | SerializedTextNode)[],
-  logger: TLogger | undefined,
 ): SerializedNoteNode | undefined {
   if (!NoteNode.isValidStyle(style)) {
-    logger?.error(`Unexpected note style '${style}'!`);
+    _logger?.error(`Unexpected note style '${style}'!`);
     return undefined;
   }
 
@@ -211,7 +254,7 @@ function createNote<TLogger extends LoggerBasic>(
     ...node,
     type: NoteNode.getType(),
     usxStyle: style as NoteUsxStyle,
-    caller: marker.caller ?? "*",
+    caller: getNoteCaller(marker.caller),
     previewText,
     version: NOTE_VERSION,
   };
@@ -238,9 +281,8 @@ function addNode(
   }
 }
 
-function recurseNodes<TLogger extends LoggerBasic>(
+function recurseNodes(
   markers: MarkerContent[] | undefined,
-  logger: TLogger | undefined,
 ): (SerializedElementNode | SerializedTextNode)[] {
   const elementNodes: (SerializedElementNode | SerializedTextNode)[] = [];
   markers?.forEach((marker) => {
@@ -252,35 +294,37 @@ function recurseNodes<TLogger extends LoggerBasic>(
       const { element, style } = deserializeUsjType(marker.type);
       switch (element) {
         case "book":
-          lexicalNode = createBook(style, marker, logger);
+          lexicalNode = createBook(style, marker);
           addNode(lexicalNode, elementNodes);
           break;
         case "chapter":
-          lexicalNode = createChapter(style, marker, logger);
+          lexicalNode = createChapter(style, marker);
           addNode(lexicalNode, elementNodes);
           break;
         case "verse":
-          lexicalNode = createVerse(style, marker, logger);
+          lexicalNode = createVerse(style, marker);
           addNode(lexicalNode, elementNodes);
           break;
         case "char":
-          lexicalNode = createChar(style, marker, logger);
+          lexicalNode = createChar(style, marker);
           addNode(lexicalNode, elementNodes);
           break;
         case "para":
-          elementNode = createPara(style, logger);
+          elementNode = createPara(style);
           if (elementNode) {
-            elementNode.children = recurseNodes(marker.content, logger);
+            elementNode.children = recurseNodes(marker.content);
             elementNodes.push(elementNode);
           }
           break;
         case "note":
-          lexicalNode = createNote(style, marker, recurseNodes(marker.content, logger), logger);
+          if (marker.caller === "-") break;
+
+          lexicalNode = createNote(style, marker, recurseNodes(marker.content));
           addNode(lexicalNode, elementNodes);
           break;
         default:
           if (!marker.type || marker.type === "ms") break;
-          logger?.error(`Unexpected node type '${marker.type}'!`);
+          _logger?.error(`Unexpected node type '${marker.type}'!`);
       }
     }
   });
@@ -311,21 +355,17 @@ function insertImpliedParasRecurse(
   return nodes as SerializedElementNode[];
 }
 
-export function loadEditorState<TLogger extends LoggerBasic>(
-  usj: Usj | undefined,
-  logger?: TLogger,
-): SerializedEditorState {
+export function loadEditorState(usj: Usj | undefined): SerializedEditorState {
   let children: SerializedElementNode[];
   if (usj) {
     if (usj.type !== USJ_TYPE)
-      logger?.warn(`This USJ type '${usj.type}' didn't match the expected type '${USJ_TYPE}'.`);
+      _logger?.warn(`This USJ type '${usj.type}' didn't match the expected type '${USJ_TYPE}'.`);
     if (usj.version !== USJ_VERSION)
-      logger?.warn(
+      _logger?.warn(
         `This USJ version '${usj.version}' didn't match the expected version '${USJ_VERSION}'.`,
       );
 
-    if (usj.content.length > 0)
-      children = insertImpliedParasRecurse(recurseNodes<TLogger>(usj.content, logger));
+    if (usj.content.length > 0) children = insertImpliedParasRecurse(recurseNodes(usj.content));
     else children = [emptyParaNode];
   } else {
     children = [emptyParaNode];
@@ -345,20 +385,25 @@ export function loadEditorState<TLogger extends LoggerBasic>(
 
 /**
  * A component (plugin) that updates the state of lexical.
- * @param props - { usj object, logger }
+ * @param props - { usj object, noteCallers, logger }
  * @returns null, i.e. no DOM elements.
  */
 export default function UpdateStatePlugin<TLogger extends LoggerBasic>({
   usj,
+  noteCallers,
   logger,
 }: {
   usj?: Usj;
+  noteCallers?: string[];
   logger?: TLogger;
 }): null {
   const [editor] = useLexicalComposerContext();
+  if (noteCallers && noteCallers.length > 0) _noteCallers = noteCallers;
+  if (logger) _logger = logger;
 
   useEffect(() => {
-    const serializedEditorState = loadEditorState<TLogger>(usj, logger);
+    resetCallerCount();
+    const serializedEditorState = loadEditorState(usj);
     // const stringifiedEditorState = JSON.stringify(serializedEditorState);
     // logger.log(stringifiedEditorState);
     const editorState = editor.parseEditorState(serializedEditorState);
