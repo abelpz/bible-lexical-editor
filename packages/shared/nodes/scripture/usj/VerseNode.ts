@@ -53,16 +53,13 @@ export class VerseNode extends TextNode {
   }
 
   static clone(node: VerseNode): VerseNode {
-    return new VerseNode(node.__text, node.__key);
+    const { __number, __sid, __altnumber, __pubnumber, __key } = node;
+    return new VerseNode(__number, __sid, __altnumber, __pubnumber, __key);
   }
 
   static importJSON(serializedNode: SerializedVerseNode): VerseNode {
-    const node = $createVerseNode(
-      serializedNode.text,
-      serializedNode.sid,
-      serializedNode.altnumber,
-      serializedNode.pubnumber,
-    );
+    const { number, sid, altnumber, pubnumber } = serializedNode;
+    const node = $createVerseNode(number, sid, altnumber, pubnumber);
     node.setDetail(serializedNode.detail);
     node.setFormat(serializedNode.format);
     node.setMode(serializedNode.mode);

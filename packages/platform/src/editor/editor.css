@@ -6,10 +6,6 @@
   content: attr(data-code) " ";
 }
 
-.chapter[data-number]::after {
-  content: attr(data-number);
-}
-
 .note {
   vertical-align: super;
   font-size: 80%;

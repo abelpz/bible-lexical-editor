@@ -70,6 +70,10 @@ export class BookNode extends ElementNode {
     self.__code = code;
   }
 
+  /**
+   * Get the book code (ID).
+   * @returns the book code (ID).
+   */
   getCode(): BookCode {
     const self = this.getLatest();
     return self.__code;

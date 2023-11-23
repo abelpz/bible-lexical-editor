@@ -2,6 +2,7 @@
  * Converted to typescript from the Lexical React example.
  * @see https://codesandbox.io/s/lexical-rich-text-example-5tncvy
  */
+import { ScriptureReference } from "papi-components";
 import { JSX } from "react";
 import { InitialConfigType, LexicalComposer } from "@lexical/react/LexicalComposer";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
@@ -12,6 +13,7 @@ import { Usj } from "shared/converters/usj/usj.model";
 import scriptureUsjNodes from "shared/nodes/scripture/usj";
 import { NoteNode } from "./nodes/NoteNode";
 import editorTheme from "./themes/editor-theme";
+import ScriptureReferencePlugin from "./plugins/ScriptureReferencePlugin";
 import ToolbarPlugin from "./plugins/toolbar/ToolbarPlugin";
 import UpdateStatePlugin from "./plugins/UpdateStatePlugin";
 import { LoggerBasic } from "./plugins/logger-basic.model";
@@ -23,6 +25,11 @@ type Mutable<T> = {
 type EditorProps<TLogger extends LoggerBasic> = {
   /** Scripture data in USJ form */
   usj?: Usj;
+  /** Scripture Ref state */
+  scrRefState?: [
+    scrRef: ScriptureReference,
+    setScrRef: React.Dispatch<React.SetStateAction<ScriptureReference>>,
+  ];
   /** Possible note callers to use when caller is '+' */
   noteCallers?: string[];
   /** is the editor readonly or editable */
@@ -63,6 +70,7 @@ function Placeholder(): JSX.Element {
  */
 export default function Editor<TLogger extends LoggerBasic>({
   usj,
+  scrRefState,
   noteCallers,
   isReadonly,
   logger,
@@ -80,6 +88,7 @@ export default function Editor<TLogger extends LoggerBasic>({
             ErrorBoundary={LexicalErrorBoundary}
           />
           <HistoryPlugin />
+          {scrRefState && <ScriptureReferencePlugin scrRefState={scrRefState} />}
           <UpdateStatePlugin usj={usj} noteCallers={noteCallers} logger={logger} />
         </div>
       </div>

@@ -5,7 +5,9 @@
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "src/index.ts",
+    "src/editor"
   ],
   "scripts": {
     "dev": "vite",

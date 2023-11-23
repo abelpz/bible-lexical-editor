@@ -13,7 +13,7 @@ import {
   extractNonNumberedStyles,
   extractNumberedStyles,
   isValidNumberedStyle,
-} from "./nodes.util";
+} from "./node.utils";
 
 /**
  * @see https://ubsicap.github.io/usx/charstyles.html

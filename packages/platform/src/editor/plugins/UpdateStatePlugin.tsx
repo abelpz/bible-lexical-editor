@@ -45,8 +45,8 @@ import {
   SerializedVerseNode,
   VERSE_STYLE,
   VERSE_VERSION,
-  VerseNode,
-} from "shared/nodes/scripture/usj/VerseNode";
+  ImmutableVerseNode,
+} from "shared/nodes/scripture/usj/ImmutableVerseNode";
 import { LoggerBasic } from "./logger-basic.model";
 
 /** empty para node for an 'empty' editor */
@@ -171,14 +171,9 @@ function createVerse(style: string, marker: MarkerObject): SerializedVerseNode |
 
   return {
     ...node,
-    type: VerseNode.getType(),
+    type: ImmutableVerseNode.getType(),
     usxStyle: VERSE_STYLE,
     number: marker.number ?? "",
-    text: marker.number ?? "",
-    detail: 0,
-    format: 0,
-    mode: "normal",
-    style: "",
     version: VERSE_VERSION,
   };
 }
@@ -384,8 +379,10 @@ export function loadEditorState(usj: Usj | undefined): SerializedEditorState {
 }
 
 /**
- * A component (plugin) that updates the state of lexical.
- * @param props - { usj object, noteCallers, logger }
+ * A component (plugin) that updates the state of lexical when incoming USJ changes.
+ * @param props.usj - USJ Scripture data.
+ * @param props.noteCallers - Possible note callers to use when caller is '+'.
+ * @param props.logger - logger instance
  * @returns null, i.e. no DOM elements.
  */
 export default function UpdateStatePlugin<TLogger extends LoggerBasic>({

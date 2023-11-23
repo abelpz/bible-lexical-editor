@@ -12,7 +12,7 @@ import {
   extractNonNumberedStyles,
   extractNumberedStyles,
   isValidNumberedStyle,
-} from "./nodes.util";
+} from "./node.utils";
 
 export const PARA_STYLE_DEFAULT = "p";
 

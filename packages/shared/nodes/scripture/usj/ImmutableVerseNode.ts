@@ -1,4 +1,4 @@
-/** Conforms with USX v3.0 @see https://ubsicap.github.io/usx/elements.html#chapter */
+/** Conforms with USX v3.0 @see https://ubsicap.github.io/usx/elements.html#verse */
 
 import {
   type LexicalNode,
@@ -9,14 +9,14 @@ import {
   Spread,
 } from "lexical";
 
-export const CHAPTER_STYLE = "c";
-export const CHAPTER_VERSION = 1;
+export const VERSE_STYLE = "v";
+export const VERSE_VERSION = 1;
 
-type ChapterUsxStyle = typeof CHAPTER_STYLE;
+type VerseUsxStyle = typeof VERSE_STYLE;
 
-export type SerializedChapterNode = Spread<
+export type SerializedVerseNode = Spread<
   {
-    usxStyle: ChapterUsxStyle;
+    usxStyle: VerseUsxStyle;
     number: string;
     sid?: string;
     altnumber?: string;
@@ -25,38 +25,38 @@ export type SerializedChapterNode = Spread<
   SerializedLexicalNode
 >;
 
-export class ImmutableChapterNode extends DecoratorNode<void> {
-  __usxStyle: ChapterUsxStyle;
+export class ImmutableVerseNode extends DecoratorNode<void> {
+  __usxStyle: VerseUsxStyle;
   __number: string;
   __sid?: string;
   __altnumber?: string;
   __pubnumber?: string;
 
   constructor(
-    chapterNumber: string,
+    verseNumber: string,
     sid?: string,
     altnumber?: string,
     pubnumber?: string,
     key?: NodeKey,
   ) {
     super(key);
-    this.__usxStyle = CHAPTER_STYLE;
-    this.__number = chapterNumber;
+    this.__usxStyle = VERSE_STYLE;
+    this.__number = verseNumber;
     this.__sid = sid;
     this.__altnumber = altnumber;
     this.__pubnumber = pubnumber;
   }
 
   static getType(): string {
-    return "chapter";
+    return "verse";
   }
 
-  static clone(node: ImmutableChapterNode): ImmutableChapterNode {
-    return new ImmutableChapterNode(node.__number, node.__key);
+  static clone(node: ImmutableVerseNode): ImmutableVerseNode {
+    return new ImmutableVerseNode(node.__number, node.__key);
   }
 
-  static importJSON(serializedNode: SerializedChapterNode): ImmutableChapterNode {
-    const node = $createImmutableChapterNode(
+  static importJSON(serializedNode: SerializedVerseNode): ImmutableVerseNode {
+    const node = $createImmutableVerseNode(
       serializedNode.number,
       serializedNode.sid,
       serializedNode.altnumber,
@@ -66,19 +66,19 @@ export class ImmutableChapterNode extends DecoratorNode<void> {
     return node;
   }
 
-  setUsxStyle(usxStyle: ChapterUsxStyle): void {
+  setUsxStyle(usxStyle: VerseUsxStyle): void {
     const self = this.getWritable();
     self.__usxStyle = usxStyle;
   }
 
-  getUsxStyle(): ChapterUsxStyle {
+  getUsxStyle(): VerseUsxStyle {
     const self = this.getLatest();
     return self.__usxStyle;
   }
 
-  setNumber(chapterNumber: string): void {
+  setNumber(verseNumber: string): void {
     const self = this.getWritable();
-    self.__number = chapterNumber;
+    self.__number = verseNumber;
   }
 
   getNumber(): string {
@@ -134,7 +134,7 @@ export class ImmutableChapterNode extends DecoratorNode<void> {
     return this.getNumber();
   }
 
-  exportJSON(): SerializedChapterNode {
+  exportJSON(): SerializedVerseNode {
     return {
       type: this.getType(),
       usxStyle: this.getUsxStyle(),
@@ -142,22 +142,22 @@ export class ImmutableChapterNode extends DecoratorNode<void> {
       sid: this.getSid(),
       altnumber: this.getAltnumber(),
       pubnumber: this.getPubnumber(),
-      version: CHAPTER_VERSION,
+      version: VERSE_VERSION,
     };
   }
 }
 
-export function $createImmutableChapterNode(
-  chapterNumber: string,
+export function $createImmutableVerseNode(
+  verseNumber: string,
   sid?: string,
   altnumber?: string,
   pubnumber?: string,
-): ImmutableChapterNode {
-  return $applyNodeReplacement(new ImmutableChapterNode(chapterNumber, sid, altnumber, pubnumber));
+): ImmutableVerseNode {
+  return $applyNodeReplacement(new ImmutableVerseNode(verseNumber, sid, altnumber, pubnumber));
 }
 
-export function $isImmutableChapterNode(
+export function $isImmutableVerseNode(
   node: LexicalNode | null | undefined,
-): node is ImmutableChapterNode {
-  return node instanceof ImmutableChapterNode;
+): node is ImmutableVerseNode {
+  return node instanceof ImmutableVerseNode;
 }
