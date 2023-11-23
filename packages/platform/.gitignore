@@ -9,6 +9,7 @@ lerna-debug.log*
 
 node_modules
 dist
+!lib/papi-components/dist
 dist-ssr
 *.local
 

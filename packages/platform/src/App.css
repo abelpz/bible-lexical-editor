@@ -61,3 +61,7 @@ button {
 button:hover {
   border-color: #646cff;
 }
+
+.ref-selector {
+  margin-bottom: 30px;
+}

@@ -1,10 +1,33 @@
+import { RefSelector, ScriptureReference } from "papi-components";
+import { useState } from "react";
 import { usxStringToJson } from "shared/converters/usj/usx-to-usj";
 import { WEB_PSA_USX } from "shared/data/WEB-PSA.usx";
 import Editor from "./editor/Editor";
 import "./App.css";
 
+const defaultScrRef: ScriptureReference = {
+  bookNum: 19, // PSA
+  chapterNum: 1,
+  verseNum: 1,
+};
+
 const usj = usxStringToJson(WEB_PSA_USX);
 
 export default function App() {
-  return <Editor usj={usj} logger={console} />;
+  const [scrRef, setScrRef] = useState(defaultScrRef);
+
+  const handleReferenceChanged = (newScrRef: ScriptureReference) => {
+    // fixed to book of Psalms for testing
+    if (newScrRef.bookNum !== defaultScrRef.bookNum) newScrRef.bookNum = defaultScrRef.bookNum;
+    setScrRef(newScrRef);
+  };
+
+  return (
+    <>
+      <div className="ref-selector">
+        <RefSelector handleSubmit={handleReferenceChanged} scrRef={scrRef} />
+      </div>
+      <Editor usj={usj} logger={console} />
+    </>
+  );
 }
