@@ -16,18 +16,25 @@ import ToolbarPlugin from "./plugins/toolbar/ToolbarPlugin";
 import UpdateStatePlugin from "./plugins/UpdateStatePlugin";
 import { LoggerBasic } from "./plugins/logger-basic.model";
 
+type Mutable<T> = {
+  -readonly [P in keyof T]: T[P];
+};
+
 type EditorProps<TLogger extends LoggerBasic> = {
   /** Scripture data in USJ form */
   usj?: Usj;
   /** Possible note callers to use when caller is '+' */
   noteCallers?: string[];
+  /** is the editor readonly or editable */
+  isReadonly?: boolean;
   /** logger instance */
   logger?: TLogger;
 };
 
-const editorConfig: InitialConfigType = {
+const editorConfig: Mutable<InitialConfigType> = {
   namespace: "platformEditor",
   theme: editorTheme,
+  editable: true,
   // Avoid the onChange handler being triggered initially.
   editorState: null,
   // Handling of errors during update
@@ -42,11 +49,26 @@ function Placeholder(): JSX.Element {
   return <div className="editor-placeholder">Enter some Scripture...</div>;
 }
 
+/**
+ * Scripture Editor for USJ. Created for use in Platform.Bible.
+ * @see https://github.com/usfm-bible/tcdocs/blob/usj/grammar/usj.js
+ *
+ * @param props.usj - USJ Scripture data.
+ * @param props.scrRefState - Scripture reference state object containing the ref and the function
+ *   to set it.
+ * @param props.noteCallers - Possible note callers to use when caller is '+'.
+ * @param props.isReadonly - Is the editor readonly or editable (default).
+ * @param props.logger - Logger instance.
+ * @returns the editor element.
+ */
 export default function Editor<TLogger extends LoggerBasic>({
   usj,
   noteCallers,
+  isReadonly,
   logger,
 }: EditorProps<TLogger>): JSX.Element {
+  if (isReadonly) editorConfig.editable = false;
+
   return (
     <LexicalComposer initialConfig={editorConfig}>
       <div className="editor-container">
