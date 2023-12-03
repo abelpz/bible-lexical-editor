@@ -6,13 +6,10 @@ title: ScriptureData—Editor flow
 ---
 graph TB
   DB[(DB)] <-- USX --> C
-  C[USX-USJ converter] -- USJ --> A
-  A[USJ-Editor adapter] -- Editor State --> Editor
+  C[<a href='/abelpz/bible-lexical-editor/tree/main/packages/shared/converters/usj'>USX-USJ converter</a>] -- USJ --> A
+  A[<a href='/abelpz/bible-lexical-editor/tree/main/packages/platform/src/editor/plugins/UpdateStatePlugin.tsx'>USJ-Editor adapter</a>] -- Editor State --> Editor
   A -. NYI* .-> C
   Editor -. NYI* .-> A
-
-  click C "https://github.com/abelpz/bible-lexical-editor/tree/main/packages/shared/converters/usj"
-  click A "https://github.com/abelpz/bible-lexical-editor/blob/main/packages/platform/src/editor/plugins/UpdateStatePlugin.tsx"
 
   Editor ~~~ Key[NYI* - Not Yet Implemented]
   style Key fill:#fff,stroke:#fff
@@ -22,7 +19,7 @@ graph TB
 
 To develop an editor in a target application you can use [yalc](https://www.npmjs.com/package/yalc) to link the editor in without having to publish to NPM every time something changes.
 
-1. Install `yalc` globally:
+1. Install `yalc` globally (note we intentionally use `npm` rather than `pnpm` for global installs, see [JavaScript Tool Manager](/README.md#javascript-tool-manager)):
    ```bash
    npm i -g yalc
    ```
