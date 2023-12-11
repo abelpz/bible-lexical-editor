@@ -3,7 +3,7 @@
 ## Developer Quick Start
 
 1. Install [Volta](https://docs.volta.sh/guide/getting-started).
-2. Install [Nx](https://nx.dev/) globally:
+2. Install [Nx](https://nx.dev/) globally (note we intentionally use `npm` rather than `pnpm` for global installs, see [JavaScript Tool Manager](#javascript-tool-manager)):
    ```bash
    npm i -g nx
    ```
@@ -22,7 +22,7 @@
 
 You can use [Volta](https://volta.sh/) with this repo to use the right version of tools such as Node.js and PNPM.
 
-If you don't use Volta just look at the `volta` property in [package.json](https://github.com/abelpz/bible-lexical-editor/blob/main/package.json) to see the right tool versions to install in your preferred way.
+If you don't use Volta just look at the `volta` property in [package.json](/package.json) to see the right tool versions to install in your preferred way.
 
 NOTE: there is a [known limitation using PNPM with Volta](https://docs.volta.sh/advanced/pnpm). So to install packages globally, use NPM instead of PNPM (only for global installs). For an example, see step 2 of [Developer Quick Start](#developer-quick-start).
 
@@ -33,14 +33,9 @@ NOTE: there is a [known limitation using PNPM with Volta](https://docs.volta.sh/
 title: Nx Graph
 ---
 graph TB
-  R(perf-react) --> S(shared)
-  V(perf-vanilla) --> S
-  P(platform) --> S
-
-  click R "https://github.com/abelpz/bible-lexical-editor/tree/main/packages/perf-react"
-  click V "https://github.com/abelpz/bible-lexical-editor/tree/main/packages/perf-vanilla"
-  click P "https://github.com/abelpz/bible-lexical-editor/tree/main/packages/platform"
-  click S "https://github.com/abelpz/bible-lexical-editor/tree/main/packages/shared"
+  R(<a href='/abelpz/bible-lexical-editor/tree/main/packages/perf-react'>perf-react</a>) --> S(<a href='/abelpz/bible-lexical-editor/tree/main/packages/shared'>shared</a>)
+  V(<a href='/abelpz/bible-lexical-editor/tree/main/packages/perf-vanilla'>perf-vanilla</a>) --> S
+  P(<a href='/abelpz/bible-lexical-editor/tree/main/packages/platform'>platform</a>) --> S
 ```
 
 <a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
@@ -107,7 +102,7 @@ Nx comes with local caching already built-in (check your `nx.json`). On CI you m
 
 ## Testing
 
-The unit tests run automatically on each GitHub PR (see [test.yml](https://github.com/abelpz/bible-lexical-editor/blob/main/.github/workflows/test.yml)).
+The unit tests run automatically on each GitHub PR (see [test.yml](/.github/workflows/test.yml)).
 
 To run all TS unit tests:
 
@@ -132,7 +127,7 @@ To run all TS unit tests watching for file changes:
   nx watch --all -- nx test \$NX_PROJECT_NAME
   ```
 
-You can also use the [recommended VS Code extensions](https://github.com/abelpz/bible-lexical-editor/blob/main/.vscode/extensions.json) to run tests there. This is particularly useful for running individual tests and debugging.
+You can also use the [recommended VS Code extensions](/.vscode/extensions.json) to run tests there. This is particularly useful for running individual tests and debugging.
 
 ## Formatting, Linting and Typechecking
 
