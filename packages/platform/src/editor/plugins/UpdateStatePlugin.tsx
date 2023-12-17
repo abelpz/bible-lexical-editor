@@ -30,6 +30,12 @@ import {
 } from "shared/nodes/scripture/usj/ImmutableChapterNode";
 import { CHAR_VERSION, CharNode, SerializedCharNode } from "shared/nodes/scripture/usj/CharNode";
 import {
+  MILESTONE_VERSION,
+  MilestoneNode,
+  MilestoneUsxStyle,
+  SerializedMilestoneNode,
+} from "shared/nodes/scripture/usj/MilestoneNode";
+import {
   IMPLIED_PARA_VERSION,
   ImpliedParaNode,
   SerializedImpliedParaNode,
@@ -255,6 +261,22 @@ function createNote(
   };
 }
 
+function createMilestone(style: string, marker: MarkerObject): SerializedMilestoneNode | undefined {
+  if (!MilestoneNode.isValidStyle(style)) {
+    _logger?.error(`Unexpected milestone style '${style}'!`);
+    return undefined;
+  }
+  const node = { ...marker };
+  delete node.content;
+
+  return {
+    ...node,
+    type: MilestoneNode.getType(),
+    usxStyle: style as MilestoneUsxStyle,
+    version: MILESTONE_VERSION,
+  };
+}
+
 function createText(text: string): SerializedTextNode {
   return {
     type: TextNode.getType(),
@@ -317,8 +339,12 @@ function recurseNodes(
           lexicalNode = createNote(style, marker, recurseNodes(marker.content));
           addNode(lexicalNode, elementNodes);
           break;
+        case "ms":
+          lexicalNode = createMilestone(style, marker);
+          addNode(lexicalNode, elementNodes);
+          break;
         default:
-          if (!marker.type || marker.type === "ms") break;
+          if (!marker.type) break;
           _logger?.error(`Unexpected node type '${marker.type}'!`);
       }
     }

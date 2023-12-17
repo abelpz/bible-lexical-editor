@@ -842,4 +842,5 @@ export default String.raw`\id PSA EN_ULT en_English_ltr Mon Oct 09 2023 16:39:14
 \zaln-s |x-strong="k:H6793c" x-lemma="צִנָּה" x-morph="He,Rd:Ncfsa" x-occurrence="1" x-occurrences="1" x-content="כַּ֝⁠צִּנָּ֗ה"\*\w as|x-occurrence="1" x-occurrences="1"\w*
 \w a|x-occurrence="1" x-occurrences="1"\w*
 \w shield|x-occurrence="1" x-occurrences="1"\w*\zaln-e\*.
-\ts\*`;
+\ts\*
+`;
