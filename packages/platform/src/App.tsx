@@ -1,8 +1,8 @@
 import { RefSelector, ScriptureReference } from "papi-components";
 import { useState } from "react";
 import { usxStringToJson } from "shared/converters/usj/usx-to-usj";
-// import { WEB_PSA_USX as usx } from "shared/data/WEB-PSA.usx";
-import { PSA_USX as usx } from "shared/data/psa.usfm.usx";
+import { WEB_PSA_USX as usx } from "shared/data/WEB-PSA.usx";
+// import { PSA_USX as usx } from "shared/data/psa.usfm.usx";
 import Editor from "./editor/Editor";
 import "./App.css";
 

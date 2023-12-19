@@ -1,7 +1,3 @@
-/**
- * Converted to typescript from the Lexical React example.
- * @see https://codesandbox.io/s/lexical-rich-text-example-5tncvy
- */
 import { ScriptureReference } from "papi-components";
 import { JSX } from "react";
 import { InitialConfigType, LexicalComposer } from "@lexical/react/LexicalComposer";
@@ -11,6 +7,7 @@ import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
 import { Usj } from "shared/converters/usj/usj.model";
 import scriptureUsjNodes from "shared/nodes/scripture/usj";
+import usjEditorAdaptor from "./adaptors/usj-editor.adaptor";
 import { NoteNode } from "./nodes/NoteNode";
 import editorTheme from "./themes/editor-theme";
 import ScriptureReferencePlugin from "./plugins/ScriptureReferencePlugin";
@@ -75,7 +72,7 @@ export default function Editor<TLogger extends LoggerBasic>({
   isReadonly,
   logger,
 }: EditorProps<TLogger>): JSX.Element {
-  if (isReadonly) editorConfig.editable = false;
+  editorConfig.editable = !isReadonly;
 
   return (
     <LexicalComposer initialConfig={editorConfig}>
@@ -89,7 +86,12 @@ export default function Editor<TLogger extends LoggerBasic>({
           />
           <HistoryPlugin />
           {scrRefState && <ScriptureReferencePlugin scrRefState={scrRefState} />}
-          <UpdateStatePlugin usj={usj} noteCallers={noteCallers} logger={logger} />
+          <UpdateStatePlugin
+            scripture={usj}
+            noteCallers={noteCallers}
+            editorAdaptor={usjEditorAdaptor}
+            logger={logger}
+          />
         </div>
       </div>
     </LexicalComposer>

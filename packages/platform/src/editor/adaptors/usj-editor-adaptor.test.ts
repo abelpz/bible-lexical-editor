@@ -11,9 +11,9 @@ import {
 import { MarkerObject } from "shared/converters/usj/usj.model";
 import { SerializedParaNode } from "shared/nodes/scripture/usj/ParaNode";
 import { SerializedNoteNode } from "../nodes/NoteNode";
-import { loadEditorState, resetCallerCount } from "./UpdateStatePlugin";
+import { loadEditorState, reset } from "./usj-editor.adaptor";
 
-describe("Update Lexical State", () => {
+describe("USJ Editor Adaptor", () => {
   it("should convert from empty USJ to Lexical editor state JSON", () => {
     const serializedEditorState = loadEditorState(usjEmpty);
     expect(serializedEditorState).toEqual(editorStateEmpty);
@@ -30,7 +30,7 @@ describe("Update Lexical State", () => {
   });
 
   it("should convert from USJ to Lexical editor state JSON with caller clocked", () => {
-    resetCallerCount(25);
+    reset(25);
 
     // SUT
     let serializedEditorState = loadEditorState(usjGen1v1);
@@ -41,7 +41,7 @@ describe("Update Lexical State", () => {
     note.caller = "z";
     expect(serializedEditorState).toEqual(editorStateCallerUpdated);
 
-    resetCallerCount(52);
+    reset(52);
 
     // SUT
     serializedEditorState = loadEditorState(usjGen1v1);
@@ -51,7 +51,7 @@ describe("Update Lexical State", () => {
   });
 
   it("should reset if the note caller count is too large", () => {
-    resetCallerCount(701);
+    reset(701);
 
     // SUT
     let serializedEditorState = loadEditorState(usjGen1v1);
@@ -62,7 +62,7 @@ describe("Update Lexical State", () => {
     note.caller = "zz";
     expect(serializedEditorState).toEqual(editorStateCallerUpdated);
 
-    resetCallerCount(702);
+    reset(702);
 
     // SUT
     serializedEditorState = loadEditorState(usjGen1v1);
