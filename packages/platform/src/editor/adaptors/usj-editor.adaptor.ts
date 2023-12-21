@@ -43,22 +43,40 @@ import {
   ParaNode,
   SerializedParaNode,
 } from "shared/nodes/scripture/usj/ParaNode";
-import { NOTE_VERSION, NoteNode, NoteUsxStyle, SerializedNoteNode } from "../nodes/NoteNode";
+import {
+  NOTE_VERSION,
+  NoteNode,
+  NoteUsxStyle,
+  OnClick,
+  SerializedNoteNode,
+  noteNodeName,
+} from "../nodes/NoteNode";
 import {
   SerializedVerseNode,
   VERSE_STYLE,
   VERSE_VERSION,
   ImmutableVerseNode,
 } from "shared/nodes/scripture/usj/ImmutableVerseNode";
-import { EditorAdaptor } from "./editor-adaptor.model";
+import { EditorAdaptor, NodeOptions } from "./editor-adaptor.model";
 import { LoggerBasic } from "../plugins/logger-basic.model";
+
+export interface UsjNodeOptions extends NodeOptions {
+  [noteNodeName]?: {
+    noteCallers?: string[];
+    onClick?: OnClick;
+  };
+}
+
+interface UsjEditorAdaptor extends EditorAdaptor {
+  initialize: typeof initialize;
+  reset: typeof reset;
+  loadEditorState: typeof loadEditorState;
+}
 
 /** empty para node for an 'empty' editor */
 const emptyParaNode: SerializedParaNode = createPara(PARA_STYLE_DEFAULT);
-
-let callerCount = 0;
 /** Possible note callers to use when caller is '+'. Up to 2 characters are used, e.g. a-zz */
-let _noteCallers = [
+const defaultNoteCallers = [
   "a",
   "b",
   "c",
@@ -86,11 +104,19 @@ let _noteCallers = [
   "y",
   "z",
 ];
+
+/** Options for each node. */
+let _nodeOptions: UsjNodeOptions = {};
+/** Count used for note callers */
+let callerCount = 0;
 /** logger instance */
 let _logger: LoggerBasic;
 
-export function initialize(noteCallers: string[] | undefined, logger: LoggerBasic | undefined) {
-  setNoteCallers(noteCallers);
+export function initialize(
+  nodeOptions: UsjNodeOptions | undefined,
+  logger: LoggerBasic | undefined,
+) {
+  setNodeOptions(nodeOptions);
   setLogger(logger);
 }
 
@@ -127,12 +153,11 @@ export function loadEditorState(usj: Usj | undefined): SerializedEditorState {
 }
 
 /**
- * Set the list of potential note caller symbols to use when caller is '+'.
- * @param noteCallers - Array of note callers to display in the editor. Defaults to lower case
- *   alphabet.
+ * Set the node options.
+ * @param nodeOptions - Node options.
  */
-function setNoteCallers(noteCallers: string[] | undefined) {
-  if (noteCallers && noteCallers.length > 0) _noteCallers = noteCallers;
+function setNodeOptions(nodeOptions: UsjNodeOptions | undefined) {
+  if (nodeOptions) _nodeOptions = nodeOptions;
 }
 
 /**
@@ -158,20 +183,23 @@ function resetCallerCount(resetValue = 0) {
  *   callers list, '*' if undefined.
  */
 function getNoteCaller(markerCaller: string | undefined): string {
+  const optionsNoteCallers = _nodeOptions[noteNodeName]?.noteCallers;
+  const noteCallers =
+    optionsNoteCallers && optionsNoteCallers.length > 0 ? optionsNoteCallers : defaultNoteCallers;
   let caller = markerCaller;
   if (markerCaller === "+") {
-    if (callerCount >= _noteCallers.length ** 2 + _noteCallers.length) {
+    if (callerCount >= noteCallers.length ** 2 + noteCallers.length) {
       resetCallerCount();
       _logger?.warn("Note caller count was reset. Consider adding more possible note callers.");
     }
 
-    const callerIndex = callerCount % _noteCallers.length;
+    const callerIndex = callerCount % noteCallers.length;
     let callerLeadChar = "";
-    if (callerCount >= _noteCallers.length) {
-      const callerLeadCharIndex = Math.trunc(callerCount / _noteCallers.length) - 1;
-      callerLeadChar = _noteCallers[callerLeadCharIndex];
+    if (callerCount >= noteCallers.length) {
+      const callerLeadCharIndex = Math.trunc(callerCount / noteCallers.length) - 1;
+      callerLeadChar = noteCallers[callerLeadCharIndex];
     }
-    caller = callerLeadChar + _noteCallers[callerIndex];
+    caller = callerLeadChar + noteCallers[callerIndex];
     callerCount += 1;
   }
   return caller ?? "*";
@@ -304,6 +332,7 @@ function createNote(
       "",
     )
     .trim();
+  const onClick = (_nodeOptions[NoteNode.name]?.onClick as OnClick) ?? (() => false);
   const node = { ...marker };
   delete node.content;
 
@@ -313,6 +342,7 @@ function createNote(
     usxStyle: style as NoteUsxStyle,
     caller: getNoteCaller(marker.caller),
     previewText,
+    onClick,
     version: NOTE_VERSION,
   };
 }
@@ -432,7 +462,7 @@ function insertImpliedParasRecurse(
   return nodes as SerializedElementNode[];
 }
 
-const usjEditorAdaptor: EditorAdaptor = {
+const usjEditorAdaptor: UsjEditorAdaptor = {
   initialize,
   reset,
   loadEditorState,

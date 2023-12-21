@@ -2,35 +2,35 @@ import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext
 import { CLEAR_HISTORY_COMMAND } from "lexical";
 import { useEffect } from "react";
 import { LoggerBasic } from "./logger-basic.model";
-import { EditorAdaptor } from "../adaptors/editor-adaptor.model";
+import { EditorAdaptor, NodeOptions } from "../adaptors/editor-adaptor.model";
 
 /**
- * A component (plugin) that updates the state of lexical when incoming Scripture changes.
+ * A plugin component that updates the state of the lexical editor when incoming Scripture changes.
  * @param props.scripture - Scripture data.
- * @param props.noteCallers - Possible note callers to use when caller is '+'.
+ * @param props.nodeOptions - Options for each node.
  * @param props.editorAdaptor - Editor adaptor
  * @param props.logger - logger instance
  * @returns null, i.e. no DOM elements.
  */
 export default function UpdateStatePlugin<TLogger extends LoggerBasic>({
   scripture,
-  noteCallers,
+  nodeOptions,
   editorAdaptor,
   logger,
 }: {
   scripture?: unknown;
-  noteCallers?: string[];
+  nodeOptions?: NodeOptions;
   editorAdaptor: EditorAdaptor;
   logger?: TLogger;
 }): null {
   const [editor] = useLexicalComposerContext();
-  editorAdaptor.initialize?.(noteCallers, logger);
+  editorAdaptor.initialize?.(nodeOptions, logger);
 
   useEffect(() => {
     editorAdaptor.reset?.();
     const serializedEditorState = editorAdaptor.loadEditorState(scripture);
     const editorState = editor.parseEditorState(serializedEditorState);
-    // TODO: review use of `queueMicrotask`. It stops an error but why is it necessary?
+    // Execute at a safe time prior to control returning to the browser's event loop.
     queueMicrotask(() => {
       editor.setEditorState(editorState);
       editor.dispatchCommand(CLEAR_HISTORY_COMMAND, undefined);

@@ -7,7 +7,7 @@ import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
 import { Usj } from "shared/converters/usj/usj.model";
 import scriptureUsjNodes from "shared/nodes/scripture/usj";
-import usjEditorAdaptor from "./adaptors/usj-editor.adaptor";
+import usjEditorAdaptor, { UsjNodeOptions } from "./adaptors/usj-editor.adaptor";
 import { NoteNode } from "./nodes/NoteNode";
 import editorTheme from "./themes/editor-theme";
 import ScriptureReferencePlugin from "./plugins/ScriptureReferencePlugin";
@@ -27,11 +27,11 @@ type EditorProps<TLogger extends LoggerBasic> = {
     scrRef: ScriptureReference,
     setScrRef: React.Dispatch<React.SetStateAction<ScriptureReference>>,
   ];
-  /** Possible note callers to use when caller is '+' */
-  noteCallers?: string[];
-  /** is the editor readonly or editable */
+  /** Options for each node */
+  nodeOptions?: UsjNodeOptions;
+  /** Is the editor readonly or editable */
   isReadonly?: boolean;
-  /** logger instance */
+  /** Logger instance */
   logger?: TLogger;
 };
 
@@ -60,7 +60,10 @@ function Placeholder(): JSX.Element {
  * @param props.usj - USJ Scripture data.
  * @param props.scrRefState - Scripture reference state object containing the ref and the function
  *   to set it.
- * @param props.noteCallers - Possible note callers to use when caller is '+'.
+ * @param props.nodeOptions - Options for each node.
+ * @param props.nodeOptions[].noteCallers - Possible note callers to use when caller is
+ *   '+' for NoteNode.
+ * @param props.nodeOptions[].onClick - Click handler for NoteNode.
  * @param props.isReadonly - Is the editor readonly or editable (default).
  * @param props.logger - Logger instance.
  * @returns the editor element.
@@ -68,7 +71,7 @@ function Placeholder(): JSX.Element {
 export default function Editor<TLogger extends LoggerBasic>({
   usj,
   scrRefState,
-  noteCallers,
+  nodeOptions,
   isReadonly,
   logger,
 }: EditorProps<TLogger>): JSX.Element {
@@ -88,7 +91,7 @@ export default function Editor<TLogger extends LoggerBasic>({
           {scrRefState && <ScriptureReferencePlugin scrRefState={scrRefState} />}
           <UpdateStatePlugin
             scripture={usj}
-            noteCallers={noteCallers}
+            nodeOptions={nodeOptions}
             editorAdaptor={usjEditorAdaptor}
             logger={logger}
           />

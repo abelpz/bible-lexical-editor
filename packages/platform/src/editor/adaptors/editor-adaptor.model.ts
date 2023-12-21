@@ -1,22 +1,27 @@
 import { SerializedEditorState } from "lexical";
+import { LoggerBasic } from "../plugins/logger-basic.model";
+
+/** Option properties to use with each node. */
+export type NodeOptions = { [nodeClassName: string]: { [prop: string]: unknown } };
 
 export interface EditorAdaptor {
   /**
    * Load the Scripture into a serialized editor state.
-   * @param scripture - Scripture to adapt to the editor.
+   * @param scripture - Scripture to adapt to the editor, if any.
    * @returns the serialized editor state.
    */
   loadEditorState(scripture: unknown | undefined): SerializedEditorState;
 
   /**
    * Initialize the adaptor.
-   * @param args - Arguments to initialize.
+   * @param nodeOptions - Node options, if any.
+   * @param logger - Logger, if any.
    */
-  initialize?(...args: unknown[]): void;
+  initialize?(nodeOptions: NodeOptions | undefined, logger: LoggerBasic | undefined): void;
 
   /**
    * Reset the adaptor to use with new/changed Scripture.
-   * @param resetValues - Values to reset to.
+   * @param resetValues - Values to reset to, if any.
    */
   reset?(...resetValues: unknown[]): void;
 }

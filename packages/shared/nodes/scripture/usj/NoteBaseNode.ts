@@ -17,7 +17,7 @@ export const NOTE_VERSION = 1;
 
 export type NoteUsxStyle = (typeof VALID_NOTE_STYLES)[number];
 
-export type SerializedNoteNode = Spread<
+export type SerializedNoteBaseNode = Spread<
   {
     usxStyle: NoteUsxStyle;
     caller: string;
@@ -114,7 +114,7 @@ export class NoteBaseNode<T> extends DecoratorNode<T> {
     throw new Error("decorate: base method not extended");
   }
 
-  exportJSON(): SerializedNoteNode {
+  exportJSON(): SerializedNoteBaseNode {
     return {
       type: this.getType(),
       usxStyle: this.getUsxStyle(),
