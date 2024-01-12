@@ -35,7 +35,9 @@ title: Nx Graph
 graph TB
   R(<a href='/abelpz/bible-lexical-editor/tree/main/packages/perf-react'>perf-react</a>) --> S(<a href='/abelpz/bible-lexical-editor/tree/main/packages/shared'>shared</a>)
   V(<a href='/abelpz/bible-lexical-editor/tree/main/packages/perf-vanilla'>perf-vanilla</a>) --> S
-  P(<a href='/abelpz/bible-lexical-editor/tree/main/packages/platform'>platform</a>) --> S
+  P(<a href='/abelpz/bible-lexical-editor/tree/main/packages/platform'>platform</a>) --> SR
+  SR(<a href='/abelpz/bible-lexical-editor/tree/main/packages/shared-react'>shared-react</a>) --> S
+  P --> S
 ```
 
 <a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>

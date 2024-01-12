@@ -7,13 +7,13 @@ import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
 import { Usj } from "shared/converters/usj/usj.model";
 import scriptureUsjNodes from "shared/nodes/scripture/usj";
+import { LoggerBasic } from "shared-react/plugins/logger-basic.model";
+import UpdateStatePlugin from "shared-react/plugins/UpdateStatePlugin";
 import usjEditorAdaptor, { UsjNodeOptions } from "./adaptors/usj-editor.adaptor";
 import { NoteNode } from "./nodes/NoteNode";
 import editorTheme from "./themes/editor-theme";
 import ScriptureReferencePlugin from "./plugins/ScriptureReferencePlugin";
 import ToolbarPlugin from "./plugins/toolbar/ToolbarPlugin";
-import UpdateStatePlugin from "./plugins/UpdateStatePlugin";
-import { LoggerBasic } from "./plugins/logger-basic.model";
 
 type Mutable<T> = {
   -readonly [P in keyof T]: T[P];

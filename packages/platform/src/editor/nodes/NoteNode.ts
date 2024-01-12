@@ -39,13 +39,13 @@ export class NoteNode extends NoteBaseNode<ReactNode> {
   }
 
   static clone(node: NoteNode): NoteNode {
-    const { __usxStyle, __caller, __previewText, __onClick: __onClickFn, __category } = node;
-    return new NoteNode(__usxStyle, __caller, __previewText, __onClickFn, __category, node.__key);
+    const { __usxStyle, __caller, __previewText, __onClick, __category } = node;
+    return new NoteNode(__usxStyle, __caller, __previewText, __onClick, __category, node.__key);
   }
 
   static importJSON(serializedNode: SerializedNoteNode): NoteNode {
-    const { usxStyle, caller, previewText, onClick: onClickFn, category } = serializedNode;
-    const node = $createNoteNode(usxStyle, caller, previewText, onClickFn, category);
+    const { usxStyle, caller, previewText, onClick, category } = serializedNode;
+    const node = $createNoteNode(usxStyle, caller, previewText, onClick, category);
     return node;
   }
 
@@ -72,7 +72,7 @@ export class NoteNode extends NoteBaseNode<ReactNode> {
   }
 }
 
-export const noteNodeName = Symbol(NoteNode.name);
+export const noteNodeName = Symbol.for(NoteNode.name);
 
 export function $createNoteNode(
   usxStyle: NoteUsxStyle,

@@ -57,8 +57,8 @@ import {
   VERSE_VERSION,
   ImmutableVerseNode,
 } from "shared/nodes/scripture/usj/ImmutableVerseNode";
-import { EditorAdaptor, NodeOptions } from "./editor-adaptor.model";
-import { LoggerBasic } from "../plugins/logger-basic.model";
+import { EditorAdaptor, NodeOptions } from "shared-react/adaptors/editor-adaptor.model";
+import { LoggerBasic } from "shared-react/plugins/logger-basic.model";
 
 export interface UsjNodeOptions extends NodeOptions {
   [noteNodeName]?: {
