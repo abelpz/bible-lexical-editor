@@ -8,11 +8,11 @@ import Editor from "./editor/Editor";
 import { noteNodeName } from "./editor/nodes/NoteNode";
 import "./App.css";
 
-const defaultScrRef: ScriptureReference = { bookNum: 19, /* PSA */ chapterNum: 1, verseNum: 1 };
+const defaultScrRef: ScriptureReference = { /* PSA */ bookNum: 19, chapterNum: 1, verseNum: 1 };
 
 const usj = usxStringToJson(usx);
 
-const nodeOptions: UsjNodeOptions = { [noteNodeName]: { onClick: () => false } };
+const nodeOptions: UsjNodeOptions = { [noteNodeName]: { onClick: () => undefined } };
 
 export default function App() {
   const [scrRef, setScrRef] = useState(defaultScrRef);

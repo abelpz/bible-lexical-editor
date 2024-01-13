@@ -332,7 +332,7 @@ function createNote(
       "",
     )
     .trim();
-  const onClick = (_nodeOptions[NoteNode.name]?.onClick as OnClick) ?? (() => false);
+  const onClick = (_nodeOptions[noteNodeName]?.onClick as OnClick) ?? (() => undefined);
   const node = { ...marker };
   delete node.content;
 

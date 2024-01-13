@@ -35,7 +35,6 @@ describe("USJ Editor Adaptor", () => {
     const note = (serializedEditorState.root.children[NOTE_PARA_INDEX] as SerializedParaNode)
       .children[NOTE_INDEX] as SerializedNoteNode;
     expect(typeof note.onClick).toBe("function");
-    expect(note.onClick?.()).toBe(false);
     removeOnClick(serializedEditorState);
     expect(serializedEditorState).toEqual(editorStateGen1v1);
   });
