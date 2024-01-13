@@ -11,7 +11,7 @@ import {
 } from "shared/converters/usj/converter-test.data";
 import { MarkerObject } from "shared/converters/usj/usj.model";
 import { SerializedParaNode } from "shared/nodes/scripture/usj/ParaNode";
-import { SerializedNoteNode } from "../nodes/NoteNode";
+import { SerializedNoteNode } from "shared-react/nodes/scripture/usj/NoteNode";
 import { loadEditorState, reset } from "./usj-editor.adaptor";
 
 /**

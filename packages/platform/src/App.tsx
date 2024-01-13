@@ -3,9 +3,9 @@ import { useState } from "react";
 import { usxStringToJson } from "shared/converters/usj/usx-to-usj";
 import { WEB_PSA_USX as usx } from "shared/data/WEB-PSA.usx";
 // import { PSA_USX as usx } from "shared/data/psa.usfm.usx";
+import { noteNodeName } from "shared-react/nodes/scripture/usj/NoteNode";
 import { UsjNodeOptions } from "./editor/adaptors/usj-editor.adaptor";
 import Editor from "./editor/Editor";
-import { noteNodeName } from "./editor/nodes/NoteNode";
 import "./App.css";
 
 const defaultScrRef: ScriptureReference = { /* PSA */ bookNum: 19, chapterNum: 1, verseNum: 1 };

@@ -50,7 +50,7 @@ import {
   OnClick,
   SerializedNoteNode,
   noteNodeName,
-} from "../nodes/NoteNode";
+} from "shared-react/nodes/scripture/usj/NoteNode";
 import {
   SerializedVerseNode,
   VERSE_STYLE,
