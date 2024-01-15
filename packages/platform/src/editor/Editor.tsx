@@ -1,5 +1,5 @@
 import { ScriptureReference } from "papi-components";
-import { JSX } from "react";
+import React, { JSX } from "react";
 import { InitialConfigType, LexicalComposer } from "@lexical/react/LexicalComposer";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
@@ -22,6 +22,8 @@ type Mutable<T> = {
 type EditorProps<TLogger extends LoggerBasic> = {
   /** Scripture data in USJ form */
   usj?: Usj;
+  /** View Mode state */
+  viewModeState?: [viewMode: string, setViewMode: React.Dispatch<React.SetStateAction<string>>];
   /** Scripture Ref state */
   scrRefState?: [
     scrRef: ScriptureReference,
@@ -58,6 +60,8 @@ function Placeholder(): JSX.Element {
  * @see https://github.com/usfm-bible/tcdocs/blob/usj/grammar/usj.js
  *
  * @param props.usj - USJ Scripture data.
+ * @param props.viewModeState - View Mode state object containing the viewMode and the function to
+ *   set it.
  * @param props.scrRefState - Scripture reference state object containing the ref and the function
  *   to set it.
  * @param props.nodeOptions - Options for each node.
@@ -70,11 +74,13 @@ function Placeholder(): JSX.Element {
  */
 export default function Editor<TLogger extends LoggerBasic>({
   usj,
+  viewModeState,
   scrRefState,
   nodeOptions,
   isReadonly,
   logger,
 }: EditorProps<TLogger>): JSX.Element {
+  const viewMode = viewModeState ? viewModeState[0] : "";
   editorConfig.editable = !isReadonly;
 
   return (
@@ -93,6 +99,7 @@ export default function Editor<TLogger extends LoggerBasic>({
             scripture={usj}
             nodeOptions={nodeOptions}
             editorAdaptor={usjEditorAdaptor}
+            viewMode={viewMode}
             logger={logger}
           />
         </div>

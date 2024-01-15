@@ -374,6 +374,9 @@ pre::-webkit-scrollbar-thumb {
   border-radius: 8px;
   border: 0;
   max-width: 250px;
+}
+
+.dropdown .item.block-type {
   min-width: 420px;
 }
 

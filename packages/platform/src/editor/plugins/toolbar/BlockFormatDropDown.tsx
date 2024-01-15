@@ -84,15 +84,15 @@ export default function BlockFormatDropDown({
       buttonClassName="toolbar-item block-controls"
       buttonIconClassName={"icon block-type " + blockTypeToClassName(blockType)}
       buttonLabel={blockFormatLabel(blockType)}
-      buttonAriaLabel="Formatting options for text style"
+      buttonAriaLabel="Formatting options for block type"
     >
       {Object.keys(commonBlockTypeToBlockNames).map((itemBlockType) => (
         <DropDownItem
           key={itemBlockType}
-          className={"item " + dropDownActiveClass(blockType === itemBlockType)}
+          className={"item block-type " + dropDownActiveClass(blockType === itemBlockType)}
           onClick={() => formatPara(itemBlockType)}
         >
-          <i className={"icon " + typeToClassName(itemBlockType)} />
+          <i className={"icon block-type " + typeToClassName(itemBlockType)} />
           <span className={"text usfm_" + typeToStyle(itemBlockType)}>
             {commonBlockTypeToBlockNames[itemBlockType as keyof typeof commonBlockTypeToBlockNames]}
           </span>

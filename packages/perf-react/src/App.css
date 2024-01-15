@@ -81,14 +81,6 @@
   color: #888;
 }
 
-.ltr {
-  text-align: left;
-}
-
-.rtl {
-  text-align: right;
-}
-
 .editor-oce {
   position: relative;
   text-align: left;
