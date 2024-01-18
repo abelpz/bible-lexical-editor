@@ -143,3 +143,7 @@ nx format:write # to fix formatting
 nx run-many -t lint # to check linting
 nx run-many -t typecheck # to check types
 ```
+
+## Collaborative Web Development Environment
+
+Thanks to [CodeSandbox](https://codesandbox.io/) for the instant dev environment: https://codesandbox.io/p/github/abelpz/bible-lexical-editor/main

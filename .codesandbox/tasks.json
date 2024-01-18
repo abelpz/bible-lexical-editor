@@ -9,20 +9,28 @@
 
   // These tasks can be run from CodeSandbox. Running one will open a log in the app.
   "tasks": {
-    "dev:react": {
-      "name": "dev:react",
-      "command": "pnpm nx dev react",
+    "dev:perf-vanilla": {
+      "name": "dev:perf-vanilla",
+      "command": "pnpm nx dev perf-vanilla",
+      "runAtStart": true,
+      "preview": {
+        "port": 5173
+      }
+    },
+    "dev:perf-react": {
+      "name": "dev:perf-react",
+      "command": "pnpm nx dev perf-react",
       "runAtStart": true,
       "preview": {
         "port": 5174
       }
     },
-    "dev:vanilla": {
-      "name": "dev:vanilla",
-      "command": "pnpm nx dev vanilla",
+    "dev:platform": {
+      "name": "dev:platform",
+      "command": "pnpm nx dev platform",
       "runAtStart": true,
       "preview": {
-        "port": 5173
+        "port": 5175
       }
     },
     "build": {
