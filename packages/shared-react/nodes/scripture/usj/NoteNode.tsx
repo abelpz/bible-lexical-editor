@@ -1,14 +1,14 @@
 /** Conforms with USX v3.0 @see https://ubsicap.github.io/usx/elements.html#note */
 
 import { type LexicalNode, $applyNodeReplacement, NodeKey, Spread } from "lexical";
-import { ReactNode, createElement } from "react";
+import { JSX, ReactNode } from "react";
 import {
   NoteBaseNode,
   NoteUsxStyle,
   SerializedNoteBaseNode,
 } from "shared/nodes/scripture/usj/NoteBaseNode";
 
-export type OnClick = () => boolean;
+export type OnClick = () => void;
 
 export { NOTE_VERSION, type NoteUsxStyle } from "shared/nodes/scripture/usj/NoteBaseNode";
 
@@ -31,7 +31,7 @@ export class NoteNode extends NoteBaseNode<ReactNode> {
     key?: NodeKey,
   ) {
     super(usxStyle, caller, previewText, category, key);
-    this.__onClick = onClick ?? (() => false);
+    this.__onClick = onClick ?? (() => undefined);
   }
 
   static getType(): string {
@@ -39,13 +39,13 @@ export class NoteNode extends NoteBaseNode<ReactNode> {
   }
 
   static clone(node: NoteNode): NoteNode {
-    const { __usxStyle, __caller, __previewText, __onClick: __onClickFn, __category } = node;
-    return new NoteNode(__usxStyle, __caller, __previewText, __onClickFn, __category, node.__key);
+    const { __usxStyle, __caller, __previewText, __onClick, __category } = node;
+    return new NoteNode(__usxStyle, __caller, __previewText, __onClick, __category, node.__key);
   }
 
   static importJSON(serializedNode: SerializedNoteNode): NoteNode {
-    const { usxStyle, caller, previewText, onClick: onClickFn, category } = serializedNode;
-    const node = $createNoteNode(usxStyle, caller, previewText, onClickFn, category);
+    const { usxStyle, caller, previewText, onClick, category } = serializedNode;
+    const node = $createNoteNode(usxStyle, caller, previewText, onClick, category);
     return node;
   }
 
@@ -59,11 +59,11 @@ export class NoteNode extends NoteBaseNode<ReactNode> {
     return self.__onClick;
   }
 
-  decorate(): ReactNode {
-    return createElement(
-      "a",
-      { onClick: this.__onClick, title: this.__previewText },
-      this.__caller,
+  decorate(): JSX.Element {
+    return (
+      <button onClick={this.__onClick} title={this.__previewText}>
+        {this.__caller}
+      </button>
     );
   }
 
@@ -72,7 +72,7 @@ export class NoteNode extends NoteBaseNode<ReactNode> {
   }
 }
 
-export const noteNodeName = Symbol(NoteNode.name);
+export const noteNodeName = Symbol.for(NoteNode.name);
 
 export function $createNoteNode(
   usxStyle: NoteUsxStyle,

@@ -50,15 +50,15 @@ import {
   OnClick,
   SerializedNoteNode,
   noteNodeName,
-} from "../nodes/NoteNode";
+} from "shared-react/nodes/scripture/usj/NoteNode";
 import {
   SerializedVerseNode,
   VERSE_STYLE,
   VERSE_VERSION,
   ImmutableVerseNode,
 } from "shared/nodes/scripture/usj/ImmutableVerseNode";
-import { EditorAdaptor, NodeOptions } from "./editor-adaptor.model";
-import { LoggerBasic } from "../plugins/logger-basic.model";
+import { EditorAdaptor, NodeOptions } from "shared-react/adaptors/editor-adaptor.model";
+import { LoggerBasic } from "shared-react/plugins/logger-basic.model";
 
 export interface UsjNodeOptions extends NodeOptions {
   [noteNodeName]?: {
@@ -332,7 +332,7 @@ function createNote(
       "",
     )
     .trim();
-  const onClick = (_nodeOptions[NoteNode.name]?.onClick as OnClick) ?? (() => false);
+  const onClick = (_nodeOptions[noteNodeName]?.onClick as OnClick) ?? (() => undefined);
   const node = { ...marker };
   delete node.content;
 

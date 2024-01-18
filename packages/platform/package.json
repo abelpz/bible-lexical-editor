@@ -24,7 +24,8 @@
     "lexical": "^0.12.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "shared": "*"
+    "shared": "*",
+    "shared-react": "*"
   },
   "devDependencies": {
     "@types/react": "^18.2.35",

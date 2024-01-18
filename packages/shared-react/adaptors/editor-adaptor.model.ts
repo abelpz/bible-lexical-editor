@@ -8,16 +8,17 @@ export interface EditorAdaptor {
   /**
    * Load the Scripture into a serialized editor state.
    * @param scripture - Scripture to adapt to the editor, if any.
+   * @param viewMode - View Mode of the editor, if any.
    * @returns the serialized editor state.
    */
-  loadEditorState(scripture: unknown | undefined): SerializedEditorState;
+  loadEditorState(scripture: unknown | undefined, viewMode?: unknown): SerializedEditorState;
 
   /**
    * Initialize the adaptor.
    * @param nodeOptions - Node options, if any.
    * @param logger - Logger, if any.
    */
-  initialize?(nodeOptions: NodeOptions | undefined, logger: LoggerBasic | undefined): void;
+  initialize?(nodeOptions?: NodeOptions, logger?: LoggerBasic): void;
 
   /**
    * Reset the adaptor to use with new/changed Scripture.
