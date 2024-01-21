@@ -200,7 +200,7 @@ export const editorStateGen1v1 = {
         version: 1,
         children: [],
       },
-      { type: "chapter", number: "1", usxStyle: "c", sid: "GEN 1", version: 1 },
+      { type: "immutable-chapter", number: "1", usxStyle: "c", sid: "GEN 1", version: 1 },
       {
         direction: null,
         format: "",
@@ -210,7 +210,7 @@ export const editorStateGen1v1 = {
         classList: [],
         version: 1,
         children: [
-          { type: "verse", number: "1", usxStyle: "v", sid: "GEN 1:1", version: 1 },
+          { type: "immutable-verse", number: "1", usxStyle: "v", sid: "GEN 1:1", version: 1 },
           {
             detail: 0,
             format: 0,
@@ -220,7 +220,7 @@ export const editorStateGen1v1 = {
             type: "text",
             version: 1,
           },
-          { type: "verse", number: "2", usxStyle: "v", sid: "GEN 1:2", version: 1 },
+          { type: "immutable-verse", number: "2", usxStyle: "v", sid: "GEN 1:2", version: 1 },
           {
             detail: 0,
             format: 0,
@@ -230,7 +230,7 @@ export const editorStateGen1v1 = {
             type: "text",
             version: 1,
           },
-          { type: "verse", number: "15", usxStyle: "v", sid: "GEN 1:15", version: 1 },
+          { type: "immutable-verse", number: "15", usxStyle: "v", sid: "GEN 1:15", version: 1 },
           {
             detail: 0,
             format: 0,
@@ -337,8 +337,8 @@ export const editorStateGen1v1ImpliedPara = {
         type: "implied-para",
         version: 1,
         children: [
-          { type: "chapter", number: "1", usxStyle: "c", sid: "GEN 1", version: 1 },
-          { type: "verse", number: "1", usxStyle: "v", sid: "GEN 1:1", version: 1 },
+          { type: "immutable-chapter", number: "1", usxStyle: "c", sid: "GEN 1", version: 1 },
+          { type: "immutable-verse", number: "1", usxStyle: "v", sid: "GEN 1:1", version: 1 },
           {
             detail: 0,
             format: 0,
@@ -348,7 +348,7 @@ export const editorStateGen1v1ImpliedPara = {
             type: "text",
             version: 1,
           },
-          { type: "verse", number: "2", usxStyle: "v", sid: "GEN 1:2", version: 1 },
+          { type: "immutable-verse", number: "2", usxStyle: "v", sid: "GEN 1:2", version: 1 },
           {
             detail: 0,
             format: 0,
@@ -358,7 +358,7 @@ export const editorStateGen1v1ImpliedPara = {
             type: "text",
             version: 1,
           },
-          { type: "verse", number: "15", usxStyle: "v", sid: "GEN 1:15", version: 1 },
+          { type: "immutable-verse", number: "15", usxStyle: "v", sid: "GEN 1:15", version: 1 },
           {
             detail: 0,
             format: 0,

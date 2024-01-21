@@ -143,8 +143,6 @@ const defaultNoteCallers = [
 
 /** View options - view mode parameters */
 let viewOptions: ViewOptions | undefined;
-/** empty para node for an 'empty' editor */
-const emptyParaNode: SerializedParaNode = createPara(PARA_STYLE_DEFAULT);
 /** Options for each node */
 let _nodeOptions: UsjNodeOptions = {};
 /** Count used for note callers */
@@ -166,6 +164,8 @@ export function reset(callerCountValue = 0) {
 
 export function loadEditorState(usj: Usj | undefined, viewMode?: ViewMode): SerializedEditorState {
   viewOptions = createViewOptions(viewMode);
+  /** empty para node for an 'empty' editor */
+  const emptyParaNode: SerializedParaNode = createPara(PARA_STYLE_DEFAULT);
   let children: SerializedElementNode[];
   if (usj) {
     if (usj.type !== USJ_TYPE)

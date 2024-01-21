@@ -60,10 +60,10 @@ export function extractNonNumberedStyles(styles: string[] | readonly string[]): 
  * @param ChapterNodeClass - use a different chapter node class if needed.
  * @returns the chapter node if found, `undefined` otherwise.
  */
-export function findChapter<T = ImmutableChapterNode>(
+export function findChapter<T extends LexicalNode = ImmutableChapterNode>(
   nodes: LexicalNode[],
   chapterNum: number,
-  ChapterNodeClass = ImmutableChapterNode,
+  ChapterNodeClass: typeof LexicalNode = ImmutableChapterNode,
 ) {
   return nodes.find(
     (node) =>
@@ -78,10 +78,10 @@ export function findChapter<T = ImmutableChapterNode>(
  * @param ChapterNodeClass - use a different chapter node class if needed.
  * @returns the next chapter node if found, `undefined` otherwise.
  */
-export function findNextChapter<T = ImmutableChapterNode>(
+export function findNextChapter<T extends LexicalNode = ImmutableChapterNode>(
   nodes: LexicalNode[],
   isCurrentChapterAtFirstNode = false,
-  ChapterNodeClass = ImmutableChapterNode,
+  ChapterNodeClass: typeof LexicalNode = ImmutableChapterNode,
 ) {
   return nodes.find(
     (node, index) =>
@@ -95,9 +95,9 @@ export function findNextChapter<T = ImmutableChapterNode>(
  * @param ChapterNodeClass - use a different chapter node class if needed.
  * @returns the chapter node if found, `undefined` otherwise.
  */
-export function findThisChapter<T = ImmutableChapterNode>(
+export function findThisChapter<T extends LexicalNode = ImmutableChapterNode>(
   node: LexicalNode | null | undefined,
-  ChapterNodeClass = ImmutableChapterNode,
+  ChapterNodeClass: typeof LexicalNode = ImmutableChapterNode,
 ) {
   if (!node) return;
 
@@ -120,10 +120,10 @@ export function findThisChapter<T = ImmutableChapterNode>(
  * @param VerseNodeClass - use a different verse node class if needed.
  * @returns the verse node if found, `undefined` otherwise.
  */
-export function findVerseInNode<T = ImmutableVerseNode>(
+export function findVerseInNode<T extends LexicalNode = ImmutableVerseNode>(
   node: LexicalNode,
   verseNum: number,
-  VerseNodeClass = ImmutableVerseNode,
+  VerseNodeClass: typeof LexicalNode = ImmutableVerseNode,
 ) {
   if (!$isElementNode(node)) return;
 
@@ -142,10 +142,10 @@ export function findVerseInNode<T = ImmutableVerseNode>(
  * @param VerseNodeClass - use a different verse node class if needed.
  * @returns the verse node if found, `undefined` otherwise.
  */
-export function findVerse<T = ImmutableVerseNode>(
+export function findVerse<T extends LexicalNode = ImmutableVerseNode>(
   nodes: LexicalNode[],
   verseNum: number,
-  VerseNodeClass = ImmutableVerseNode,
+  VerseNodeClass: typeof LexicalNode = ImmutableVerseNode,
 ) {
   return (
     nodes
@@ -161,9 +161,9 @@ export function findVerse<T = ImmutableVerseNode>(
  * @param VerseNodeClass - use a different verse node class if needed.
  * @returns the verse node if found, `undefined` otherwise.
  */
-export function findNextVerseInNode<T = ImmutableVerseNode>(
+export function findNextVerseInNode<T extends LexicalNode = ImmutableVerseNode>(
   node: LexicalNode,
-  VerseNodeClass = ImmutableVerseNode,
+  VerseNodeClass: typeof LexicalNode = ImmutableVerseNode,
 ) {
   if (!$isElementNode(node)) return;
   const children = node.getChildren();
@@ -177,9 +177,9 @@ export function findNextVerseInNode<T = ImmutableVerseNode>(
  * @param VerseNodeClass - use a different verse node class if needed.
  * @returns the verse node if found, `undefined` otherwise.
  */
-export function findNextVerse<T = ImmutableVerseNode>(
+export function findNextVerse<T extends LexicalNode = ImmutableVerseNode>(
   nodes: LexicalNode[],
-  VerseNodeClass = ImmutableVerseNode,
+  VerseNodeClass: typeof LexicalNode = ImmutableVerseNode,
 ) {
   return (
     nodes
@@ -195,9 +195,9 @@ export function findNextVerse<T = ImmutableVerseNode>(
  * @param VerseNodeClass - use a different verse node class if needed.
  * @returns the verse node if found, `undefined` otherwise.
  */
-export function findLastVerseInNode<T = ImmutableVerseNode>(
+export function findLastVerseInNode<T extends LexicalNode = ImmutableVerseNode>(
   node: LexicalNode | null | undefined,
-  VerseNodeClass = ImmutableVerseNode,
+  VerseNodeClass: typeof LexicalNode = ImmutableVerseNode,
 ) {
   if (!node || !$isElementNode(node)) return;
 
@@ -212,9 +212,9 @@ export function findLastVerseInNode<T = ImmutableVerseNode>(
  * @param VerseNodeClass - use a different verse node class if needed.
  * @returns the verse node if found, `undefined` otherwise.
  */
-export function findLastVerse<T = ImmutableVerseNode>(
+export function findLastVerse<T extends LexicalNode = ImmutableVerseNode>(
   nodes: LexicalNode[],
-  VerseNodeClass = ImmutableVerseNode,
+  VerseNodeClass: typeof LexicalNode = ImmutableVerseNode,
 ) {
   const verseNodes = nodes
     .map((node) => findLastVerseInNode<T>(node, VerseNodeClass))
@@ -231,9 +231,9 @@ export function findLastVerse<T = ImmutableVerseNode>(
  * @param VerseNodeClass - use a different verse node class if needed.
  * @returns the verse node if found, `undefined` otherwise.
  */
-export function findThisVerse<T = ImmutableVerseNode>(
+export function findThisVerse<T extends LexicalNode = ImmutableVerseNode>(
   node: LexicalNode | null | undefined,
-  VerseNodeClass = ImmutableVerseNode,
+  VerseNodeClass: typeof LexicalNode = ImmutableVerseNode,
 ): T | undefined {
   if (!node) return;
 
