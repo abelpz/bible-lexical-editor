@@ -7,6 +7,10 @@ import { ImmutableVerseNode } from "./ImmutableVerseNode";
 /** RegEx to test for a string only containing digits. */
 export const ONLY_DIGITS_TEST = /^\d+$/;
 
+export const NBSP = "\xa0";
+export const CHAPTER_CLASS_NAME = "chapter";
+export const VERSE_CLASS_NAME = "verse";
+
 const NUMBERED_STYLE_PLACEHOLDER = "#";
 
 /**
@@ -286,4 +290,31 @@ export function removeNodesBeforeNode(
   if (!firstNode) return nodes;
 
   return nodes.splice(firstNode.getIndexWithinParent(), nodes.length - 1);
+}
+
+/**
+ * Gets the marker text with the marker visible.
+ * @param style - Verse style.
+ * @param content - Content such as chapter or verse number.
+ * @returns the marker text with the marker visible.
+ */
+export function getVisibleMarkerText(style: string, content: string | undefined): string {
+  let text = `\\${style}`;
+  if (content) text += ` ${content}`;
+  text += NBSP;
+  return text;
+}
+
+/**
+ * Gets the inline marker text with the marker visible.
+ * @param style - Verse style.
+ * @param content - Content such as chapter or verse number.
+ * @returns the inline marker text with the marker visible.
+ */
+export function getVisibleInlineMarkerText(style: string, content: string | undefined): string {
+  let text = `\\${style}`;
+  if (content) text += ` ${content}`;
+  text += ` \\${style}*`;
+  text += NBSP;
+  return text;
 }

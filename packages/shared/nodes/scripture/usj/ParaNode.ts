@@ -100,16 +100,23 @@ export type ParaUsxStyle = string;
 export type SerializedParaNode = Spread<
   {
     usxStyle: ParaUsxStyle;
+    classList: string[];
   },
   SerializedElementNode
 >;
 
 export class ParaNode extends ParagraphNode {
   __usxStyle: ParaUsxStyle;
+  __classList: string[];
 
-  constructor(usxStyle: ParaUsxStyle = PARA_STYLE_DEFAULT, key?: NodeKey) {
+  constructor(
+    usxStyle: ParaUsxStyle = PARA_STYLE_DEFAULT,
+    classList: string[] = [],
+    key?: NodeKey,
+  ) {
     super(key);
     this.__usxStyle = usxStyle;
+    this.__classList = classList;
   }
 
   static getType(): string {
@@ -117,14 +124,16 @@ export class ParaNode extends ParagraphNode {
   }
 
   static clone(node: ParaNode): ParaNode {
-    return new ParaNode(node.__usxStyle, node.__key);
+    const { __usxStyle, __classList, __key } = node;
+    return new ParaNode(__usxStyle, __classList, __key);
   }
 
   static importJSON(serializedNode: SerializedParaNode): ParaNode {
-    const node = $createParaNode(serializedNode.usxStyle);
-    node.setFormat(serializedNode.format);
-    node.setIndent(serializedNode.indent);
-    node.setDirection(serializedNode.direction);
+    const { usxStyle, classList, format, indent, direction } = serializedNode;
+    const node = $createParaNode(usxStyle, classList);
+    node.setFormat(format);
+    node.setIndent(indent);
+    node.setDirection(direction);
     return node;
   }
 
@@ -145,11 +154,21 @@ export class ParaNode extends ParagraphNode {
     return self.__usxStyle;
   }
 
+  setClassList(classList: string[]): void {
+    const self = this.getWritable();
+    self.__classList = classList;
+  }
+
+  getClassList(): string[] {
+    const self = this.getLatest();
+    return self.__classList;
+  }
+
   createDOM(): HTMLElement {
     // Define the DOM element here
     const dom = document.createElement("p");
     dom.setAttribute("data-usx-style", this.__usxStyle);
-    dom.classList.add(this.getType(), `usfm_${this.__usxStyle}`);
+    dom.classList.add(this.getType(), `usfm_${this.__usxStyle}`, ...this.__classList);
     return dom;
   }
 
@@ -164,13 +183,14 @@ export class ParaNode extends ParagraphNode {
       ...super.exportJSON(),
       type: this.getType(),
       usxStyle: this.getUsxStyle(),
+      classList: this.getClassList(),
       version: PARA_VERSION,
     };
   }
 }
 
-export function $createParaNode(usxStyle?: ParaUsxStyle): ParaNode {
-  return $applyNodeReplacement(new ParaNode(usxStyle));
+export function $createParaNode(usxStyle?: ParaUsxStyle, classList?: string[]): ParaNode {
+  return $applyNodeReplacement(new ParaNode(usxStyle, classList));
 }
 
 export function $isParaNode(node: LexicalNode | null | undefined): node is ParaNode {

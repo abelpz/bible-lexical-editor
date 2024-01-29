@@ -9,6 +9,7 @@ import {
   Spread,
   TextNode,
 } from "lexical";
+import { VERSE_CLASS_NAME } from "./node.utils";
 
 export const VERSE_STYLE = "v";
 export const VERSE_VERSION = 1;
@@ -19,6 +20,7 @@ export type SerializedVerseNode = Spread<
   {
     usxStyle: VerseUsxStyle;
     number: string;
+    classList: string[];
     sid?: string;
     altnumber?: string;
     pubnumber?: string;
@@ -29,20 +31,24 @@ export type SerializedVerseNode = Spread<
 export class VerseNode extends TextNode {
   __usxStyle: VerseUsxStyle;
   __number: string;
+  __classList: string[];
   __sid?: string;
   __altnumber?: string;
   __pubnumber?: string;
 
   constructor(
     verseNumber: string,
+    classList: string[] = [],
+    text?: string,
     sid?: string,
     altnumber?: string,
     pubnumber?: string,
     key?: NodeKey,
   ) {
-    super(verseNumber, key);
+    super(text ?? verseNumber, key);
     this.__usxStyle = VERSE_STYLE;
     this.__number = verseNumber;
+    this.__classList = classList;
     this.__sid = sid;
     this.__altnumber = altnumber;
     this.__pubnumber = pubnumber;
@@ -53,19 +59,30 @@ export class VerseNode extends TextNode {
   }
 
   static clone(node: VerseNode): VerseNode {
-    const { __number, __sid, __altnumber, __pubnumber, __key } = node;
-    return new VerseNode(__number, __sid, __altnumber, __pubnumber, __key);
+    const { __number, __classList, __text, __sid, __altnumber, __pubnumber, __key } = node;
+    return new VerseNode(__number, __classList, __text, __sid, __altnumber, __pubnumber, __key);
   }
 
   static importJSON(serializedNode: SerializedVerseNode): VerseNode {
-    const { number, sid, altnumber, pubnumber } = serializedNode;
-    const node = $createVerseNode(number, sid, altnumber, pubnumber);
-    node.setDetail(serializedNode.detail);
-    node.setFormat(serializedNode.format);
-    node.setMode(serializedNode.mode);
-    node.setStyle(serializedNode.style);
-    node.setUsxStyle(serializedNode.usxStyle);
-    node.setNumber(serializedNode.number);
+    const {
+      number,
+      classList,
+      text,
+      sid,
+      altnumber,
+      pubnumber,
+      detail,
+      format,
+      mode,
+      style,
+      usxStyle,
+    } = serializedNode;
+    const node = $createVerseNode(number, classList, text, sid, altnumber, pubnumber);
+    node.setDetail(detail);
+    node.setFormat(format);
+    node.setMode(mode);
+    node.setStyle(style);
+    node.setUsxStyle(usxStyle);
     return node;
   }
 
@@ -79,14 +96,24 @@ export class VerseNode extends TextNode {
     return self.__usxStyle;
   }
 
-  setNumber(chapterNumber: string): void {
+  setNumber(verseNumber: string): void {
     const self = this.getWritable();
-    self.__number = chapterNumber;
+    self.__number = verseNumber;
   }
 
   getNumber(): string {
     const self = this.getLatest();
     return self.__number;
+  }
+
+  setClassList(classList: string[]): void {
+    const self = this.getWritable();
+    self.__classList = classList;
+  }
+
+  getClassList(): string[] {
+    const self = this.getLatest();
+    return self.__classList;
   }
 
   setSid(sid: string | undefined): void {
@@ -122,15 +149,9 @@ export class VerseNode extends TextNode {
   createDOM(config: EditorConfig): HTMLElement {
     const dom = super.createDOM(config);
     dom.setAttribute("data-usx-style", this.__usxStyle);
-    dom.classList.add(this.getType(), `usfm_${this.__usxStyle}`);
+    dom.classList.add(VERSE_CLASS_NAME, `usfm_${this.__usxStyle}`, ...this.__classList);
     dom.setAttribute("data-number", this.__number);
     return dom;
-  }
-
-  updateDOM(): boolean {
-    // Returning false tells Lexical that this node does not need its
-    // DOM element replacing with a new copy from createDOM.
-    return false;
   }
 
   exportJSON(): SerializedVerseNode {
@@ -139,6 +160,7 @@ export class VerseNode extends TextNode {
       type: this.getType(),
       usxStyle: this.getUsxStyle(),
       number: this.getNumber(),
+      classList: this.getClassList(),
       sid: this.getSid(),
       altnumber: this.getAltnumber(),
       pubnumber: this.getPubnumber(),
@@ -149,11 +171,15 @@ export class VerseNode extends TextNode {
 
 export function $createVerseNode(
   verseNumber: string,
+  classList?: string[],
+  text?: string,
   sid?: string,
   altnumber?: string,
   pubnumber?: string,
 ): VerseNode {
-  return $applyNodeReplacement(new VerseNode(verseNumber, sid, altnumber, pubnumber));
+  return $applyNodeReplacement(
+    new VerseNode(verseNumber, classList, text, sid, altnumber, pubnumber),
+  );
 }
 
 export function $isVerseNode(node: LexicalNode | null | undefined): node is VerseNode {

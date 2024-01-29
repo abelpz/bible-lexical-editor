@@ -172,6 +172,7 @@ export const editorStateEmpty = {
         indent: 0,
         type: "para",
         usxStyle: "p",
+        classList: [],
         version: 1,
         children: [],
       },
@@ -206,6 +207,7 @@ export const editorStateGen1v1 = {
         indent: 0,
         type: "para",
         usxStyle: "p",
+        classList: [],
         version: 1,
         children: [
           { type: "verse", number: "1", usxStyle: "v", sid: "GEN 1:1", version: 1 },
@@ -265,6 +267,7 @@ export const editorStateGen1v1 = {
         indent: 0,
         type: "para",
         usxStyle: "q2",
+        classList: [],
         version: 1,
         children: [
           {

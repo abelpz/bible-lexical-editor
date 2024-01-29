@@ -8,16 +8,18 @@ import {
   SerializedLexicalNode,
   Spread,
 } from "lexical";
+import { VERSE_CLASS_NAME, getVisibleMarkerText } from "./node.utils";
 
 export const VERSE_STYLE = "v";
-export const VERSE_VERSION = 1;
+export const IMMUTABLE_VERSE_VERSION = 1;
 
 type VerseUsxStyle = typeof VERSE_STYLE;
 
-export type SerializedVerseNode = Spread<
+export type SerializedImmutableVerseNode = Spread<
   {
     usxStyle: VerseUsxStyle;
     number: string;
+    showMarker?: boolean;
     sid?: string;
     altnumber?: string;
     pubnumber?: string;
@@ -28,12 +30,14 @@ export type SerializedVerseNode = Spread<
 export class ImmutableVerseNode extends DecoratorNode<void> {
   __usxStyle: VerseUsxStyle;
   __number: string;
+  __showMarker?: boolean;
   __sid?: string;
   __altnumber?: string;
   __pubnumber?: string;
 
   constructor(
     verseNumber: string,
+    showMarker = false,
     sid?: string,
     altnumber?: string,
     pubnumber?: string,
@@ -42,27 +46,25 @@ export class ImmutableVerseNode extends DecoratorNode<void> {
     super(key);
     this.__usxStyle = VERSE_STYLE;
     this.__number = verseNumber;
+    this.__showMarker = showMarker;
     this.__sid = sid;
     this.__altnumber = altnumber;
     this.__pubnumber = pubnumber;
   }
 
   static getType(): string {
-    return "verse";
+    return "immutable-verse";
   }
 
   static clone(node: ImmutableVerseNode): ImmutableVerseNode {
-    return new ImmutableVerseNode(node.__number, node.__key);
+    const { __number, __showMarker, __sid, __altnumber, __pubnumber, __key } = node;
+    return new ImmutableVerseNode(__number, __showMarker, __sid, __altnumber, __pubnumber, __key);
   }
 
-  static importJSON(serializedNode: SerializedVerseNode): ImmutableVerseNode {
-    const node = $createImmutableVerseNode(
-      serializedNode.number,
-      serializedNode.sid,
-      serializedNode.altnumber,
-      serializedNode.pubnumber,
-    );
-    node.setUsxStyle(serializedNode.usxStyle);
+  static importJSON(serializedNode: SerializedImmutableVerseNode): ImmutableVerseNode {
+    const { number, showMarker, sid, altnumber, pubnumber, usxStyle } = serializedNode;
+    const node = $createImmutableVerseNode(number, showMarker, sid, altnumber, pubnumber);
+    node.setUsxStyle(usxStyle);
     return node;
   }
 
@@ -84,6 +86,16 @@ export class ImmutableVerseNode extends DecoratorNode<void> {
   getNumber(): string {
     const self = this.getLatest();
     return self.__number;
+  }
+
+  setShowMarker(showMarker = false): void {
+    const self = this.getWritable();
+    self.__showMarker = showMarker;
+  }
+
+  getShowMarker(): boolean | undefined {
+    const self = this.getLatest();
+    return self.__showMarker;
   }
 
   setSid(sid: string | undefined): void {
@@ -119,7 +131,7 @@ export class ImmutableVerseNode extends DecoratorNode<void> {
   createDOM(): HTMLElement {
     const dom = document.createElement("span");
     dom.setAttribute("data-usx-style", this.__usxStyle);
-    dom.classList.add(this.getType(), `usfm_${this.__usxStyle}`);
+    dom.classList.add(VERSE_CLASS_NAME, `usfm_${this.__usxStyle}`);
     dom.setAttribute("data-number", this.__number);
     return dom;
   }
@@ -131,29 +143,35 @@ export class ImmutableVerseNode extends DecoratorNode<void> {
   }
 
   decorate(): string {
-    return this.getNumber();
+    return this.getShowMarker()
+      ? getVisibleMarkerText(this.getUsxStyle(), this.getNumber())
+      : this.getNumber();
   }
 
-  exportJSON(): SerializedVerseNode {
+  exportJSON(): SerializedImmutableVerseNode {
     return {
       type: this.getType(),
       usxStyle: this.getUsxStyle(),
       number: this.getNumber(),
+      showMarker: this.getShowMarker(),
       sid: this.getSid(),
       altnumber: this.getAltnumber(),
       pubnumber: this.getPubnumber(),
-      version: VERSE_VERSION,
+      version: IMMUTABLE_VERSE_VERSION,
     };
   }
 }
 
 export function $createImmutableVerseNode(
   verseNumber: string,
+  showMarker?: boolean,
   sid?: string,
   altnumber?: string,
   pubnumber?: string,
 ): ImmutableVerseNode {
-  return $applyNodeReplacement(new ImmutableVerseNode(verseNumber, sid, altnumber, pubnumber));
+  return $applyNodeReplacement(
+    new ImmutableVerseNode(verseNumber, showMarker, sid, altnumber, pubnumber),
+  );
 }
 
 export function $isImmutableVerseNode(

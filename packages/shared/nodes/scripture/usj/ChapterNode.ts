@@ -4,40 +4,44 @@ import {
   type LexicalNode,
   type NodeKey,
   $applyNodeReplacement,
-  DecoratorNode,
-  SerializedLexicalNode,
   Spread,
+  TextNode,
+  SerializedElementNode,
+  ElementNode,
+  $createTextNode,
 } from "lexical";
-import { CHAPTER_CLASS_NAME, getVisibleMarkerText } from "./node.utils";
+import { CHAPTER_CLASS_NAME } from "./node.utils";
 
 export const CHAPTER_STYLE = "c";
-export const IMMUTABLE_CHAPTER_VERSION = 1;
+export const CHAPTER_VERSION = 1;
 
 type ChapterUsxStyle = typeof CHAPTER_STYLE;
 
-export type SerializedImmutableChapterNode = Spread<
+export type SerializedChapterNode = Spread<
   {
     usxStyle: ChapterUsxStyle;
     number: string;
-    showMarker?: boolean;
+    classList: string[];
+    text?: string;
     sid?: string;
     altnumber?: string;
     pubnumber?: string;
   },
-  SerializedLexicalNode
+  SerializedElementNode
 >;
 
-export class ImmutableChapterNode extends DecoratorNode<void> {
+export class ChapterNode extends ElementNode {
   __usxStyle: ChapterUsxStyle;
   __number: string;
-  __showMarker?: boolean;
+  __classList: string[];
   __sid?: string;
   __altnumber?: string;
   __pubnumber?: string;
 
   constructor(
     chapterNumber: string,
-    showMarker = false,
+    classList: string[] = [],
+    text?: string,
     sid?: string,
     altnumber?: string,
     pubnumber?: string,
@@ -46,24 +50,39 @@ export class ImmutableChapterNode extends DecoratorNode<void> {
     super(key);
     this.__usxStyle = CHAPTER_STYLE;
     this.__number = chapterNumber;
-    this.__showMarker = showMarker;
+    this.__classList = classList;
     this.__sid = sid;
     this.__altnumber = altnumber;
     this.__pubnumber = pubnumber;
+    this.append($createTextNode(text ?? chapterNumber));
   }
 
   static getType(): string {
-    return "immutable-chapter";
+    return "chapter";
   }
 
-  static clone(node: ImmutableChapterNode): ImmutableChapterNode {
-    const { __number, __showMarker, __sid, __altnumber, __pubnumber, __key } = node;
-    return new ImmutableChapterNode(__number, __showMarker, __sid, __altnumber, __pubnumber, __key);
+  static clone(node: ChapterNode): ChapterNode {
+    const { __number, __classList, __text, __sid, __altnumber, __pubnumber, __key } = node;
+    return new ChapterNode(__number, __classList, __text, __sid, __altnumber, __pubnumber, __key);
   }
 
-  static importJSON(serializedNode: SerializedImmutableChapterNode): ImmutableChapterNode {
-    const { number, showMarker, sid, altnumber, pubnumber, usxStyle } = serializedNode;
-    const node = $createImmutableChapterNode(number, showMarker, sid, altnumber, pubnumber);
+  static importJSON(serializedNode: SerializedChapterNode): ChapterNode {
+    const {
+      number,
+      classList,
+      text,
+      sid,
+      altnumber,
+      pubnumber,
+      format,
+      indent,
+      direction,
+      usxStyle,
+    } = serializedNode;
+    const node = $createChapterNode(number, classList, text, sid, altnumber, pubnumber);
+    node.setFormat(format);
+    node.setIndent(indent);
+    node.setDirection(direction);
     node.setUsxStyle(usxStyle);
     return node;
   }
@@ -88,14 +107,14 @@ export class ImmutableChapterNode extends DecoratorNode<void> {
     return self.__number;
   }
 
-  setShowMarker(showMarker = false): void {
+  setClassList(classList: string[]): void {
     const self = this.getWritable();
-    self.__showMarker = showMarker;
+    self.__classList = classList;
   }
 
-  getShowMarker(): boolean | undefined {
+  getClassList(): string[] {
     const self = this.getLatest();
-    return self.__showMarker;
+    return self.__classList;
   }
 
   setSid(sid: string | undefined): void {
@@ -129,53 +148,42 @@ export class ImmutableChapterNode extends DecoratorNode<void> {
   }
 
   createDOM(): HTMLElement {
-    const dom = document.createElement("span");
+    const dom = document.createElement("p");
     dom.setAttribute("data-usx-style", this.__usxStyle);
-    dom.classList.add(CHAPTER_CLASS_NAME, `usfm_${this.__usxStyle}`);
+    dom.classList.add(CHAPTER_CLASS_NAME, `usfm_${this.__usxStyle}`, ...this.__classList);
     dom.setAttribute("data-number", this.__number);
     return dom;
   }
 
-  updateDOM(): boolean {
-    // Returning false tells Lexical that this node does not need its
-    // DOM element replacing with a new copy from createDOM.
-    return false;
-  }
-
-  decorate(): string {
-    return this.getShowMarker()
-      ? getVisibleMarkerText(this.getUsxStyle(), this.getNumber())
-      : this.getNumber();
-  }
-
-  exportJSON(): SerializedImmutableChapterNode {
+  exportJSON(): SerializedChapterNode {
     return {
+      ...super.exportJSON(),
       type: this.getType(),
       usxStyle: this.getUsxStyle(),
       number: this.getNumber(),
-      showMarker: this.getShowMarker(),
+      classList: this.getClassList(),
+      text: (this.getFirstChild() as TextNode)?.getText(),
       sid: this.getSid(),
       altnumber: this.getAltnumber(),
       pubnumber: this.getPubnumber(),
-      version: IMMUTABLE_CHAPTER_VERSION,
+      version: CHAPTER_VERSION,
     };
   }
 }
 
-export function $createImmutableChapterNode(
+export function $createChapterNode(
   chapterNumber: string,
-  showMarker?: boolean,
+  classList?: string[],
+  text?: string,
   sid?: string,
   altnumber?: string,
   pubnumber?: string,
-): ImmutableChapterNode {
+): ChapterNode {
   return $applyNodeReplacement(
-    new ImmutableChapterNode(chapterNumber, showMarker, sid, altnumber, pubnumber),
+    new ChapterNode(chapterNumber, classList, text, sid, altnumber, pubnumber),
   );
 }
 
-export function $isImmutableChapterNode(
-  node: LexicalNode | null | undefined,
-): node is ImmutableChapterNode {
-  return node instanceof ImmutableChapterNode;
+export function $isChapterNode(node: LexicalNode | null | undefined): node is ChapterNode {
+  return node instanceof ChapterNode;
 }

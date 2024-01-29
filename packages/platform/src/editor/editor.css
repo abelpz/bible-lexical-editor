@@ -20,9 +20,23 @@
   background-color: inherit;
 }
 
-/* stylelint-disable-next-line selector-class-pattern */
-.verse.usfm_v {
+.verse {
   vertical-align: super;
+}
+
+.no-indent {
+  text-indent: 0;
+  text-align: start;
+  margin-left: 0;
+}
+
+.plain-font {
+  font-weight: normal;
+  font-style: normal;
+  font-size: 100%;
+  color: inherit;
+  background-color: inherit;
+  vertical-align: inherit;
 }
 
 /* Lexical */

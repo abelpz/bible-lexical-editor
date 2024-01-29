@@ -1,7 +1,9 @@
 import {
+  LineBreakNode,
   SerializedEditorState,
   SerializedElementNode,
   SerializedLexicalNode,
+  SerializedLineBreakNode,
   SerializedTextNode,
   TextNode,
 } from "lexical";
@@ -20,11 +22,16 @@ import {
   SerializedBookNode,
 } from "shared/nodes/scripture/usj/BookNode";
 import {
+  SerializedImmutableChapterNode,
   CHAPTER_STYLE,
-  CHAPTER_VERSION,
+  IMMUTABLE_CHAPTER_VERSION,
   ImmutableChapterNode,
-  SerializedChapterNode,
 } from "shared/nodes/scripture/usj/ImmutableChapterNode";
+import {
+  SerializedChapterNode,
+  CHAPTER_VERSION,
+  ChapterNode,
+} from "shared/nodes/scripture/usj/ChapterNode";
 import { CHAR_VERSION, CharNode, SerializedCharNode } from "shared/nodes/scripture/usj/CharNode";
 import {
   MILESTONE_VERSION,
@@ -52,13 +59,28 @@ import {
   noteNodeName,
 } from "shared-react/nodes/scripture/usj/NoteNode";
 import {
-  SerializedVerseNode,
+  SerializedImmutableVerseNode,
   VERSE_STYLE,
-  VERSE_VERSION,
+  IMMUTABLE_VERSE_VERSION,
   ImmutableVerseNode,
 } from "shared/nodes/scripture/usj/ImmutableVerseNode";
+import {
+  SerializedVerseNode,
+  VERSE_VERSION,
+  VerseNode,
+} from "shared/nodes/scripture/usj/VerseNode";
 import { EditorAdaptor, NodeOptions } from "shared-react/adaptors/editor-adaptor.model";
 import { LoggerBasic } from "shared-react/plugins/logger-basic.model";
+import {
+  ViewNameKey,
+  formattedViewMode as defaultViewMode,
+  formattedViewMode,
+  unformattedViewMode,
+} from "../plugins/toolbar/view-mode.model";
+import {
+  getVisibleInlineMarkerText,
+  getVisibleMarkerText,
+} from "shared/nodes/scripture/usj/node.utils";
 
 export interface UsjNodeOptions extends NodeOptions {
   [noteNodeName]?: {
@@ -73,8 +95,22 @@ interface UsjEditorAdaptor extends EditorAdaptor {
   loadEditorState: typeof loadEditorState;
 }
 
-/** empty para node for an 'empty' editor */
-const emptyParaNode: SerializedParaNode = createPara(PARA_STYLE_DEFAULT);
+type ViewMode = ViewNameKey;
+type ViewOptions = {
+  /** USFM markers are visible, editable or hidden */
+  markerMode: "visible" | "editable" | "hidden";
+  /** is the text indented */
+  isIndented: boolean;
+  /** is the text in a plain font */
+  isPlainFont: boolean;
+};
+
+const NO_INDENT_CLASS_NAME = "no-indent";
+const PLAIN_FONT_CLASS_NAME = "plain-font";
+const serializedLineBreakNode: SerializedLineBreakNode = {
+  type: LineBreakNode.getType(),
+  version: 1,
+};
 /** Possible note callers to use when caller is '+'. Up to 2 characters are used, e.g. a-zz */
 const defaultNoteCallers = [
   "a",
@@ -105,11 +141,15 @@ const defaultNoteCallers = [
   "z",
 ];
 
-/** Options for each node. */
+/** View options - view mode parameters */
+let viewOptions: ViewOptions | undefined;
+/** empty para node for an 'empty' editor */
+const emptyParaNode: SerializedParaNode = createPara(PARA_STYLE_DEFAULT);
+/** Options for each node */
 let _nodeOptions: UsjNodeOptions = {};
 /** Count used for note callers */
 let callerCount = 0;
-/** logger instance */
+/** Logger instance */
 let _logger: LoggerBasic;
 
 export function initialize(
@@ -124,7 +164,8 @@ export function reset(callerCountValue = 0) {
   resetCallerCount(callerCountValue);
 }
 
-export function loadEditorState(usj: Usj | undefined): SerializedEditorState {
+export function loadEditorState(usj: Usj | undefined, viewMode?: ViewMode): SerializedEditorState {
+  viewOptions = createViewOptions(viewMode);
   let children: SerializedElementNode[];
   if (usj) {
     if (usj.type !== USJ_TYPE)
@@ -166,6 +207,34 @@ function setNodeOptions(nodeOptions: UsjNodeOptions | undefined) {
  */
 function setLogger(logger: LoggerBasic | undefined) {
   if (logger) _logger = logger;
+}
+
+/**
+ * Create view option properties based on the view mode.
+ * @param viewMode - View mode of the editor.
+ * @returns the view options if the view is defined, `undefined` otherwise.
+ */
+function createViewOptions(viewMode: ViewMode | undefined): ViewOptions | undefined {
+  let viewOptions: ViewOptions | undefined;
+  switch (viewMode ?? defaultViewMode) {
+    case formattedViewMode:
+      viewOptions = {
+        markerMode: "hidden",
+        isIndented: true,
+        isPlainFont: false,
+      };
+      break;
+    case unformattedViewMode:
+      viewOptions = {
+        markerMode: "editable",
+        isIndented: false,
+        isPlainFont: true,
+      };
+      break;
+    default:
+      break;
+  }
+  return viewOptions;
 }
 
 /**
@@ -234,37 +303,70 @@ function createBook(style: string, marker: MarkerObject): SerializedBookNode | u
   };
 }
 
-function createChapter(style: string, marker: MarkerObject): SerializedChapterNode | undefined {
+function createChapter(
+  style: string,
+  marker: MarkerObject,
+): SerializedChapterNode | SerializedImmutableChapterNode | undefined {
   if (style !== CHAPTER_STYLE) {
     _logger?.error(`Unexpected chapter style '${style}'!`);
     return undefined;
   }
   const node = { ...marker };
   delete node.content;
+  const type =
+    viewOptions?.markerMode === "editable" ? ChapterNode.getType() : ImmutableChapterNode.getType();
+  const version =
+    viewOptions?.markerMode === "editable" ? CHAPTER_VERSION : IMMUTABLE_CHAPTER_VERSION;
+  let text: string | undefined;
+  let classList: string[] | undefined;
+  let showMarker: boolean | undefined;
+  if (viewOptions?.markerMode === "editable") {
+    text = getVisibleMarkerText(style, marker.number);
+    classList = [PLAIN_FONT_CLASS_NAME];
+  } else if (viewOptions?.markerMode === "visible") showMarker = true;
 
   return {
     ...node,
-    type: ImmutableChapterNode.getType(),
+    type,
+    text,
     usxStyle: CHAPTER_STYLE,
     number: marker.number ?? "",
-    version: CHAPTER_VERSION,
+    classList,
+    showMarker,
+    version,
   };
 }
 
-function createVerse(style: string, marker: MarkerObject): SerializedVerseNode | undefined {
+function createVerse(
+  style: string,
+  marker: MarkerObject,
+): SerializedVerseNode | SerializedImmutableVerseNode | undefined {
   if (style !== VERSE_STYLE) {
     _logger?.error(`Unexpected verse style '${style}'!`);
     return undefined;
   }
   const node = { ...marker };
   delete node.content;
+  const type =
+    viewOptions?.markerMode === "editable" ? VerseNode.getType() : ImmutableVerseNode.getType();
+  const version = viewOptions?.markerMode === "editable" ? VERSE_VERSION : IMMUTABLE_VERSE_VERSION;
+  let text: string | undefined;
+  let classList: string[] | undefined;
+  let showMarker: boolean | undefined;
+  if (viewOptions?.markerMode === "editable") {
+    text = getVisibleMarkerText(style, marker.number);
+    classList = [PLAIN_FONT_CLASS_NAME];
+  } else if (viewOptions?.markerMode === "visible") showMarker = true;
 
   return {
     ...node,
-    type: ImmutableVerseNode.getType(),
+    type,
+    text,
     usxStyle: VERSE_STYLE,
     number: marker.number ?? "",
-    version: VERSE_VERSION,
+    classList,
+    showMarker,
+    version,
   };
 }
 
@@ -274,10 +376,15 @@ function createChar(style: string, marker: MarkerObject): SerializedCharNode | u
     return undefined;
   }
 
+  const text =
+    viewOptions?.markerMode === "visible" || viewOptions?.markerMode === "editable"
+      ? getVisibleInlineMarkerText(style, getTextContent(marker.content))
+      : getTextContent(marker.content);
+
   return {
     type: CharNode.getType(),
     usxStyle: style,
-    text: getTextContent(marker.content),
+    text,
     detail: 0,
     format: 0,
     mode: "normal",
@@ -304,11 +411,18 @@ function createPara(style: string): SerializedParaNode {
     _logger?.warn(`Unexpected para style '${style}'!`);
     // Always return with data as other elements need this structure.
   }
+  const classList: string[] = [];
+  if (!viewOptions?.isIndented) classList.push(NO_INDENT_CLASS_NAME);
+  if (viewOptions?.isPlainFont) classList.push(PLAIN_FONT_CLASS_NAME);
+  const children: SerializedLexicalNode[] = [];
+  if (viewOptions?.markerMode === "editable")
+    children.push(createText(getVisibleMarkerText(style, undefined)));
 
   return {
     type: ParaNode.getType(),
     usxStyle: style,
-    children: [],
+    classList,
+    children,
     direction: null,
     format: "",
     indent: 0,
@@ -406,6 +520,7 @@ function recurseNodes(
           break;
         case "verse":
           lexicalNode = createVerse(style, marker);
+          if (!viewOptions?.isIndented) addNode(serializedLineBreakNode, elementNodes);
           addNode(lexicalNode, elementNodes);
           break;
         case "char":
@@ -415,7 +530,7 @@ function recurseNodes(
         case "para":
           elementNode = createPara(style);
           if (elementNode) {
-            elementNode.children = recurseNodes(marker.content);
+            elementNode.children.push(...recurseNodes(marker.content));
             elementNodes.push(elementNode);
           }
           break;
@@ -448,11 +563,19 @@ function insertImpliedParasRecurse(
 ): SerializedElementNode[] {
   let nodes = elementNodes;
   const bookNodeIndex = nodes.findIndex((node) => node.type === BookNode.getType());
-  if (bookNodeIndex >= 0) {
+  const isBookNodeFound = bookNodeIndex >= 0;
+  const chapterNodeIndex = nodes.findIndex((node) => node.type === ChapterNode.getType());
+  const isChapterNodeFound = chapterNodeIndex >= 0;
+  if (isBookNodeFound && (!isChapterNodeFound || bookNodeIndex < chapterNodeIndex)) {
     const nodesBefore = insertImpliedParasRecurse(nodes.slice(0, bookNodeIndex));
     const bookNode = nodes[bookNodeIndex];
     const nodesAfter = insertImpliedParasRecurse(nodes.slice(bookNodeIndex + 1));
     nodes = [...nodesBefore, bookNode, ...nodesAfter];
+  } else if (isChapterNodeFound) {
+    const nodesBefore = insertImpliedParasRecurse(nodes.slice(0, chapterNodeIndex));
+    const chapterNode = nodes[chapterNodeIndex];
+    const nodesAfter = insertImpliedParasRecurse(nodes.slice(chapterNodeIndex + 1));
+    nodes = [...nodesBefore, chapterNode, ...nodesAfter];
   } else if (nodes.some((node) => "text" in node && "mode" in node)) {
     // If there are any text nodes as a child of this root, enclose in an implied para node.
     nodes = [createImpliedPara(nodes)];
