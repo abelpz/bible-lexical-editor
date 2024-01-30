@@ -208,6 +208,28 @@ function resetCallerCount(resetValue = 0) {
 }
 
 /**
+ * Get the chapter node class for the given view options.
+ * @param viewOptions - View options of the editor.
+ * @returns the chapter node class if the view is defined, `undefined` otherwise.
+ */
+export function getChapterNodeClass(viewOptions: ViewOptions | undefined) {
+  if (!viewOptions) return;
+
+  return viewOptions.markerMode === "editable" ? ChapterNode : ImmutableChapterNode;
+}
+
+/**
+ * Get the verse node class for the given view options.
+ * @param viewOptions - View options of the editor.
+ * @returns the verse node class if the view is defined, `undefined` otherwise.
+ */
+export function getVerseNodeClass(viewOptions: ViewOptions | undefined) {
+  if (!viewOptions) return;
+
+  return viewOptions.markerMode === "editable" ? VerseNode : ImmutableVerseNode;
+}
+
+/**
  * Get the note caller to use. E.g. for '+' replace with a-z, aa-zz.
  * @param markerCaller - the specified note caller.
  * @returns the specified caller, if '+' replace with up to 2 characters from the possible note
@@ -275,10 +297,8 @@ function createChapter(
   }
   const node = { ...marker };
   delete node.content;
-  const type =
-    _viewOptions?.markerMode === "editable"
-      ? ChapterNode.getType()
-      : ImmutableChapterNode.getType();
+  const ChapterNodeClass = getChapterNodeClass(_viewOptions) ?? ImmutableChapterNode;
+  const type = ChapterNodeClass.getType();
   const version =
     _viewOptions?.markerMode === "editable" ? CHAPTER_VERSION : IMMUTABLE_CHAPTER_VERSION;
   let text: string | undefined;
@@ -311,8 +331,8 @@ function createVerse(
   }
   const node = { ...marker };
   delete node.content;
-  const type =
-    _viewOptions?.markerMode === "editable" ? VerseNode.getType() : ImmutableVerseNode.getType();
+  const VerseNodeClass = getVerseNodeClass(_viewOptions) ?? ImmutableVerseNode;
+  const type = VerseNodeClass.getType();
   const version = _viewOptions?.markerMode === "editable" ? VERSE_VERSION : IMMUTABLE_VERSE_VERSION;
   let text: string | undefined;
   let classList: string[] | undefined;

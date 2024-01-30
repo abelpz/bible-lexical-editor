@@ -98,7 +98,9 @@ export default function Editor<TLogger extends LoggerBasic>({
             ErrorBoundary={LexicalErrorBoundary}
           />
           <HistoryPlugin />
-          {scrRefState && <ScriptureReferencePlugin scrRefState={scrRefState} />}
+          {scrRefState && (
+            <ScriptureReferencePlugin scrRefState={scrRefState} viewOptions={viewOptions} />
+          )}
           <UpdateStatePlugin
             scripture={usj}
             nodeOptions={nodeOptions}

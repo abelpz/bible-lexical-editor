@@ -18,6 +18,8 @@ import {
   removeNodeAndAfter,
   removeNodesBeforeNode,
 } from "shared/nodes/scripture/usj/node.utils";
+import { ViewOptions } from "../adaptors/view-options.utils";
+import { getChapterNodeClass, getVerseNodeClass } from "../adaptors/usj-editor.adaptor";
 
 /** Prevents the cursor being moved again after a selection has changed. */
 let hasSelectionChanged = false;
@@ -30,11 +32,13 @@ let hasSelectionChanged = false;
  */
 export default function ScriptureReferencePlugin({
   scrRefState,
+  viewOptions,
 }: {
   scrRefState: [
     scrRef: ScriptureReference,
     setScrRef: React.Dispatch<React.SetStateAction<ScriptureReference>>,
   ];
+  viewOptions?: ViewOptions;
 }): null {
   const [editor] = useLexicalComposerContext();
   const [{ bookNum, chapterNum, verseNum }, setScrRef] = scrRefState;
@@ -47,45 +51,49 @@ export default function ScriptureReferencePlugin({
           for (const [nodeKey, mutation] of nodeMutations) {
             const bookNode = $getNodeByKey<BookNode>(nodeKey);
             if (bookNode && $isBookNode(bookNode) && mutation === "created") {
-              moveCursorToVerseStart(chapterNum, verseNum);
+              moveCursorToVerseStart(chapterNum, verseNum, viewOptions);
             }
           }
         });
       }),
-    [editor, chapterNum, verseNum],
+    [editor, chapterNum, verseNum, viewOptions],
   );
 
   // Scripture Ref changed
   useEffect(() => {
     editor.update(() => {
-      if (!hasSelectionChanged) moveCursorToVerseStart(chapterNum, verseNum);
+      if (!hasSelectionChanged) moveCursorToVerseStart(chapterNum, verseNum, viewOptions);
       else hasSelectionChanged = false;
     });
-  }, [editor, chapterNum, verseNum]);
+  }, [editor, chapterNum, verseNum, viewOptions]);
 
   // selection changed
   useEffect(
     () =>
       editor.registerCommand(
         SELECTION_CHANGE_COMMAND,
-        () => findAndSetChapterAndVerse(bookNum, chapterNum, verseNum, setScrRef),
+        () => findAndSetChapterAndVerse(bookNum, chapterNum, verseNum, setScrRef, viewOptions),
         COMMAND_PRIORITY_LOW,
       ),
-    [editor, bookNum, chapterNum, verseNum, setScrRef],
+    [editor, bookNum, chapterNum, verseNum, setScrRef, viewOptions],
   );
 
   return null;
 }
 
-function moveCursorToVerseStart(chapterNum: number, verseNum: number) {
+function moveCursorToVerseStart(chapterNum: number, verseNum: number, viewOptions?: ViewOptions) {
+  const ChapterNodeClass = getChapterNodeClass(viewOptions);
+  const VerseNodeClass = getVerseNodeClass(viewOptions);
+  if (!ChapterNodeClass || !VerseNodeClass) return;
+
   const children = $getRoot().getChildren();
-  const chapterNode = findChapter(children, chapterNum);
+  const chapterNode = findChapter(children, chapterNum, ChapterNodeClass);
   const nodesInChapter = removeNodesBeforeNode(children, chapterNode);
-  const nextChapterNode = findNextChapter(nodesInChapter, !!chapterNode);
+  const nextChapterNode = findNextChapter(nodesInChapter, !!chapterNode, ChapterNodeClass);
   if ((nextChapterNode && !chapterNode) || !chapterNode) return;
 
   removeNodeAndAfter(nodesInChapter, chapterNode, nextChapterNode);
-  const verseNode = findVerse(nodesInChapter, verseNum);
+  const verseNode = findVerse(nodesInChapter, verseNum, VerseNodeClass);
   if (!verseNode || verseNode.isSelected()) return;
 
   verseNode.selectNext(0, 0);
@@ -96,12 +104,15 @@ function findAndSetChapterAndVerse(
   chapterNum: number,
   verseNum: number,
   setScrRef: React.Dispatch<React.SetStateAction<ScriptureReference>>,
-): boolean {
+  viewOptions?: ViewOptions,
+) {
   const startNode = $getSelection()?.getNodes()[0];
-  if (!startNode) return false;
+  const ChapterNodeClass = getChapterNodeClass(viewOptions);
+  const VerseNodeClass = getVerseNodeClass(viewOptions);
+  if (!startNode || !ChapterNodeClass || !VerseNodeClass) return false;
 
-  const chapterNode = findThisChapter(startNode);
-  const verseNode = findThisVerse(startNode);
+  const chapterNode = findThisChapter(startNode, ChapterNodeClass);
+  const verseNode = findThisVerse(startNode, VerseNodeClass);
   hasSelectionChanged = !!(
     (chapterNode && +chapterNode.getNumber() !== chapterNum) ||
     (verseNode && +verseNode.getNumber() !== verseNum)
