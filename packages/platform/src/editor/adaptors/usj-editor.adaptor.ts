@@ -69,18 +69,13 @@ import {
   VERSE_VERSION,
   VerseNode,
 } from "shared/nodes/scripture/usj/VerseNode";
-import { EditorAdaptor, NodeOptions } from "shared-react/adaptors/editor-adaptor.model";
-import { LoggerBasic } from "shared-react/plugins/logger-basic.model";
-import {
-  ViewNameKey,
-  formattedViewMode as defaultViewMode,
-  formattedViewMode,
-  unformattedViewMode,
-} from "../plugins/toolbar/view-mode.model";
 import {
   getVisibleInlineMarkerText,
   getVisibleMarkerText,
 } from "shared/nodes/scripture/usj/node.utils";
+import { EditorAdaptor, NodeOptions } from "shared-react/adaptors/editor-adaptor.model";
+import { LoggerBasic } from "shared-react/plugins/logger-basic.model";
+import { ViewOptions, getViewOptions } from "./view-options.utils";
 
 export interface UsjNodeOptions extends NodeOptions {
   [noteNodeName]?: {
@@ -94,16 +89,6 @@ interface UsjEditorAdaptor extends EditorAdaptor {
   reset: typeof reset;
   loadEditorState: typeof loadEditorState;
 }
-
-type ViewMode = ViewNameKey;
-type ViewOptions = {
-  /** USFM markers are visible, editable or hidden */
-  markerMode: "visible" | "editable" | "hidden";
-  /** is the text indented */
-  isIndented: boolean;
-  /** is the text in a plain font */
-  isPlainFont: boolean;
-};
 
 const NO_INDENT_CLASS_NAME = "no-indent";
 const PLAIN_FONT_CLASS_NAME = "plain-font";
@@ -142,7 +127,7 @@ const defaultNoteCallers = [
 ];
 
 /** View options - view mode parameters */
-let viewOptions: ViewOptions | undefined;
+let _viewOptions: ViewOptions | undefined;
 /** Options for each node */
 let _nodeOptions: UsjNodeOptions = {};
 /** Count used for note callers */
@@ -162,8 +147,13 @@ export function reset(callerCountValue = 0) {
   resetCallerCount(callerCountValue);
 }
 
-export function loadEditorState(usj: Usj | undefined, viewMode?: ViewMode): SerializedEditorState {
-  viewOptions = createViewOptions(viewMode);
+export function loadEditorState(
+  usj: Usj | undefined,
+  viewOptions?: ViewOptions,
+): SerializedEditorState {
+  if (viewOptions) _viewOptions = viewOptions;
+  // use default view mode
+  else _viewOptions = getViewOptions(undefined);
   /** empty para node for an 'empty' editor */
   const emptyParaNode: SerializedParaNode = createPara(PARA_STYLE_DEFAULT);
   let children: SerializedElementNode[];
@@ -207,34 +197,6 @@ function setNodeOptions(nodeOptions: UsjNodeOptions | undefined) {
  */
 function setLogger(logger: LoggerBasic | undefined) {
   if (logger) _logger = logger;
-}
-
-/**
- * Create view option properties based on the view mode.
- * @param viewMode - View mode of the editor.
- * @returns the view options if the view is defined, `undefined` otherwise.
- */
-function createViewOptions(viewMode: ViewMode | undefined): ViewOptions | undefined {
-  let viewOptions: ViewOptions | undefined;
-  switch (viewMode ?? defaultViewMode) {
-    case formattedViewMode:
-      viewOptions = {
-        markerMode: "hidden",
-        isIndented: true,
-        isPlainFont: false,
-      };
-      break;
-    case unformattedViewMode:
-      viewOptions = {
-        markerMode: "editable",
-        isIndented: false,
-        isPlainFont: true,
-      };
-      break;
-    default:
-      break;
-  }
-  return viewOptions;
 }
 
 /**
@@ -314,16 +276,18 @@ function createChapter(
   const node = { ...marker };
   delete node.content;
   const type =
-    viewOptions?.markerMode === "editable" ? ChapterNode.getType() : ImmutableChapterNode.getType();
+    _viewOptions?.markerMode === "editable"
+      ? ChapterNode.getType()
+      : ImmutableChapterNode.getType();
   const version =
-    viewOptions?.markerMode === "editable" ? CHAPTER_VERSION : IMMUTABLE_CHAPTER_VERSION;
+    _viewOptions?.markerMode === "editable" ? CHAPTER_VERSION : IMMUTABLE_CHAPTER_VERSION;
   let text: string | undefined;
   let classList: string[] | undefined;
   let showMarker: boolean | undefined;
-  if (viewOptions?.markerMode === "editable") {
+  if (_viewOptions?.markerMode === "editable") {
     text = getVisibleMarkerText(style, marker.number);
     classList = [PLAIN_FONT_CLASS_NAME];
-  } else if (viewOptions?.markerMode === "visible") showMarker = true;
+  } else if (_viewOptions?.markerMode === "visible") showMarker = true;
 
   return {
     ...node,
@@ -348,15 +312,15 @@ function createVerse(
   const node = { ...marker };
   delete node.content;
   const type =
-    viewOptions?.markerMode === "editable" ? VerseNode.getType() : ImmutableVerseNode.getType();
-  const version = viewOptions?.markerMode === "editable" ? VERSE_VERSION : IMMUTABLE_VERSE_VERSION;
+    _viewOptions?.markerMode === "editable" ? VerseNode.getType() : ImmutableVerseNode.getType();
+  const version = _viewOptions?.markerMode === "editable" ? VERSE_VERSION : IMMUTABLE_VERSE_VERSION;
   let text: string | undefined;
   let classList: string[] | undefined;
   let showMarker: boolean | undefined;
-  if (viewOptions?.markerMode === "editable") {
+  if (_viewOptions?.markerMode === "editable") {
     text = getVisibleMarkerText(style, marker.number);
     classList = [PLAIN_FONT_CLASS_NAME];
-  } else if (viewOptions?.markerMode === "visible") showMarker = true;
+  } else if (_viewOptions?.markerMode === "visible") showMarker = true;
 
   return {
     ...node,
@@ -377,7 +341,7 @@ function createChar(style: string, marker: MarkerObject): SerializedCharNode | u
   }
 
   const text =
-    viewOptions?.markerMode === "visible" || viewOptions?.markerMode === "editable"
+    _viewOptions?.markerMode === "visible" || _viewOptions?.markerMode === "editable"
       ? getVisibleInlineMarkerText(style, getTextContent(marker.content))
       : getTextContent(marker.content);
 
@@ -412,10 +376,10 @@ function createPara(style: string): SerializedParaNode {
     // Always return with data as other elements need this structure.
   }
   const classList: string[] = [];
-  if (!viewOptions?.isIndented) classList.push(NO_INDENT_CLASS_NAME);
-  if (viewOptions?.isPlainFont) classList.push(PLAIN_FONT_CLASS_NAME);
+  if (!_viewOptions?.isIndented) classList.push(NO_INDENT_CLASS_NAME);
+  if (_viewOptions?.isPlainFont) classList.push(PLAIN_FONT_CLASS_NAME);
   const children: SerializedLexicalNode[] = [];
-  if (viewOptions?.markerMode === "editable")
+  if (_viewOptions?.markerMode === "editable")
     children.push(createText(getVisibleMarkerText(style, undefined)));
 
   return {
@@ -520,7 +484,7 @@ function recurseNodes(
           break;
         case "verse":
           lexicalNode = createVerse(style, marker);
-          if (!viewOptions?.isIndented) addNode(serializedLineBreakNode, elementNodes);
+          if (!_viewOptions?.isIndented) addNode(serializedLineBreakNode, elementNodes);
           addNode(lexicalNode, elementNodes);
           break;
         case "char":

@@ -14,6 +14,7 @@ import usjEditorAdaptor, { UsjNodeOptions } from "./adaptors/usj-editor.adaptor"
 import editorTheme from "./themes/editor-theme";
 import ScriptureReferencePlugin from "./plugins/ScriptureReferencePlugin";
 import ToolbarPlugin from "./plugins/toolbar/ToolbarPlugin";
+import { ViewOptions } from "./adaptors/view-options.utils";
 
 type Mutable<T> = {
   -readonly [P in keyof T]: T[P];
@@ -22,8 +23,11 @@ type Mutable<T> = {
 type EditorProps<TLogger extends LoggerBasic> = {
   /** Scripture data in USJ form */
   usj?: Usj;
-  /** View Mode state */
-  viewModeState?: [viewMode: string, setViewMode: React.Dispatch<React.SetStateAction<string>>];
+  /** View Options state */
+  viewOptionsState?: [
+    viewOptions: ViewOptions | undefined,
+    setViewOptions: React.Dispatch<React.SetStateAction<ViewOptions>>,
+  ];
   /** Scripture Ref state */
   scrRefState?: [
     scrRef: ScriptureReference,
@@ -74,13 +78,13 @@ function Placeholder(): JSX.Element {
  */
 export default function Editor<TLogger extends LoggerBasic>({
   usj,
-  viewModeState,
+  viewOptionsState,
   scrRefState,
   nodeOptions,
   isReadonly,
   logger,
 }: EditorProps<TLogger>): JSX.Element {
-  const viewMode = viewModeState ? viewModeState[0] : "";
+  const viewOptions = viewOptionsState ? viewOptionsState[0] : undefined;
   editorConfig.editable = !isReadonly;
 
   return (
@@ -99,7 +103,7 @@ export default function Editor<TLogger extends LoggerBasic>({
             scripture={usj}
             nodeOptions={nodeOptions}
             editorAdaptor={usjEditorAdaptor}
-            viewMode={viewMode}
+            viewOptions={viewOptions}
             logger={logger}
           />
         </div>

@@ -9,7 +9,7 @@ import { EditorAdaptor, NodeOptions } from "../adaptors/editor-adaptor.model";
  * @param props.scripture - Scripture data.
  * @param props.nodeOptions - Options for each node.
  * @param props.editorAdaptor - Editor adaptor.
- * @param props.viewMode - View Mode of the editor.
+ * @param props.viewOptions - View options of the editor.
  * @param props.logger - Logger instance.
  * @returns null, i.e. no DOM elements.
  */
@@ -17,13 +17,13 @@ export default function UpdateStatePlugin<TLogger extends LoggerBasic>({
   scripture,
   nodeOptions,
   editorAdaptor,
-  viewMode,
+  viewOptions,
   logger,
 }: {
   scripture?: unknown;
   nodeOptions?: NodeOptions;
   editorAdaptor: EditorAdaptor;
-  viewMode?: string;
+  viewOptions?: unknown;
   logger?: TLogger;
 }): null {
   const [editor] = useLexicalComposerContext();
@@ -31,14 +31,14 @@ export default function UpdateStatePlugin<TLogger extends LoggerBasic>({
 
   useEffect(() => {
     editorAdaptor.reset?.();
-    const serializedEditorState = editorAdaptor.loadEditorState(scripture, viewMode);
+    const serializedEditorState = editorAdaptor.loadEditorState(scripture, viewOptions);
     const editorState = editor.parseEditorState(serializedEditorState);
     // Execute after the current render cycle.
     setTimeout(() => {
       editor.setEditorState(editorState);
       editor.dispatchCommand(CLEAR_HISTORY_COMMAND, undefined);
     }, 0);
-  }, [editor, scripture, viewMode, logger, editorAdaptor]);
+  }, [editor, scripture, viewOptions, logger, editorAdaptor]);
 
   return null;
 }
