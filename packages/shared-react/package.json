@@ -17,14 +17,14 @@
     "shared": "*"
   },
   "devDependencies": {
-    "@types/react": "^18.2.35",
-    "@types/react-dom": "^18.2.14",
+    "@types/react": "^18.2.48",
+    "@types/react-dom": "^18.2.18",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "peerDependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react": ">=18.2.0",
+    "react-dom": ">=18.2.0"
   },
   "repository": {
     "type": "git",

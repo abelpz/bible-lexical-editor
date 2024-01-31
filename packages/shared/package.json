@@ -20,7 +20,7 @@
     "proskomma-core": "^0.10.4"
   },
   "peerDependencies": {
-    "proskomma-core": "^0.10.4"
+    "proskomma-core": ">=0.10.4"
   },
   "repository": {
     "type": "git",
