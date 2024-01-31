@@ -10,10 +10,14 @@
   "scripts": {},
   "license": "MIT",
   "version": "0.0.1",
+  "peerDependencies": {
+    "react": ">=18.2.0",
+    "react-dom": ">=18.2.0"
+  },
   "dependencies": {
-    "@lexical/react": "^0.12.2",
-    "@lexical/utils": "^0.12.2",
-    "lexical": "0.12.2",
+    "@lexical/react": "^0.13.1",
+    "@lexical/utils": "^0.13.1",
+    "lexical": "^0.13.1",
     "shared": "*"
   },
   "devDependencies": {
@@ -21,10 +25,6 @@
     "@types/react-dom": "^18.2.18",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
-  },
-  "peerDependencies": {
-    "react": ">=18.2.0",
-    "react-dom": ">=18.2.0"
   },
   "repository": {
     "type": "git",

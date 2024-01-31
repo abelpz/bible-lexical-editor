@@ -13,8 +13,8 @@ export class UsfmParagraphNode extends UsfmElementNode {
     return new UsfmParagraphNode(node.__attributes, node.__data, node.__tag, node.__key);
   }
 
-  constructor(attributes: Attributes, data: unknown, tag: string | undefined, key?: NodeKey) {
-    super(attributes, data, tag || "p", key);
+  constructor(attributes: Attributes, data: unknown, tag?: string, key?: NodeKey) {
+    super(attributes, data, tag, key);
   }
 
   static importJSON(serializedNode: SerializedUsfmParagraphNode): UsfmParagraphNode {
@@ -28,7 +28,7 @@ export class UsfmParagraphNode extends UsfmElementNode {
 
   createDOM(config: EditorConfig): HTMLElement {
     const attributes = this.getAttributes() || {};
-    const element = document.createElement(this.getTag());
+    const element = document.createElement(this.getTag() || "p");
     Object.keys(attributes).forEach((attKey) => {
       element.setAttribute(attKey, attributes[attKey]);
     });
@@ -43,7 +43,7 @@ export class UsfmParagraphNode extends UsfmElementNode {
   exportJSON(): SerializedUsfmParagraphNode {
     return {
       ...super.exportJSON(),
-      type: "usfmparagraph",
+      type: this.getType(),
       version: 1,
     };
   }
@@ -57,7 +57,7 @@ export class UsfmParagraphNode extends UsfmElementNode {
 export function $createUsfmParagraphNode(
   attributes: Attributes,
   data: unknown,
-  tag: string | undefined,
+  tag?: string,
 ): UsfmParagraphNode {
   return $applyNodeReplacement(new UsfmParagraphNode(attributes, data, tag));
 }

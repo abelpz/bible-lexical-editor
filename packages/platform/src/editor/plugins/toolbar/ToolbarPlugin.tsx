@@ -23,6 +23,7 @@ import {
 import { useCallback, useEffect, useState } from "react";
 import { serializeUsjType } from "shared/converters/usj/usj.util";
 import { IS_APPLE } from "shared/lexical/environment";
+import { ParaNode } from "shared/nodes/scripture/usj/ParaNode";
 import BlockFormatDropDown from "./BlockFormatDropDown";
 
 function Divider(): JSX.Element {
@@ -57,7 +58,7 @@ export default function ToolbarPlugin(): JSX.Element {
       const elementDOM = activeEditor.getElementByKey(elementKey);
 
       if (elementDOM !== null) {
-        const type = serializeUsjType(element.getType(), element.getUsxStyle());
+        const type = serializeUsjType(element.getType(), (element as ParaNode).getUsxStyle());
         setBlockType(type);
       }
     }

@@ -1,10 +1,5 @@
 import { $setBlocksType } from "@lexical/selection";
-import {
-  $getSelection,
-  $isRangeSelection,
-  DEPRECATED_$isGridSelection,
-  LexicalEditor,
-} from "lexical";
+import { $getSelection, $isRangeSelection, LexicalEditor } from "lexical";
 import { typeToClassName, typeToStyle } from "shared/converters/usj/usj.util";
 import { $createParaNode } from "shared/nodes/scripture/usj/ParaNode";
 import DropDown, { DropDownItem } from "../../ui/DropDown";
@@ -72,7 +67,7 @@ export default function BlockFormatDropDown({
   const formatPara = (selectedBlockType: string) => {
     editor.update(() => {
       const selection = $getSelection();
-      if ($isRangeSelection(selection) || DEPRECATED_$isGridSelection(selection)) {
+      if ($isRangeSelection(selection)) {
         $setBlocksType(selection, () => $createParaNode(typeToStyle(selectedBlockType)));
       }
     });

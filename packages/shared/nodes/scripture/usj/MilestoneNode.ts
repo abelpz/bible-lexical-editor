@@ -62,15 +62,13 @@ export class MilestoneNode extends DecoratorNode<void> {
   }
 
   static clone(node: MilestoneNode): MilestoneNode {
-    return new MilestoneNode(node.__number, node.__key);
+    const { __usxStyle, __sid, __eid, __key } = node;
+    return new MilestoneNode(__usxStyle, __sid, __eid, __key);
   }
 
   static importJSON(serializedNode: SerializedMilestoneNode): MilestoneNode {
-    const node = $createMilestoneNode(
-      serializedNode.usxStyle,
-      serializedNode.sid,
-      serializedNode.eid,
-    );
+    const { usxStyle, sid, eid } = serializedNode;
+    const node = $createMilestoneNode(usxStyle, sid, eid);
     return node;
   }
 

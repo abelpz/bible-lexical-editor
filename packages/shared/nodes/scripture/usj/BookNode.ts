@@ -21,7 +21,7 @@ export type SerializedBookNode = Spread<
   {
     usxStyle: BookUsxStyle;
     code: BookCode;
-    text: string;
+    text?: string;
   },
   SerializedElementNode
 >;
@@ -30,7 +30,7 @@ export class BookNode extends ElementNode {
   __usxStyle: BookUsxStyle;
   __code: BookCode;
 
-  constructor(code: BookCode, text: string, key?: NodeKey) {
+  constructor(code: BookCode, text?: string, key?: NodeKey) {
     super(key);
     this.__usxStyle = BOOK_STYLE;
     this.__code = code;
@@ -42,7 +42,8 @@ export class BookNode extends ElementNode {
   }
 
   static clone(node: BookNode): BookNode {
-    return new BookNode(node.__code, node.__text, node.__key);
+    const __text = node.getFirstChild<TextNode>()?.getTextContent();
+    return new BookNode(node.__code, __text, node.__key);
   }
 
   static importJSON(serializedNode: SerializedBookNode): BookNode {
@@ -99,13 +100,13 @@ export class BookNode extends ElementNode {
       type: this.getType(),
       usxStyle: this.getUsxStyle(),
       code: this.getCode(),
-      text: (this.getFirstChild() as TextNode)?.getText(),
+      text: this.getFirstChild<TextNode>()?.getTextContent(),
       version: BOOK_VERSION,
     };
   }
 }
 
-export function $createBookNode(code: BookCode, text: string): BookNode {
+export function $createBookNode(code: BookCode, text?: string): BookNode {
   return $applyNodeReplacement(new BookNode(code, text));
 }
 
