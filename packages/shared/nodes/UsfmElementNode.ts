@@ -6,13 +6,17 @@ export type SerializedUsfmElementNode = Spread<
   {
     attributes: Attributes;
     data: unknown;
-    tag: string;
+    tag?: string;
   },
   SerializedElementNode
 >;
 
 export class UsfmElementNode extends ElementNode {
-  constructor(attributes: Attributes, data: unknown, tag: string | undefined, key?: NodeKey) {
+  __data: unknown;
+  __attributes: Attributes;
+  __tag?: string;
+
+  constructor(attributes: Attributes, data: unknown, tag?: string, key?: NodeKey) {
     super(key);
     this.__data = data;
     this.__attributes = attributes;
@@ -37,11 +41,11 @@ export class UsfmElementNode extends ElementNode {
     writable.__attributes = attributes;
   }
 
-  getTag(): string {
+  getTag(): string | undefined {
     return this.getLatest().__tag;
   }
 
-  setTag(tag: string) {
+  setTag(tag: string | undefined) {
     const writable = this.getWritable();
     writable.__tag = tag;
   }

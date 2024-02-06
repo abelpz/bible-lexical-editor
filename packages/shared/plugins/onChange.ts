@@ -4,6 +4,7 @@ import {
   // $getSelection,
   $getNodeByKey,
 } from "lexical";
+import { UsfmElementNode } from "../nodes/UsfmElementNode";
 
 export const registerOnChange = ({
   editor,
@@ -56,9 +57,10 @@ export const registerOnChange = ({
           console.log("PREVSTATE");
           for (const nodeKey of dirtyLeaves) {
             const node = $getNodeByKey(nodeKey);
-            const parentNode = node?.getParent?.();
+            const parentNode = node?.getParent<UsfmElementNode>?.();
             console.log({ node });
-            const { path } = parentNode?.getData?.() ?? {};
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const { path } = (parentNode?.getData?.() ?? {}) as any;
             if (path) console.log("node with path changed", { path, node, parentNode });
             if (!path) console.log("node deleted?", { path, node, parentNode });
           }
@@ -68,9 +70,10 @@ export const registerOnChange = ({
           console.log("CURRSTATE");
           for (const nodeKey of dirtyLeaves) {
             const node = $getNodeByKey(nodeKey);
-            const parentNode = node?.getParent?.();
+            const parentNode = node?.getParent<UsfmElementNode>?.();
             // console.log({ node });
-            const { path } = parentNode?.getData?.() ?? {};
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const { path } = (parentNode?.getData?.() ?? {}) as any;
             if (path) console.log("node with path changed", { path, node, parentNode });
             if (!path) console.log("node deleted?", { path, node, parentNode });
           }

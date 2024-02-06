@@ -62,7 +62,8 @@ export class ChapterNode extends ElementNode {
   }
 
   static clone(node: ChapterNode): ChapterNode {
-    const { __number, __classList, __text, __sid, __altnumber, __pubnumber, __key } = node;
+    const { __number, __classList, __sid, __altnumber, __pubnumber, __key } = node;
+    const __text = node.getFirstChild<TextNode>()?.getTextContent();
     return new ChapterNode(__number, __classList, __text, __sid, __altnumber, __pubnumber, __key);
   }
 
@@ -162,7 +163,7 @@ export class ChapterNode extends ElementNode {
       usxStyle: this.getUsxStyle(),
       number: this.getNumber(),
       classList: this.getClassList(),
-      text: (this.getFirstChild() as TextNode)?.getText(),
+      text: this.getFirstChild<TextNode>()?.getTextContent(),
       sid: this.getSid(),
       altnumber: this.getAltnumber(),
       pubnumber: this.getPubnumber(),

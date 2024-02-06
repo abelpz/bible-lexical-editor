@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { EditorState, LexicalEditor } from "lexical";
+import { UsfmElementNode } from "shared/nodes/UsfmElementNode";
 
 export type OnChange = (editorState: EditorState, editor: LexicalEditor, tags: Set<string>) => void;
 
@@ -16,7 +17,8 @@ export const OnChangePlugin = ({ onChange }: { onChange: OnChange }) => {
         onChange(editorState, editor, tags);
         for (const [nodeKey] of dirtyElements) {
           const node = editorState._nodeMap.get(nodeKey);
-          const path = node?.__data?.path;
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const path = ((node as UsfmElementNode)?.__data as any)?.path;
           if (path) console.log("node with path changed", { path, node });
         }
       }

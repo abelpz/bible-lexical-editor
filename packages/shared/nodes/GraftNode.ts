@@ -5,8 +5,8 @@ import { addClassNamesToElement } from "@lexical/utils";
 export type SerializedGraftNode = SerializedUsfmElementNode;
 
 export class GraftNode extends UsfmElementNode {
-  constructor(attributes: Attributes, data: unknown, tag: string | undefined, key?: NodeKey) {
-    super(attributes, data, tag || "span", key);
+  constructor(attributes: Attributes, data: unknown, tag?: string, key?: NodeKey) {
+    super(attributes, data, tag, key);
   }
 
   static getType(): string {
@@ -22,7 +22,7 @@ export class GraftNode extends UsfmElementNode {
   }
 
   createDOM(config: EditorConfig): HTMLElement {
-    const element = document.createElement(this.getTag());
+    const element = document.createElement(this.getTag() || "span");
     const attributes = this.getAttributes() ?? {};
     Object.keys(attributes).forEach((attKey) => {
       element.setAttribute(attKey, attributes[attKey]);
@@ -43,7 +43,7 @@ export class GraftNode extends UsfmElementNode {
   exportJSON(): SerializedGraftNode {
     return {
       ...super.exportJSON(),
-      type: "graft",
+      type: this.getType(),
       version: 1,
     };
   }
@@ -55,10 +55,6 @@ export class GraftNode extends UsfmElementNode {
   }
 }
 
-function $createGraftNode(
-  attributes: Attributes,
-  data: unknown,
-  tag: string | undefined,
-): GraftNode {
+function $createGraftNode(attributes: Attributes, data: unknown, tag?: string): GraftNode {
   return $applyNodeReplacement(new GraftNode(attributes, data, tag));
 }

@@ -9,12 +9,12 @@
   ],
   "scripts": {},
   "license": "MIT",
-  "version": "0.12.2",
+  "version": "0.13.1",
   "dependencies": {
-    "@lexical/utils": "^0.12.2",
+    "@lexical/utils": "^0.13.1",
     "@xmldom/xmldom": "^0.8.10",
     "epitelete": "^0.2.20",
-    "lexical": "0.12.2"
+    "lexical": "^0.13.1"
   },
   "devDependencies": {
     "proskomma-core": "^0.10.4"
